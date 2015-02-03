@@ -37,11 +37,11 @@ json_obj_players = urllib.urlopen(url_players).read()
 readable_json_players = json.loads(json_obj_players)
 
 for p in readable_json_players['result']['players']:
-        #players.append(p['account_id'])
+        players.append(p['account_id'])
         #players.append(Team(p['account_id'], p['kills']))
-        name = p['account_id']
-        id = p['kills']
-        testing.append(Team(name, id))
+        #name = p['account_id']
+        #id = p['kills']
+        #testing.append(Team(name, id))
         
 testing.append(Team('Jacob', '1'))
 testing.append(Team('One', '0'))
