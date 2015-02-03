@@ -13,6 +13,8 @@ leagues = []
 legends = []
 players = []
 testing = []
+id_test = []
+riot = []
 
 #find leagues
 url = "http://api.steampowered.com/IDOTA2Match_205790/GetLeagueListing/v0001/?key=C60B2F253D948B27317D3EE293EE04ED"
@@ -43,6 +45,28 @@ for p in readable_json_players['result']['players']:
         #id = p['kills']
         #testing.append(Team(name, id))
         
+#name by id
+#url_id = "http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=C60B2F253D948B27317D3EE293EE04ED&steamids="
+
+for i in readable_json_players['result']['players']:
+    steam_id = int(i['account_id']) + 76561197960265728
+    url_id = "http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=C60B2F253D948B27317D3EE293EE04ED&steamids=" + str(steam_id)
+    json_obj_id = urllib.urlopen(url_id).read()
+    readable_json_id = json.loads(json_obj_id)
+    
+    for j in readable_json_id['response']['players']:
+        id_test.append([steam_id, j['personaname']])
+        
+#riot
+url_riot = "https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/tuxedo,riotschmick?api_key=08829c99-4bee-431c-8034-66f09809ef0a"
+json_obj_riot = urllib.urlopen(url_riot).read()
+readable_json_riot = json.loads(json_obj_riot)
+
+#for r in readable_json_riot['summonerId']:
+#    riot.append(r['summonerId'])
+    
+        
+        
 testing.append(Team('Jacob', '1'))
 testing.append(Team('One', '0'))
 name = 'building'
@@ -68,7 +92,7 @@ def button_handler():
     elif 'players' in request.form:
         return render_template('hello.html', items=players)
     elif 'test' in request.form:
-        return render_template('hello.html', items=testing)
+        return render_template('hello.html', items=id_test)
     else: 
         return 'Error'
 
