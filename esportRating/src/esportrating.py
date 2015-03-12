@@ -29,20 +29,32 @@ class Player(Resource):
         cursor.execute("INSERT INTO Player VALUES ('%d', '%s', '%d', '%d', '%d')" % (player_id, username, 1200, 1200, team_id))
         conn.commit()
         return "%s is added" % username
+    
+
+class Team(Resource):
+    def get(self): #Returns all teams
+        cursor.execute("SELECT team_name FROM Team")
+        data = cursor.fetchall()
+        return data
+    
+    def post(self):
+        team_id = request.get_json().get('team_id', '')
+        team_name = request.get_json().get('team_name', '')
+        cursor.execute("INSERT INTO Team VALUES ('%d', '%s')" % (team_id, team_name))
+        conn.commit()
+        return "%s is added" % team_name
         
         
 class GetPlayers(Resource):
     def get(self):
-        cursor.execute("select * from Player")
+        cursor.execute("select username, display_rating, team_name from Player p, Team t WHERE p.team_id = t.team_id")
         data = cursor.fetchall()
-        print data
-            
-    def post(self):
-        print "Hallohallo"
+        return data
+   
 
-api.add_resource(GetPlayers, '/getplayers') #Get all players
-api.add_resource(Player, '/player') #Get player by username: '{"username":"STRING"}', POST new player: '{"player_id":INT, "username":"STRING", "team_id":INT(has to already exist)}'
-
+api.add_resource(GetPlayers, '/getplayers') #GET all players
+api.add_resource(Player, '/player') #GET player by username: '{"username":"STRING"}', POST new player: '{"player_id":INT, "username":"STRING", "team_id":INT(has to already exist)}'
+api.add_resource(Team, '/team') #GET all teams, POST new team: '{"team_id":INT, "team_name":"STRING"}'
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0",
