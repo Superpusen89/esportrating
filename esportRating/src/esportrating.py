@@ -1,4 +1,4 @@
-from flask import Flask, request, json
+from flask import Flask, request, json, jsonify
 from flask.ext.restful import Api, Resource, reqparse, fields, marshal
 import MySQLdb
 
@@ -12,38 +12,23 @@ try:
 except MySQLdb.Error, e:
     print "Error %d: %s" % (e.args[0], e.args[1])
     sys.exit(1)
-    
-    
-    
-    
-    
-class HelloWorld(Resource):
+
+
+class Player(Resource):    
     def get(self):
-        return 'Hello world'
-
-#player_fields = {
- #   'player_id': fields.Integer,
-  #  'username': fields.String,
-   # 'team_id': fields.Integer
-#}
-
-
-class Player(Resource):
-    def __init__(self):
-        self.reqparse = reqparse.RequestParser()
-        self.reqparse.add_argument('player_id', type=int, location='json')
-        self.reqparse.add_argument('username', type=str, location='json')
-        self.reqparse.add_argument('team_id', type=int, location='json')
-        super(Player, self).__init__()
-        
-    def get(self):
-        cursor.execute("select * from Player") # where username = %s", (user_name))
+        user_name = request.get_json().get('user_name', '')
+        print user_name #bare for testing
+        cursor.execute("select * from Player where username = %s", (user_name))
         data = cursor.fetchall()
         return data
     
     def post(self):
-        args = self.reqparse.parse_args()
-        print args
+        player_id = request.get_json().get('player_id', '')
+        username = request.get_json().get('username', '')
+        team_id = request.get_json().get('team_id', '')
+        cursor.execute("INSERT INTO Player VALUES ('%d', '%s', '%d', '%d', '%d')" % (player_id, username, 1200, 1200, team_id))
+        conn.commit()
+        return "%s is added" % username
         
         
 class GetPlayers(Resource):
@@ -52,17 +37,11 @@ class GetPlayers(Resource):
         data = cursor.fetchall()
         print data
             
-        
+    def post(self):
+        print "Hallohallo"
 
-api.add_resource(GetPlayers, '/getplayers')
-api.add_resource(HelloWorld, '/')
-api.add_resource(Player, '/getplayer')
-
-
-
-
-
-cursor.execute("select * from Player")
+api.add_resource(GetPlayers, '/getplayers') #Get all players
+api.add_resource(Player, '/player') #Get player by username: '{"username":"STRING"}', POST new player: '{"player_id":INT, "username":"STRING", "team_id":INT(has to already exist)}'
 
 
 if __name__ == '__main__':

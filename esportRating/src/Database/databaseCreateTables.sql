@@ -63,3 +63,8 @@ CREATE TABLE User_profile
     password CHAR(128), /*Kommer an på hva slags krypteringsmetode vi bruker, dette er for SHA2 (512?)*/
     PRIMARY KEY(email_address)
 )
+
+# Testdata
+INSERT INTO Team VALUES (14, 'Superpusene');
+INSERT INTO Player VALUES (1, 'Superpusen', 1200, 1200, 14);
+INSERT INTO Player VALUES (2, 'LobNobIda', 1200, 1200, 14);
