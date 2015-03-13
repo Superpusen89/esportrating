@@ -1,10 +1,12 @@
 
-DROP TABLE Player;
-DROP TABLE Team;
-DROP TABLE Tournament;
-DROP TABLE Matches;
-DROP TABLE Player_match;
 DROP TABLE User_profile;
+DROP TABLE Tournament;
+DROP TABLE Team;
+DROP TABLE Player_match;
+DROP TABLE Player;
+DROP TABLE Matches;
+
+
 
 CREATE TABLE Team
 (
@@ -29,6 +31,7 @@ CREATE TABLE Tournament
     tournament_id INTEGER NOT NULL,
     time_start TIMESTAMP,
     time_end TIMESTAMP,
+    tournament_name CHAR(80),
     PRIMARY KEY (tournament_id)
 );
 
@@ -62,7 +65,7 @@ CREATE TABLE User_profile
     superuser boolean,
     password CHAR(128), /*Kommer an på hva slags krypteringsmetode vi bruker, dette er for SHA2 (512?)*/
     PRIMARY KEY(email_address)
-)
+);
 
 # Testdata
 INSERT INTO Team VALUES (14, 'Superpusene');
