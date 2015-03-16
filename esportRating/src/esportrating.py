@@ -17,7 +17,7 @@ except MySQLdb.Error, e:
 class Player(Resource):    
     def get(self):
         user_name = request.get_json().get('user_name', '')
-        cursor.execute("select username, display_rating from Player where username = %s", (user_name))
+        cursor.execute("select username, display_rating from Player where username = '%s'", (user_name))
         data = cursor.fetchall()
         return jsonify(data = data)
     
@@ -67,8 +67,9 @@ class GetPlayers(Resource):
     def get(self):
         cursor.execute("select username, display_rating, team_name from Player p, Team t WHERE p.team_id = t.team_id")
         data = cursor.fetchall()
+        data = jsonify(data = data)       
         print data
-        return jsonify(data = data)
+        return data
    
 
 
