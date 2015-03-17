@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+ 
+{% block content %}
+  <h2>Add player</h2>
+ 
+  {% if success %}
+    <p>Player is successfully added.</p>
+ 
+  {% else %}
+    
+    {% for message in form.username.errors %}
+      <div class="flash">{{ message }}</div>
+    {% endfor %}
+ 
+    {% for message in form.user_id.errors %}
+      <div class="flash">{{ message }}</div>
+    {% endfor %}
+ 
+    {% for message in form.team_id.errors %}
+      <div class="flash">{{ message }}</div>
+    {% endfor %}
+ 
+    <form action="{{ url_for('addplayer') }}" method=post>
+      {{ form.hidden_tag() }}
+ 
+      {{ form.username.label }}
+      {{ form.username }}
+ 
+      {{ form.user_id.label }}
+      {{ form.user_id }}
+ 
+      {{ form.team_id.label }}
+      {{ form.team_id }}
+ 
+      {{ form.submit }}
+    </form>
+ 
+  {% endif %}
+{% endblock %}

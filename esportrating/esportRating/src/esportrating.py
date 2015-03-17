@@ -10,6 +10,9 @@ from functools import update_wrapper
 app = Flask(__name__)
 api = Api(app)
 
+from flask.ext.cors import CORS
+cors = CORS(app) #added
+
 try:
     conn = MySQLdb.connect(host="localhost", user="root", passwd="HenrietteIda", db="esport")
     cursor = conn.cursor()
@@ -53,7 +56,10 @@ def crossdomain(origin=None, methods=None, headers=None,
             h['Access-Control-Allow-Headers'] = "Origin, X-Requested-With, Content-Type, Accept, Options" 
             h['Access-Control-Allow-Origin'] = origin
             h['Access-Control-Allow-Methods'] = get_methods()
+
             #h['Access-Control-Allow-Methods'] = GET, POST
+
+            #h['Access-Control-Allow-Methods'] = GET,PUT,POST,DELETE,OPTIONS
             h['Access-Control-Max-Age'] = str(max_age)
             if headers is not None:
                 h['Access-Control-Allow-Headers'] = headers
@@ -63,11 +69,13 @@ def crossdomain(origin=None, methods=None, headers=None,
         return update_wrapper(wrapped_function, f)
     return decorator   
         
-@app.route('/player', methods=['GET', 'OPTIONS'])
+@app.route('/player/<username>', methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
-def get_player():
-        username = request.get_json().get('username', '')
-        print username
+def get_player(username):
+        print ("Hallohallo")
+        #username = request.get_json().get('username', '')
+        print ("Hallohalloigjen")
+        print request.args.get('username')
         cursor.execute("SELECT username, display_rating FROM Player WHERE username = '%s'" % (username))
         data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
                                             row) for row in cursor.fetchall()]]
@@ -124,7 +132,7 @@ def create_tournament():
    
 @app.route('/getplayers', methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
-def myservice():
+def getplayers():
     cursor.execute("select username, display_rating, team_name from Player p, Team t WHERE p.team_id = t.team_id")
     data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
                                         row) for row in cursor.fetchall()]]
