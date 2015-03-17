@@ -12,8 +12,8 @@ function Hey($scope, $http) {
 //            method: "GET",
 //            params: {username: "Aragorn"}
 //        });
-        postObject.username = "Aragorn";
-        $http.get('http://0.0.0.0:5001/player', postObject).
+        postObject.username = "";
+        $http.get('http://0.0.0.0:5001/player/Superpusen').
                 success(function (data) {
                     $scope.name = data;
                 });

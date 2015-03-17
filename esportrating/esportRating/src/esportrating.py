@@ -56,7 +56,14 @@ def crossdomain(origin=None, methods=None, headers=None,
             h['Access-Control-Allow-Headers'] = "Origin, X-Requested-With, Content-Type, Accept, Options" 
             h['Access-Control-Allow-Origin'] = origin
             h['Access-Control-Allow-Methods'] = get_methods()
+<<<<<<< HEAD
             #h['Access-Control-Allow-Methods'] = 'GET','PUT','POST','DELETE','OPTIONS'
+=======
+
+            #h['Access-Control-Allow-Methods'] = GET, POST
+
+            #h['Access-Control-Allow-Methods'] = GET,PUT,POST,DELETE,OPTIONS
+>>>>>>> e0ffa0e2d488e59a4b069c8b0c586ebffe0b509a
             h['Access-Control-Max-Age'] = str(max_age)
             if headers is not None:
                 h['Access-Control-Allow-Headers'] = headers
@@ -70,7 +77,7 @@ def crossdomain(origin=None, methods=None, headers=None,
 @crossdomain(origin='*')
 def get_player(username):
         print ("Hallohallo")
-        username = request.get_json().get('username', '')
+        #username = request.get_json().get('username', '')
         print ("Hallohalloigjen")
         print request.args.get('username')
         cursor.execute("SELECT username, display_rating FROM Player WHERE username = '%s'" % (username))
