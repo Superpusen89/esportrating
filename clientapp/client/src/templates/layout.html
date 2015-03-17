@@ -1,0 +1,73 @@
+
+
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html ng-app>
+    <head>
+        <title>Hello AngularJS</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.13/angular.js"></script>
+        <script src="static/js/hello.js"></script>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <header>
+            <div class="container">
+                <h1 class="logo">Flask App</h1>
+                <nav>
+                    <ul class="menu">
+                        <li><a href="{{ url_for('home')}}">Home</a></li>
+                        <li><a href="{{ url_for('about')}}">About</a></li>
+                        <li><a href="{{ url_for('contact')}}">Contact</a></li>
+                        <li><a href="{{ url_for('addplayer')}}">Add player</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+        <div class="container">
+            {% block content %}
+            {% endblock %}
+        </div>
+
+        <div ng-app ng-controller="jsonp_example">
+            <button ng-click="doRequest()">Make JSONP request</button>
+            <ul ng-repeat="name in names">
+                <li>The content is {{ '{{name}}' }}</li>
+                <li>The content is {{ '{{name.team_name}}' }}</li>
+            </ul>
+        </div>
+
+
+        <div ng-app ng-controller="Hey">
+            <button ng-click="doRequest()">Make Player request</button>
+            <p>The name is {{ '{{name}}' }}</p>
+        </div>
+
+
+        <div ng-app ng-controller="Ho">
+            <p>ooooooo</p>
+            <ul ng-repeat="name in names">
+                <li>The content is {{'{{name}}'}}</li>
+                <li>The content is {{'{{name.username}}'}}</li>
+            </ul>
+        </div>
+        <div id="registerPlayers">
+            <form>
+                Player id: <br>
+                <input type="text"> <br>
+                Username: <br>
+                <input type="text"> <br>
+                Base rating: <br>
+                <input type="text"> <br>
+                Display rating: <br>
+                <input type="text"> <br>
+                Team id: <br>
+                <input type="text"> <br>
+            </form>
+        </div>
+    </body>
+</html>
