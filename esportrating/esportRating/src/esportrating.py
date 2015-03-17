@@ -56,7 +56,7 @@ def crossdomain(origin=None, methods=None, headers=None,
             h['Access-Control-Allow-Headers'] = "Origin, X-Requested-With, Content-Type, Accept, Options" 
             h['Access-Control-Allow-Origin'] = origin
             h['Access-Control-Allow-Methods'] = get_methods()
-            #h['Access-Control-Allow-Methods'] = GET,PUT,POST,DELETE,OPTIONS
+            #h['Access-Control-Allow-Methods'] = 'GET','PUT','POST','DELETE','OPTIONS'
             h['Access-Control-Max-Age'] = str(max_age)
             if headers is not None:
                 h['Access-Control-Allow-Headers'] = headers
