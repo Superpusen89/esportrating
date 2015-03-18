@@ -9,6 +9,7 @@ and open the template in the editor.
 <html ng-app>
     <head>
         <title>Hello AngularJS</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.13/angular.js"></script>
         <script src="static/js/hello.js"></script>
         <meta charset="UTF-8">
@@ -31,43 +32,6 @@ and open the template in the editor.
         <div class="container">
             {% block content %}
             {% endblock %}
-        </div>
-
-        <div ng-app ng-controller="jsonp_example">
-            <button ng-click="doRequest()">Make JSONP request</button>
-            <ul ng-repeat="name in names">
-                <li>The content is {{ '{{name}}' }}</li>
-                <li>The content is {{ '{{name.team_name}}' }}</li>
-            </ul>
-        </div>
-
-
-        <div ng-app ng-controller="Hey">
-            <button ng-click="doRequest()">Make Player request</button>
-            <p>The name is {{ '{{name}}' }}</p>
-        </div>
-
-
-        <div ng-app ng-controller="Ho">
-            <p>ooooooo</p>
-            <ul ng-repeat="name in names">
-                <li>The content is {{'{{name}}'}}</li>
-                <li>The content is {{'{{name.username}}'}}</li>
-            </ul>
-        </div>
-        <div id="registerPlayers">
-            <form>
-                Player id: <br>
-                <input type="text"> <br>
-                Username: <br>
-                <input type="text"> <br>
-                Base rating: <br>
-                <input type="text"> <br>
-                Display rating: <br>
-                <input type="text"> <br>
-                Team id: <br>
-                <input type="text"> <br>
-            </form>
         </div>
     </body>
 </html>

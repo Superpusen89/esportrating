@@ -6,46 +6,40 @@
 
 function Hey($scope, $http) {
     $scope.doRequest = function () {
-        var postObject = new Object();
-//        $http({
-//            url: 'http://0.0.0.0:5001/player',
-//            method: "GET",
-//            params: {username: "Aragorn"}
-//        });
-        postObject.username = "";
-        $http.get('http://0.0.0.0:5001/player/Superpusen').
+        var username = $scope.user.username;
+        $http.get('http://0.0.0.0:5001/player/' + username).
                 success(function (data) {
-                    $scope.name = data;
+                    $scope.name = data.data;
                 });
     };
 }
 
 
 function Ho($scope, $http) {
-    $http.get('http://0.0.0.0:5001/getplayers').
-            success(function (data) {
-                $scope.names = data.data;
-            });
+    $scope.doRequest = function () {
+        $http.get('http://0.0.0.0:5001/getplayers').
+                success(function (data) {
+                    $scope.names = data.data;
+                });
+    };
 }
 
-
-
-
-function jsonp_example($scope, $http) {
+function formCtrl($scope, $http) {
+    $scope.master = {player_id:"", username:"", team_id:""};
+    $scope.reset = function() {
+        $scope.user = angular.copy($scope.master);
+    };
+    $scope.reset();
     $scope.doRequest = function () {
-        /*    $http.get('http://0.0.0.0:5001/team').
-         success(function (data) {
-         $scope.names = data.data;
-         }); */
 
         var postObject = new Object();
-        postObject.player_id = 19;
-        postObject.username = "Anthea";
-        postObject.team_id = 14;
+        postObject.player_id = $scope.user.player_id;
+        postObject.username = $scope.user.username;
+        postObject.team_id = $scope.user.team_id;
 
         $http.post('http://0.0.0.0:5001/player', postObject).
                 success(function (data) {
                     console.log("HERE *******" + data);
                 });
     };
-}
+};
