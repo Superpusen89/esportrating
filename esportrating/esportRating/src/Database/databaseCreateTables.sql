@@ -10,42 +10,46 @@ DROP TABLE Matches;
 
 CREATE TABLE Team
 (
-    team_id INTEGER NOT NULL,
+    id INTEGER NOT NULL AUTO_INCREMENT, 
+    team_id INTEGER,
     team_name CHAR(80),
-    PRIMARY KEY (team_id)
+    PRIMARY KEY (id)
 );
 
 CREATE TABLE Player
 (
-    player_id INTEGER NOT NULL,
+    id INTEGER NOT NULL AUTO_INCREMENT,
+    player_id INTEGER,
     username CHAR(80),
     base_rating INTEGER,
     display_rating INTEGER,
     team_id INTEGER,
-    PRIMARY KEY (player_id),
-    FOREIGN KEY (team_id) REFERENCES Team(team_id)
+    PRIMARY KEY (id),
+    FOREIGN KEY (id) REFERENCES Team(id)
 );
 
 CREATE TABLE Tournament
 (
-    tournament_id INTEGER NOT NULL,
+    id INTEGER NOT NULL AUTO_INCREMENT,
+    tournament_id INTEGER,
     time_start TIMESTAMP,
     time_end TIMESTAMP,
     tournament_name CHAR(80),
-    PRIMARY KEY (tournament_id)
+    PRIMARY KEY (id)
 );
 
 CREATE TABLE Matches
 (
-    match_id INTEGER NOT NULL,
+    id INTEGER NOT NULL AUTO_INCREMENT,
+    match_id INTEGER,
     tournament_id INTEGER,
     radiant_team_id INTEGER NOT NULL,
     dire_team_id INTEGER NOT NULL,
     radient_team_win boolean,
     match_time_start TIMESTAMP,
     match_time_end TIMESTAMP,
-    PRIMARY KEY (match_id),
-    FOREIGN KEY (tournament_id) REFERENCES Tournament(tournament_id)
+    PRIMARY KEY (id),
+    FOREIGN KEY (id) REFERENCES Tournament(id)
 );
 
 CREATE TABLE Player_match
@@ -54,8 +58,8 @@ CREATE TABLE Player_match
     player_id INTEGER NOT NULL,
     team_id INTEGER NOT NULL,
     PRIMARY KEY(match_id, player_id),
-    FOREIGN KEY(match_id) REFERENCES Matches(match_id),
-    FOREIGN KEY(player_id) REFERENCES Player(player_id)
+    FOREIGN KEY(id) REFERENCES Matches(id),
+    FOREIGN KEY(id) REFERENCES Player(id)
 );
 
 CREATE TABLE User_profile
