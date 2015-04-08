@@ -25,7 +25,7 @@ CREATE TABLE Player
     display_rating INTEGER,
     team_id INTEGER,
     PRIMARY KEY (id),
-    FOREIGN KEY (id) REFERENCES Team(id)
+    FOREIGN KEY (team_id) REFERENCES Team(id)
 );
 
 CREATE TABLE Tournament
@@ -43,13 +43,12 @@ CREATE TABLE Matches
     id INTEGER NOT NULL AUTO_INCREMENT,
     match_id INTEGER,
     tournament_id INTEGER,
-    radiant_team_id INTEGER NOT NULL,
-    dire_team_id INTEGER NOT NULL,
-    radient_team_win boolean,
+    winning_team_id INTEGER NOT NULL,
+    losing_team_id INTEGER NOT NULL,
     match_time_start TIMESTAMP,
     match_time_end TIMESTAMP,
     PRIMARY KEY (id),
-    FOREIGN KEY (id) REFERENCES Tournament(id)
+    FOREIGN KEY (tournament_id) REFERENCES Tournament(id)
 );
 
 CREATE TABLE Player_match
@@ -58,8 +57,9 @@ CREATE TABLE Player_match
     player_id INTEGER NOT NULL,
     team_id INTEGER NOT NULL,
     PRIMARY KEY(match_id, player_id),
-    FOREIGN KEY(id) REFERENCES Matches(id),
-    FOREIGN KEY(id) REFERENCES Player(id)
+    FOREIGN KEY(match_id) REFERENCES Matches(id),
+    FOREIGN KEY(palyer_id) REFERENCES Player(id),
+    
 );
 
 CREATE TABLE User_profile
@@ -72,6 +72,6 @@ CREATE TABLE User_profile
 );
 
 # Testdata
-INSERT INTO Team VALUES (14, 'Superpusene');
-INSERT INTO Player VALUES (1, 'Superpusen', 1200, 1200, 14);
-INSERT INTO Player VALUES (2, 'LobNobIda', 1200, 1200, 14);
+INSERT INTO Team (team_id, team_name) VALUES (14, 'Superpusene');
+INSERT INTO Player (player_id, username, base_rating, display_rating, team_id) VALUES (null, 'Superpusen', 1200, 1200, 1);
+INSERT INTO Player (player_id, username, base_rating, display_rating, team_id) VALUES (null, 'LobNobIda', 1200, 1200, 1);
