@@ -66,15 +66,25 @@ def crossdomain(origin=None, methods=None, headers=None,
         f.provide_automatic_options = False
         return update_wrapper(wrapped_function, f)
     return decorator   
-        
-@app.route('/player/<username>', methods=['GET', 'OPTIONS'])
+    
+#remove this? 
+#@app.route('/player/<username>', methods=['GET', 'OPTIONS'])
+#@crossdomain(origin='*')
+#def get_player_name(username):
+#        print ("Hallohallo")
+#        #username = request.get_json().get('username', '')
+#        print ("Hallohalloigjen")
+#        print request.args.get('username')
+#        cursor.execute("SELECT username, display_rating FROM Player WHERE username = '%s'" % (username))
+#        data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
+#                                            row) for row in cursor.fetchall()]]
+#        
+#        return jsonify(data=data)
+
+@app.route('/player/<int:player_id>', methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
-def get_player(username):
-        print ("Hallohallo")
-        #username = request.get_json().get('username', '')
-        print ("Hallohalloigjen")
-        print request.args.get('username')
-        cursor.execute("SELECT username, display_rating FROM Player WHERE username = '%s'" % (username))
+def get_player(player_id):
+        cursor.execute("SELECT username, display_rating, team_name, t.id FROM (Player p join Team t on p.team_id = t.id) WHERE p.id = '%d'" % (player_id))
         data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
                                             row) for row in cursor.fetchall()]]
         
@@ -83,8 +93,6 @@ def get_player(username):
 @app.route('/player', methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*')
 def create_player():
-        player_id = request.get_json().get('player_id', '')
-        print player_id
         username = request.get_json().get('username', '')
         team_id = request.get_json().get('team_id', '')
         cursor.execute("INSERT INTO Player (username, base_rating, display_rating, team_id) VALUES ('%s', '%d', '%d', '%d')" % (username, 1200, 1200, team_id))
@@ -104,7 +112,16 @@ def edit_player():
         cursor.execute("UPDATE Player SET username = '%s', base_rating = '%d', display_rating = '%d', team_id = '%d' where id = '%d'" % (username, base_rating, dispaly_rating, team_id, player_id))
         conn.commit()
         return "%s is updated!" % username
-    
+
+@app.route('/team/<int:team_id>', methods=['GET', 'OPTIONS'])
+@crossdomain(origin='*')
+def get_team(team_id):
+        cursor.execute("SELECT team_name FROM Team WHERE id = '%d'" % (team_id))
+        data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
+                                            row) for row in cursor.fetchall()]]
+        
+        return jsonify(data=data)
+
 @app.route('/team', methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def get_teams():
@@ -155,9 +172,9 @@ def edit_tournament():
    
 @app.route('/getplayers', methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
-def getplayers(order_by):
+def getplayers():
    # order_by = order by enten username eller display_name, maa sendes med GET'en fra clienten
-    cursor.execute("select username, display_rating, team_name from Player p, Team t WHERE p.team_id = t.id ORDER BY username desc")# % (order_by))
+    cursor.execute("select username, p.id, display_rating, team_name from Player p, Team t WHERE p.team_id = t.id") # ORDER BY username desc")# % (order_by))
     data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
                                         row) for row in cursor.fetchall()]]
     return jsonify(data=data)

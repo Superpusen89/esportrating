@@ -7,4 +7,13 @@ app.controller('PlayerController', function($scope, $routeParams, daoPlayers) {
   }, function() {
     $scope.status = "Error loading Player " + $routeParams.playerId;
   });
+  
+      daoPlayers.getAllTeams(function (teams) {
+        $scope.teams = teams.data;
+        $scope.statusTeams = "Successfully loaded Teams";
+    }, function () {
+        $scope.statusTeams = "Error loading Teams";
+    }); 
+  
 });
+
