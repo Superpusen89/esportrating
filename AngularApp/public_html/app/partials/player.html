@@ -7,8 +7,7 @@
   Team id: <a href="#" editable-text="player.data[0].id">{{player.data[0].id || "empty" }}</a>
   
   Team name: 
-  <a href="#" editable-text="player.data[0].team_name" onbeforesave="updatePlayer($data)" e-typeahead="team.team_name for team in teams | filter:$viewValue | limitTo:8">
+  <a href="#" editable-text="player.data[0].team_name" onbeforesave="validateInput($data)" e-typeahead="team.team_name for team in teams | filter:$viewValue | limitTo:8">
       {{ player.data[0].team_name || "empty" }}
   </a>
 </div> 
-

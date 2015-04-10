@@ -13,15 +13,16 @@ app.controller('PlayersController', function ($scope, daoPlayers) {
     $scope.addPlayer = function () {
         var username = $scope.newPlayer.username;
         var team_id = $scope.newPlayer.team_id;
-
-        daoPlayers.getTeam(team_id, function (team) {
-                $scope.team_name = team;
-        });
-
-        var team_name = $scope.team_name.data[0].team_name;
+//
+//        daoPlayers.getTeam(team_id, function (team) {
+//                $scope.team_name = team;
+//        });
+//
+//        var team_name = $scope.team_name.data[0].team_name;
 
         daoPlayers.add(username, team_id, function () {
-            $scope.players.push({username: username, team_name: team_name});
+//            $scope.players.push({username: username, team_name: team_name});
+       $scope.players.push({username: username});
             $scope.status = "Successfully created new Player " + username;
         }, function () {
             $scope.status = "Error creating new Player";

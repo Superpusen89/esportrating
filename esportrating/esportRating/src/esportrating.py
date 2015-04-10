@@ -84,7 +84,7 @@ def crossdomain(origin=None, methods=None, headers=None,
 @app.route('/player/<int:player_id>', methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def get_player(player_id):
-        cursor.execute("SELECT username, display_rating, team_name, t.id FROM (Player p join Team t on p.team_id = t.id) WHERE p.id = '%d'" % (player_id))
+        cursor.execute("SELECT username, display_rating, base_rating, team_name, p.team_id, t.id FROM (Player p join Team t on p.team_id = t.id) WHERE p.id = '%d'" % (player_id))
         data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
                                             row) for row in cursor.fetchall()]]
         
