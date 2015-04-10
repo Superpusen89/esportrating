@@ -58,9 +58,8 @@ CREATE TABLE Player_match
     team_id INTEGER NOT NULL,
     PRIMARY KEY(match_id, player_id),
     FOREIGN KEY(match_id) REFERENCES Matches(id),
-    FOREIGN KEY(palyer_id) REFERENCES Player(id),
-    
-);
+    FOREIGN KEY(player_id) REFERENCES Player(id)
+    );
 
 CREATE TABLE User_profile
 (
@@ -71,7 +70,24 @@ CREATE TABLE User_profile
     PRIMARY KEY(email_address)
 );
 
+CREATE TABLE PY_trigger
+(
+    number_of_matches INTEGER,
+    match_id INTEGER
+);
+
+
+
 # Testdata
-INSERT INTO Team (team_id, team_name) VALUES (14, 'Superpusene');
+INSERT INTO Team (team_name) VALUES ('Superpusene');
+INSERT INTO Team (team_name) VALUES ('Guttah');
 INSERT INTO Player (player_id, username, base_rating, display_rating, team_id) VALUES (null, 'Superpusen', 1200, 1200, 1);
 INSERT INTO Player (player_id, username, base_rating, display_rating, team_id) VALUES (null, 'LobNobIda', 1200, 1200, 1);
+INSERT INTO Player (player_id, username, base_rating, display_rating, team_id) VALUES (null, 'TommyTeabag', 1200, 1200, 2);
+INSERT INTO Tournament (tournament_name) VALUES ('theFirst');
+INSERT INTO Matches (tournament_id, winning_team_id, losing_team_id) VALUES (1, 1, 2);
+INSERT INTO Player_match VALUES (1, 1, 1);
+INSERT INTO Player_match VALUES (1, 2, 1);
+INSERT INTO Player_match VALUES (1, 3, 2);
+
+SELECT ROUND(AVG(base_rating)) FROM Player WHERE team_id = (SELECT losing_team_id FROM Matches WHERE id = 1);

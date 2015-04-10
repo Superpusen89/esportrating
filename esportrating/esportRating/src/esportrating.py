@@ -83,8 +83,6 @@ def get_player(username):
 @app.route('/player', methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*')
 def create_player():
-        player_id = request.get_json().get('player_id', '')
-        print player_id
         username = request.get_json().get('username', '')
         team_id = request.get_json().get('team_id', '')
         cursor.execute("INSERT INTO Player (username, base_rating, display_rating, team_id) VALUES ('%s', '%d', '%d', '%d')" % (username, 1200, 1200, team_id))
