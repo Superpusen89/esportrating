@@ -180,6 +180,46 @@ def getplayers():
     return jsonify(data=data)
 
 
+@app.route('/match', methods=['GET', 'OPTIONS'])
+@crossdomain(origin='*')
+def get_matches():
+        cursor.execute("select * from Matches")
+        data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
+                                            row) for row in cursor.fetchall()]]
+        return jsonify(data=data)
+
+@app.route('/match', methods=['POST', 'OPTIONS'])
+@crossdomain(origin='*')
+def create_match():
+       # tournament_id = request.get_json().get('tournament_id', '')
+        time_start = request.get_json().get('time_start', '')
+        time_end = request.get_json().get('time_end', '')
+        winning_team_id = request.get_json().get('winning_team_id', '')
+        losing_team_id = request.get_json().get('losing_team_id', '')
+        tournament_id = request.get_json().get('tournament_id', '')
+        cursor.execute("INSERT INTO Matches (tournament_id, winning_team_id, losing_team_id, time_start, time_end) VALUES ('%d', '%d', '%d', '%s', '%s')" % (tournament_id, winning_team_id, losing_team_id, time_start, time_end))
+        if(winning_team_id and losing_team_id != null):
+            cursor.execute("INSERT INTO PY_trigger (match_id) VALUES ('%d')" % match_id)  
+        conn.commit()
+        return "Match is added!"
+
+@app.route('/match', methods=['PUT', 'OPTIONS'])
+@crossdomain(origin='*')
+def update_match():
+        match_id = 1 #Faa tak i id'en til matchen det er snakk om
+        time_start = request.get_json().get('time_start', '')
+        time_end = request.get_json().get('time_end', '')
+        winning_team_id = request.get_json().get('winning_team_id', '')
+        losing_team_id = request.get_json().get('losing_team_id', '')
+        cursor.execute("UPDATE Matches SET winning_team_id = '%d', losing_team_id = '%d', time_start = '%s', time_end = '%s')" % (winning_team_id, losing_team_id, time_start, time_end))
+        if(winning_team_id and losing_team_id != null):
+            cursor.execute("INSERT INTO PY_trigger (match_id) VALUES ('%d')" % match_id)            
+        
+        conn.commit()
+        return "Match is updated!"
+    
+    
+
 #@app.route('/getplayers', methods=['GET', 'OPTIONS'])
 #@crossdomain(origin='*')
 #def getplayers():
