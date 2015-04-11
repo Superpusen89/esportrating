@@ -84,10 +84,9 @@ def crossdomain(origin=None, methods=None, headers=None,
 @app.route('/player/<int:player_id>', methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def get_player(player_id):
-        cursor.execute("SELECT username, display_rating, base_rating, team_name, p.team_id, t.id FROM (Player p join Team t on p.team_id = t.id) WHERE p.id = '%d'" % (player_id))
+        cursor.execute("SELECT p.id, username, display_rating, base_rating, team_name, p.team_id, t.id FROM (Player p join Team t on p.team_id = t.id) WHERE p.id = '%d'" % (player_id))
         data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
                                             row) for row in cursor.fetchall()]]
-        
         return jsonify(data=data)
 
 @app.route('/player', methods=['POST', 'OPTIONS'])
@@ -103,8 +102,7 @@ def create_player():
 @app.route('/player', methods=['PUT', 'OPTIONS'])
 @crossdomain(origin='*')
 def edit_player():
-        #Faa tak i id'en de allerede har og legg inn i player_
-        player_id = 2;
+        player_id = request.get_json().get('player_id', '')
         username = request.get_json().get('username', '')
         team_id = request.get_json().get('team_id', '')
         base_rating = request.get_json().get('base_rating', '')
@@ -117,6 +115,15 @@ def edit_player():
 @crossdomain(origin='*')
 def get_team(team_id):
         cursor.execute("SELECT team_name FROM Team WHERE id = '%d'" % (team_id))
+        data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
+                                            row) for row in cursor.fetchall()]]
+        
+        return jsonify(data=data)
+    
+@app.route('/team/<team_name>', methods=['GET', 'OPTIONS'])
+@crossdomain(origin='*')
+def get_team_by_name(team_name):
+        cursor.execute("SELECT id FROM Team WHERE team_name = '%s'" % (team_name))
         data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
                                             row) for row in cursor.fetchall()]]
         
