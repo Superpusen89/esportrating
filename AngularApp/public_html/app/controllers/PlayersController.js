@@ -22,7 +22,7 @@ app.controller('PlayersController', function ($scope, daoPlayers) {
 
         daoPlayers.add(username, team_id, function () {
 //            $scope.players.push({username: username, team_name: team_name});
-       $scope.players.push({username: username});
+            $scope.players.push({username: username});
             $scope.status = "Successfully created new Player " + username;
         }, function () {
             $scope.status = "Error creating new Player";
@@ -39,6 +39,8 @@ app.controller('PlayersController', function ($scope, daoPlayers) {
     }, function () {
         $scope.statusTeams = "Error loading Teams";
     });
+
+    $scope.sortorder = ['display_rating', 'username'];
 
 
 });

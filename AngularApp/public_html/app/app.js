@@ -10,9 +10,13 @@ app.config(function ($routeProvider) {
                 controller: 'PlayerController',
                 templateUrl: 'app/partials/player.html'
             })
-            .when('/ranking', {
-                controller: 'RankingController',
-                templateUrl: 'app/partials/ranking.html'
+            .when('/tournaments', {
+                controller: 'TournamentsController',
+                templateUrl: 'app/partials/tournaments.html'
+            })
+            .when('/tournaments/:tournamentId', {
+                controller: 'TournamentController',
+                templateUrl: 'app/partials/tournament.html'
             })
             .otherwise({redirectTo: '/players'});
 });

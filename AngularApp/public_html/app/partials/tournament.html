@@ -1,0 +1,9 @@
+<h3> Tournament view </h3>
+
+<div>Status: {{status}}</div><br>
+
+<div>
+   Tournament name: <a href="#" editable-text="tournament.data[0].tournament_name" onbeforesave="saveData($data)">{{tournament.data[0].tournament_name || "empty" }}</a> <br>
+   Start time: <a href="#" editable-text="tournament.data[0].time_start">{{tournament.data[0].time_start || "empty" }}</a>
+   End time: <a href="#" editable-text="tournament.data[0].time_end">{{tournament.data[0].time_end || "empty" }}</a>
+</div> 
