@@ -145,7 +145,15 @@ def create_teams():
         team_name = request.get_json().get('team_name', '')
         cursor.execute("INSERT INTO Team (team_name) VALUES ('%s')" % (team_name))
         conn.commit()
-        return "%s is added" % team_name    
+        return "%s is added" % team_name 
+
+@app.route('/tournament/<int:tournament_id>', methods=['GET', 'OPTIONS'])
+@crossdomain(origin='*')
+def get_tournament(tournament_id):
+        cursor.execute("SELECT * FROM Tournament WHERE id = '%d'" % (tournament_id))
+        data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
+                                            row) for row in cursor.fetchall()]]
+        return jsonify(data=data)
 
 @app.route('/tournament', methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
@@ -169,11 +177,11 @@ def create_tournament():
 @app.route('/tournament', methods=['PUT', 'OPTIONS'])
 @crossdomain(origin='*')
 def edit_tournament():
-       # tournament_id = request.get_json().get('tournament_id', '')
+        tournament_id = request.get_json().get('tournament_id', '')
         time_start = request.get_json().get('time_start', '')
         time_end = request.get_json().get('time_end', '')
         tournament_name = request.get_json().get('tournament_name', '')
-        cursor.execute("UPDATE Tournament SET time_start = '%s', time_end = '%s', tournament_name = '%s'" % (time_start, time_end, tournament_name))
+        cursor.execute("UPDATE Tournament SET time_start = '%s', time_end = '%s', tournament_name = '%s' where id = '%d'" % (time_start, time_end, tournament_name, tournament_id))
         conn.commit()
         return "%s is updated!" % tournament_name 
    

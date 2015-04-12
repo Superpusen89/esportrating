@@ -14,7 +14,7 @@ app.config(function ($routeProvider) {
                 controller: 'TournamentsController',
                 templateUrl: 'app/partials/tournaments.html'
             })
-            .when('/tournaments/:tournamentId', {
+            .when('/tournament/:tournamentId', {
                 controller: 'TournamentController',
                 templateUrl: 'app/partials/tournament.html'
             })
