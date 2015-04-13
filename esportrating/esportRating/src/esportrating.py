@@ -1,7 +1,10 @@
 from flask import Flask, request, json, jsonify
 from flask.ext.restful import Api, Resource, reqparse, fields, marshal
+from decimal import Decimal
 import MySQLdb
 import sys
+import time
+import math
 
 #acces-control-allow-origin
 from datetime import timedelta
@@ -21,6 +24,66 @@ try:
 except MySQLdb.Error, e:
     print "Error %d: %s" % (e.args[0], e.args[1])
     sys.exit(1)
+
+def check(match_id):
+    cursor.execute("SELECT COUNT(points) FROM Player_match WHERE match_id = '%s'" %(match_id))
+
+def resetDisplayRating(match_id):
+    cursor.execute("SELECT points, player_id FROM Player_match WHERE match_id='%s'" %(match_id)) #MATCH_ID
+    pointsExist = cursor.fetchall()
+    for row in pointsExist:
+        player_id = Decimal(row[1])
+        points = Decimal(row[0])
+        if(points != null):
+            cursor.execute("SELECT display_rating FROM Player WHERE id = '%s'" % (player_id))
+            display_rating = Decimal(cursor.fetchone()[0])
+            newDisplay_rating = display_rating - points
+            print newDisplay_rating
+            cursor.execute("UPDATE Player SET display_rating = '%s' WHERE id = '%d'" % (newDisplay_rating, player_id))
+            conn.commit()
+    
+
+def eloCalc(match_id):
+    team1 = 'winning_team_id'
+    team2 = 'losing_team_id'
+    won = 1
+    rounds = 1
+    while rounds < 3:  
+        cursor.execute("SELECT AVG(base_rating) FROM Player WHERE id= ANY (SELECT player_id FROM Player_match WHERE match_id = 1) AND team_id=(SELECT %s FROM Matches WHERE id='%s')" % (team2, match_id))
+        B = float(cursor.fetchone()[0])
+        cursor.execute("SELECT base_rating, id FROM Player WHERE id= ANY (SELECT player_id FROM Player_match WHERE match_id = 1) AND team_id=(SELECT %s FROM Matches WHERE id=1)" % (team1)) #Maa finne baseratinga til alle spillerne som har vaert med paa denne kampen
+        A = cursor.fetchall()
+        num = 0
+        for row in A:
+            tall = float(A[num][0])
+            id = A[num][1]
+            Es = 1.0/(1.0+math.pow(10.0, ((B-tall)/400.0)))
+            R = round(Decimal(15 * (won-Es)), 2)
+            cursor.execute("UPDATE Player_match set points = '%s' WHERE match_id = 1 AND player_id = '%d'" % (R, id))
+            conn.commit()
+            num += 1
+        rounds+=1
+        team1= 'losing_team_id'
+        team2 = 'winning_team_id'
+        won = 0
+        
+def detDisplayRating(match_id):
+    cursor.execute("SELECT pm.points, p.id FROM Player_match pm, Player p WHERE match_id=1 AND pm.player_id=p.id")
+    data = cursor.fetchall()
+    for row in data:
+        points = Decimal(row[0])
+        player_id = Decimal(row[1])
+        cursor.execute("SELECT display_rating FROM Player WHERE id = '%s'" % player_id)
+        display_rating = Decimal(cursor.fetchone()[0])
+        newDisplay_rating = display_rating + points
+        cursor.execute("UPDATE Player SET display_rating = '%s' WHERE id = '%d'" % (newDisplay_rating, player_id))
+        conn.commit()
+    
+
+#while A is not None:
+#    #
+#    print A;
+#    A = cursor.fetchone()
 
 #acces-control-allow-origin
 def crossdomain(origin=None, methods=None, headers=None,
@@ -66,6 +129,18 @@ def crossdomain(origin=None, methods=None, headers=None,
         f.provide_automatic_options = False
         return update_wrapper(wrapped_function, f)
     return decorator   
+
+
+#def Elo_calc(match_id):
+#    cursor.execute("SELECT AVG(base_rating) FROM Player WHERE id= ANY (SELECT player_id FROM Player_match WHERE match_id = 1) AND team_id=(SELECT winning_team_id FROM Matches WHERE id=1)")
+#    B = cursor.fetchone()
+#    cursor.execute("SELECT base_rating FROM Player WHERE id= ANY (SELECT player_id FROM Player_match WHERE match_id = 1) AND team_id=(SELECT losing_team_id FROM Matches WHERE id=1)") #Maa finne baseratinga til alle spillerne som har vaert med paa denne kampen
+#    A = cursor.fetchone()
+#    while A is not None:
+#        #Es = 1/(1+10^((B-A)/400))
+#        print A;
+    #SELECT base_rating FROM Player WHERE id= ANY (SELECT player_id FROM Player_match WHERE match_id = 1) AND team_id=(SELECT losing_team_id FROM Matches WHERE id=1);
+    #isSet = ("SELECT points FROM")
     
 #remove this? 
 #@app.route('/player/<username>', methods=['GET', 'OPTIONS'])
@@ -192,6 +267,7 @@ def getplayers():
     cursor.execute("select username, p.id, display_rating, team_name from Player p, Team t WHERE p.team_id = t.id") # ORDER BY username desc")# % (order_by))
     data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
                                         row) for row in cursor.fetchall()]]
+    conn.close()    
     return jsonify(data=data)
 
 
@@ -201,6 +277,7 @@ def get_matches():
         cursor.execute("select * from Matches")
         data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
                                             row) for row in cursor.fetchall()]]
+        conn.close()
         return jsonify(data=data)
 
 @app.route('/match', methods=['POST', 'OPTIONS'])
@@ -214,8 +291,9 @@ def create_match():
         tournament_id = request.get_json().get('tournament_id', '')
         cursor.execute("INSERT INTO Matches (tournament_id, winning_team_id, losing_team_id, time_start, time_end) VALUES ('%d', '%d', '%d', '%s', '%s')" % (tournament_id, winning_team_id, losing_team_id, time_start, time_end))
         if(winning_team_id and losing_team_id != null):
-            cursor.execute("INSERT INTO PY_trigger (match_id) VALUES ('%d')" % match_id)  
+            Elo_calc(match_id)  
         conn.commit()
+        conn.close()
         return "Match is added!"
 
 @app.route('/match', methods=['PUT', 'OPTIONS'])
@@ -228,9 +306,10 @@ def update_match():
         losing_team_id = request.get_json().get('losing_team_id', '')
         cursor.execute("UPDATE Matches SET winning_team_id = '%d', losing_team_id = '%d', time_start = '%s', time_end = '%s')" % (winning_team_id, losing_team_id, time_start, time_end))
         if(winning_team_id and losing_team_id != null):
-            cursor.execute("INSERT INTO PY_trigger (match_id) VALUES ('%d')" % match_id)            
-        
+            Elo_calc(match_id)
+            
         conn.commit()
+        conn.close()
         return "Match is updated!"
     
     
