@@ -5,20 +5,28 @@
 
 Search: <input type="text" ng-model="searchText">
 
+<select ng-model="sortorder">
+    <option value="username">Username (A-Z)</option>
+    <option value="-username">Username (Z-A)</option>
+    <option value="team_name">Team name (A-Z)</option>
+    <option value='-display_rating'>Rating</option>
+</select>
 
 <ul>
-    <li ng-repeat="player in players| filter:searchText | orderBy:'username'">
+    <li ng-repeat="player in players| filter:searchText | orderBy:sortorder">
         <a href="#/player/{{player.id}}"> 
-        {{ player.username}} - {{ player.team_name}} - {{player.display_rating}}
-        </a> 
+            {{ player.username}} 
+        </a> - {{ player.team_name}} - {{player.display_rating}}
         <!-- <button has-role="write" ng-click="editPlayer(player.id)">
              &times;
          </button> -->
     </li>
 </ul>
 
+Search: <input type="text" ng-model="searchTeam">
+
 <ul>
-    <li ng-repeat="team in teams| filter:searchText | orderBy:'id'">
+    <li ng-repeat="team in teams| filter:searchTeam | orderBy:'id'">
         {{ team.id}} - {{ team.team_name}}
     </li>
 </ul>

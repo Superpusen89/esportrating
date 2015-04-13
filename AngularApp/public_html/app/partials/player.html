@@ -3,7 +3,7 @@
 <div>Status: {{status}}</div><br>
 
 <div>
-  Username: <a href="#" editable-text="player.data[0].username">{{player.data[0].username || "empty" }}</a> <br>
+  Username: <a href="#" editable-text="player.data[0].username" onbeforesave="saveData($data)">{{player.data[0].username || "empty" }}</a> <br>
   Team id: <a href="#" editable-text="player.data[0].id">{{player.data[0].id || "empty" }}</a>
   
   Team name: 
