@@ -25,8 +25,18 @@ except MySQLdb.Error, e:
     print "Error %d: %s" % (e.args[0], e.args[1])
     sys.exit(1)
 
+cursor.execute("INSERT INTO Matches (tournament_id, winning_team_id, losing_team_id) VALUES (1, 1, 2)")
+conn.commit()
+cursor.execute("SELECT LAST_INSERT_ID()")
+match_id = cursor.fetchone()[0]
+print match_id
+        
+        
 def check(match_id):
     cursor.execute("SELECT COUNT(points) FROM Player_match WHERE match_id = '%s'" %(match_id))
+    count = cursor.fetchone()[0]
+    if(count != 0):
+        resetDisplayRating(match_id)
 
 def resetDisplayRating(match_id):
     cursor.execute("SELECT points, player_id FROM Player_match WHERE match_id='%s'" %(match_id)) #MATCH_ID
@@ -66,8 +76,9 @@ def eloCalc(match_id):
         team1= 'losing_team_id'
         team2 = 'winning_team_id'
         won = 0
+    setDisplayRating(match_id)
         
-def detDisplayRating(match_id):
+def setDisplayRating(match_id):
     cursor.execute("SELECT pm.points, p.id FROM Player_match pm, Player p WHERE match_id=1 AND pm.player_id=p.id")
     data = cursor.fetchall()
     for row in data:
@@ -290,9 +301,13 @@ def create_match():
         losing_team_id = request.get_json().get('losing_team_id', '')
         tournament_id = request.get_json().get('tournament_id', '')
         cursor.execute("INSERT INTO Matches (tournament_id, winning_team_id, losing_team_id, time_start, time_end) VALUES ('%d', '%d', '%d', '%s', '%s')" % (tournament_id, winning_team_id, losing_team_id, time_start, time_end))
-        if(winning_team_id and losing_team_id != null):
-            Elo_calc(match_id)  
         conn.commit()
+        cursor.execute("SELECT LAST_INSERT_ID()")
+        match_id = cursor.fetchone()[0]
+        if(winning_team_id and losing_team_id != null):
+            eloCalc(match_id)
+            
+        
         conn.close()
         return "Match is added!"
 
