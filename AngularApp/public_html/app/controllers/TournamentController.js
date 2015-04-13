@@ -44,7 +44,7 @@ app.controller('TournamentController', function ($scope, $routeParams, daoTourna
     $scope.saveEndTime = function (data) {
         var tournament_id = parseInt($routeParams.tournamentId);
         var tournament_name = $scope.tournament.data[0].tournament_name;
-        var time_start = $scope.tournament.data[0].time_end;
+        var time_start = $scope.tournament.data[0].time_start;
         var time_end = data;
 
         daoTournaments.edit(tournament_id, tournament_name, time_start, time_end, function () {
