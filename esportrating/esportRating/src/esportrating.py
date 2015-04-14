@@ -73,6 +73,8 @@ def eloCalc(match_id):
         team2 = 'winning_team_id'
         won = 0
     setDisplayRating(match_id)
+    print match_id
+
         
 def setDisplayRating(match_id):
     cursor.execute("SELECT pm.points, p.id FROM Player_match pm, Player p WHERE match_id='%s' AND pm.player_id=p.id" % (match_id))
@@ -292,16 +294,16 @@ def get_matches():
 @crossdomain(origin='*')
 def create_match():
        # tournament_id = request.get_json().get('tournament_id', '')
-        time_start = request.get_json().get('time_start', '')
-        time_end = request.get_json().get('time_end', '')
+        time_start = request.get_json().get('match_time_start', '')
+        time_end = request.get_json().get('match_time_end', '')
         winning_team_id = request.get_json().get('winning_team_id', '')
         losing_team_id = request.get_json().get('losing_team_id', '')
         tournament_id = request.get_json().get('tournament_id', '')
-        cursor.execute("INSERT INTO Matches (tournament_id, winning_team_id, losing_team_id, time_start, time_end) VALUES ('%d', '%d', '%d', '%s', '%s')" % (tournament_id, winning_team_id, losing_team_id, time_start, time_end))
+        cursor.execute("INSERT INTO Matches (tournament_id, winning_team_id, losing_team_id, match_time_start, match_time_end) VALUES ('%d', '%d', '%d', '%s', '%s')" % (tournament_id, winning_team_id, losing_team_id, time_start, time_end))
         conn.commit()
         cursor.execute("SELECT LAST_INSERT_ID()")
         match_id = cursor.fetchone()[0]
-        if(winning_team_id and losing_team_id != null):
+        if(winning_team_id and losing_team_id is not None):
             eloCalc(match_id)
 
         return "Match is added!"
@@ -316,7 +318,7 @@ def update_match(match_id):
         losing_team_id = request.get_json().get('losing_team_id', '')
         cursor.execute("UPDATE Matches SET winning_team_id = '%d', losing_team_id = '%d', time_start = '%s', time_end = '%s')" % (winning_team_id, losing_team_id, time_start, time_end))
         if(winning_team_id and losing_team_id != null):
-            Elo_calc(match_id)
+            eloCalc(match_id)
             
         conn.commit()
 
