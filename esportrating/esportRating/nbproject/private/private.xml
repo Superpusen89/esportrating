@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-<<<<<<< HEAD
-            <file>file:/home/ida/Documents/Bachelor/esportrating/esportrating/esportRating/src/esportrating.py</file>
-=======
             <file>file:/home/henriette/Bachelor/esportrating/esportRating/src/esportrating.py</file>
             <file>file:/home/henriette/Bachelor/esportrating/esportRating/src/setup.py</file>
             <file>file:/home/henriette/Bachelor/esportrating/esportRating/src/Server/__init__.py</file>
             <file>file:/home/henriette/Bachelor/esportrating/esportRating/src/Database/databaseCreateTables.sql</file>
             <file>file:/home/henriette/Bachelor/esportrating/esportRating/src/eloCalc.py</file>
             <file>file:/home/henriette/Bachelor/esportrating/esportRating/src/Server/dbcon.py</file>
->>>>>>> c83bdea92e68145c3da3b87afe08c8af3b0a8a95
         </group>
     </open-files>
 </project-private>

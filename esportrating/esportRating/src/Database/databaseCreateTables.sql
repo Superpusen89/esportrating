@@ -1,11 +1,10 @@
 
 DROP TABLE User_profile;
 DROP TABLE Tournament;
-DROP TABLE Team;
 DROP TABLE Player_match;
 DROP TABLE Player;
 DROP TABLE Matches;
-
+DROP TABLE Team;
 
 
 CREATE TABLE Team
@@ -21,8 +20,8 @@ CREATE TABLE Player
     id INTEGER NOT NULL AUTO_INCREMENT,
     player_id INTEGER,
     username CHAR(80),
-    base_rating DECIMAL(10,2),
-    display_rating DECIMAL(10,2),
+    base_rating FLOAT,
+    display_rating FLOAT,
     team_id INTEGER,
     PRIMARY KEY (id),
     FOREIGN KEY (team_id) REFERENCES Team(id)
@@ -56,7 +55,7 @@ CREATE TABLE Player_match
     match_id INTEGER NOT NULL,
     player_id INTEGER NOT NULL,
     team_id INTEGER NOT NULL,
-    points DECIMAL(10, 2),
+    points FLOAT,
     PRIMARY KEY(match_id, player_id),
     FOREIGN KEY(match_id) REFERENCES Matches(id),
     FOREIGN KEY(player_id) REFERENCES Player(id)    
