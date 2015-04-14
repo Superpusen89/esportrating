@@ -273,7 +273,8 @@ def getplayers():
     cursor.execute("select username, p.id, display_rating, team_name from Player p, Team t WHERE p.team_id = t.id") # ORDER BY username desc")# % (order_by))
     data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
                                         row) for row in cursor.fetchall()]]
-
+    
+    print data
     return jsonify(data=data)
 
 
