@@ -26,6 +26,7 @@ except MySQLdb.Error, e:
     sys.exit(1)
 
 
+
        
 def check(match_id):
     cursor.execute("SELECT COUNT(points) FROM Player_match WHERE match_id = '%s'" %(match_id))
@@ -60,8 +61,8 @@ def eloCalc(match_id):
         A = cursor.fetchall()
         num = 0
         for row in A:
-            tall = float(A[num][0])
-            id = A[num][1]
+            tall = float(row[0])
+            id = row[1]
             Es = 1.0/(1.0+math.pow(10.0, ((B-tall)/400.0)))
             R = round(Decimal(15 * (won-Es)), 2)
             cursor.execute("UPDATE Player_match set points = '%s' WHERE match_id = 1 AND player_id = '%d'" % (R, id))
