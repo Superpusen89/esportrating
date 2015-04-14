@@ -48,7 +48,7 @@ def resetDisplayRating(match_id):
             cursor.execute("SELECT display_rating FROM Player WHERE id = '%s'" % (player_id))
             display_rating = Decimal(cursor.fetchone()[0])
             newDisplay_rating = display_rating - points
-            print newDisplay_rating
+            print Display_rating
             cursor.execute("UPDATE Player SET display_rating = '%s' WHERE id = '%d'" % (newDisplay_rating, player_id))
             conn.commit()
     
@@ -278,7 +278,7 @@ def getplayers():
     cursor.execute("select username, p.id, display_rating, team_name from Player p, Team t WHERE p.team_id = t.id") # ORDER BY username desc")# % (order_by))
     data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
                                         row) for row in cursor.fetchall()]]
-    conn.close()    
+#    conn.close()    
     return jsonify(data=data)
 
 
@@ -288,7 +288,7 @@ def get_matches():
         cursor.execute("select * from Matches")
         data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
                                             row) for row in cursor.fetchall()]]
-        conn.close()
+#        conn.close()
         return jsonify(data=data)
 
 @app.route('/match', methods=['POST', 'OPTIONS'])
@@ -308,7 +308,7 @@ def create_match():
             eloCalc(match_id)
             
         
-        conn.close()
+#        conn.close()
         return "Match is added!"
 
 @app.route('/match', methods=['PUT', 'OPTIONS'])
@@ -324,7 +324,7 @@ def update_match():
             Elo_calc(match_id)
             
         conn.commit()
-        conn.close()
+#        conn.close()
         return "Match is updated!"
     
     

@@ -18,6 +18,14 @@ app.config(function ($routeProvider) {
                 controller: 'TournamentController',
                 templateUrl: 'app/partials/tournament.html'
             })
+//            .when('/matches', {
+//                controller: 'MatchesController',
+//                templateUrl: 'app/partials/matches.html'
+//            })
+//            .when('/match/:matchId', {
+//                controller: 'MatchController',
+//                templateUrl: 'app/partials/match.html'
+//            })
             .otherwise({redirectTo: '/players'});
 });
 
