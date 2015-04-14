@@ -25,13 +25,8 @@ except MySQLdb.Error, e:
     print "Error %d: %s" % (e.args[0], e.args[1])
     sys.exit(1)
 
-cursor.execute("INSERT INTO Matches (tournament_id, winning_team_id, losing_team_id) VALUES (1, 1, 2)")
-conn.commit()
-cursor.execute("SELECT LAST_INSERT_ID()")
-match_id = cursor.fetchone()[0]
-print match_id
-        
-        
+
+       
 def check(match_id):
     cursor.execute("SELECT COUNT(points) FROM Player_match WHERE match_id = '%s'" %(match_id))
     count = cursor.fetchone()[0]
@@ -79,7 +74,7 @@ def eloCalc(match_id):
     setDisplayRating(match_id)
         
 def setDisplayRating(match_id):
-    cursor.execute("SELECT pm.points, p.id FROM Player_match pm, Player p WHERE match_id=1 AND pm.player_id=p.id")
+    cursor.execute("SELECT pm.points, p.id FROM Player_match pm, Player p WHERE match_id='%s' AND pm.player_id=p.id" % (match_id))
     data = cursor.fetchall()
     for row in data:
         points = Decimal(row[0])
@@ -278,7 +273,7 @@ def getplayers():
     cursor.execute("select username, p.id, display_rating, team_name from Player p, Team t WHERE p.team_id = t.id") # ORDER BY username desc")# % (order_by))
     data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
                                         row) for row in cursor.fetchall()]]
-#    conn.close()    
+
     return jsonify(data=data)
 
 
@@ -288,7 +283,7 @@ def get_matches():
         cursor.execute("select * from Matches")
         data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
                                             row) for row in cursor.fetchall()]]
-#        conn.close()
+
         return jsonify(data=data)
 
 @app.route('/match', methods=['POST', 'OPTIONS'])
@@ -306,15 +301,13 @@ def create_match():
         match_id = cursor.fetchone()[0]
         if(winning_team_id and losing_team_id != null):
             eloCalc(match_id)
-            
-        
-#        conn.close()
+
         return "Match is added!"
 
 @app.route('/match', methods=['PUT', 'OPTIONS'])
 @crossdomain(origin='*')
-def update_match():
-        match_id = 1 #Faa tak i id'en til matchen det er snakk om
+def update_match(match_id):
+        #match_id = 1 #Faa tak i id'en til matchen det er snakk om
         time_start = request.get_json().get('time_start', '')
         time_end = request.get_json().get('time_end', '')
         winning_team_id = request.get_json().get('winning_team_id', '')
@@ -324,7 +317,11 @@ def update_match():
             Elo_calc(match_id)
             
         conn.commit()
-#        conn.close()
+
+        cursor.execute("UPDATE Matches SET winning_team_id = '%d', losing_team_id = '%d', time_start = '%s', time_end = '%s' WHERE id = '%s')" % (winning_team_id, losing_team_id, time_start, time_end, match_id))
+        conn.commit()        
+        check(match_id)
+        Elo_calc(match_id)
         return "Match is updated!"
     
     
