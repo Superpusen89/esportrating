@@ -80,10 +80,10 @@ def setDisplayRating(match_id):
     cursor.execute("SELECT pm.points, p.id FROM Player_match pm, Player p WHERE match_id='%s' AND pm.player_id=p.id" % (match_id))
     data = cursor.fetchall()
     for row in data:
-        points = Decimal(row[0])
-        player_id = Decimal(row[1])
+        points = float(row[0])
+        player_id = float(row[1])
         cursor.execute("SELECT display_rating FROM Player WHERE id = '%s'" % player_id)
-        display_rating = Decimal(cursor.fetchone()[0])
+        display_rating = float(cursor.fetchone()[0])
         newDisplay_rating = display_rating + points
         cursor.execute("UPDATE Player SET display_rating = '%s' WHERE id = '%d'" % (newDisplay_rating, player_id))
         conn.commit()
