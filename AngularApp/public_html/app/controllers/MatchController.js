@@ -5,7 +5,7 @@ app.run(function (editableOptions) {
 app.controller('MatchController', function ($scope, $routeParams, daoMatches) {
     $scope.status = "Loading...";
 
-    daoMatches.get($routeParams.matchIs, function (match) {
+    daoMatches.get($routeParams.matchId, function (match) {
         $scope.match = match;
         $scope.status = "Successfully loaded match " + $routeParams.matchId;
     }, function () {
