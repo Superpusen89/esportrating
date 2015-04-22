@@ -87,12 +87,7 @@ def setDisplayRating(match_id):
         newDisplay_rating = display_rating + points
         cursor.execute("UPDATE Player SET display_rating = '%s' WHERE id = '%d'" % (newDisplay_rating, player_id))
         conn.commit()
-    
 
-#while A is not None:
-#    #
-#    print A;
-#    A = cursor.fetchone()
 
 #acces-control-allow-origin
 def crossdomain(origin=None, methods=None, headers=None,
