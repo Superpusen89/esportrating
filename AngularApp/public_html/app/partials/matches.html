@@ -1,0 +1,25 @@
+<h3> Matches view </h3>
+
+<div>Status {{status}}</div><br>
+
+Search: <input type="text" ng-model="searchText">
+
+<ul>
+    <li ng-repeat="match in matches| filter:searchText | orderBy:sortorder">
+        <a href="#/match/{{match.id}}"> 
+            {{ match.id}} - {{match.time_start}} - {{ match.time_end}} - {{ match.winning_team_id}} - {{ match.losing_team_id}} - {{ match.tournament_id}}
+        </a> 
+    </li>
+</ul>
+
+<div>
+    New match:<br>
+    <form ng-submit="addMatch()">
+        <input ng-model="newMatch.winning_team_id" type="number" placeholder="Winning team">
+        <input ng-model="newMatch.losing_team_id" type="number" placeholder="Losing team">
+        <input ng-model="newMatch.time_start" type="date" placeholder="Time start">
+        <input ng-model="newMatch.time_end" type="date" placeholder="Time end">
+        <input ng-model="newMatch.tournament_id" type="number" placeholder="Tournament id">
+        <input type="submit" value="Add match" ng-disabled="!newMatch.tournament_id">
+    </form>
+</div>

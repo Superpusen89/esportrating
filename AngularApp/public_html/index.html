@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html ng-app="clientApp">
+    <head>
+        <title>Players</title>
+        <script src="lib/AngularJS/angular.min.js"></script>
+        <script src="lib/AngularJS/angular-route.min.js"></script>
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+        <link href="lib/Angular-xeditable/css/xeditable.css" rel="stylesheet">
+        <script src="lib/Angular-xeditable/js/xeditable.js"></script>
+
+        <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+        <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.6.0/ui-bootstrap-tpls.min.js"></script>
+<!--        <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.11.0/ui-bootstrap-tpls.min.js"></script>-->
+
+        <script src="app/app.js"></script>
+        <script src="app/controllers/PlayersController.js"></script>
+        <script src="app/controllers/PlayerController.js"></script>
+        <script src="app/services/daoPlayers.js"></script>
+        <script src="app/controllers/TournamentsController.js"></script>
+        <script src="app/controllers/TournamentController.js"></script>
+        <script src="app/services/daoTournaments.js"></script>
+        <script src="app/controllers/MatchesController.js"></script>
+        <script src="app/controllers/MatchController.js"></script>
+        <script src="app/services/daoMatches.js"></script>
+
+
+    </head>
+    <body>
+        <div ng-view></div>
+    </body>
+</html>
