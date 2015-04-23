@@ -7,7 +7,12 @@ Search: <input type="text" ng-model="searchText">
 <ul>
     <li ng-repeat="match in matches| filter:searchText | orderBy:sortorder">
         <a href="#/match/{{match.id}}"> 
-            {{ match.id}} - {{match.time_start}} - {{ match.time_end}} - {{ match.winning_team_id}} - {{ match.losing_team_id}} - {{ match.tournament_id}}
+            Match id: {{ match.id}} <br>
+            Start time: {{match.match_time_start}} <br>
+            End time: {{ match.match_time_end}} <br>
+            Winning team: {{ match.winning_team_id}} <br>
+            Losing team: {{ match.losing_team_id}} <br>
+            Tournament id: {{ match.tournament_id}} <br>
         </a> 
     </li>
 </ul>
