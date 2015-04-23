@@ -322,6 +322,14 @@ def update_match(match_id):
         check(match_id)
         Elo_calc(match_id)
         return "Match is updated!"
+
+@app.route('/match/<int:match_id>', methods=['GET', 'OPTIONS'])
+@crossdomain(origin='*')
+def get_match(match_id):
+        cursor.execute("SELECT * FROM Matches WHERE p.id = '%d'" % (match_id))
+        data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
+                                            row) for row in cursor.fetchall()]]
+        return jsonify(data=data)
     
     
 

@@ -1,0 +1,70 @@
+html, body{
+    height: 100%;
+    overflow: hidden;
+}
+
+body{
+    background: url("app/resources/blue.jpg") no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    padding: 40px 0px;
+}
+
+#page-wrap{
+    margin-top: 70px;
+    overflow-y: scroll; 
+    height: 100%;
+}
+
+section{
+    margin: 0 auto;
+    width: 80%; 
+    color: #DBDBDB; 
+    background-color: #050E15;
+    padding: 20px;
+}
+
+header{
+    text-align: right; 
+    width: 100%;
+    position: fixed;
+    top: 0px;
+}
+
+#admin{ 
+    color: green;
+}
+
+#menu{
+    background-color: #050E15; 
+    height: 63px;
+    color: black;
+    -khtml-opacity:.70; 
+    -moz-opacity:.70; 
+    -ms-filter:”alpha(opacity=70)”;
+    filter:alpha(opacity=70);
+    filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0.7);
+    opacity:.70; 
+}
+
+nav ul li {
+    display: inline; 
+}
+
+body a:link {
+    text-decoration: none;
+}
+
+body a:visited {
+    text-decoration: none;
+}
+
+/*body a:hover {
+    color: red; 
+}*/
+
+body a:active {
+    text-decoration: underline;
+}

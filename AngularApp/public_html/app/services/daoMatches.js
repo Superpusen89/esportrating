@@ -37,4 +37,16 @@ app.service('daoMatches', function ($http, REST) {
             }
         });
     };
+    
+    this.get = function (id, successCallback, errorCallback) {
+        $http.get(REST.path + 'match/' + id).success(function (result) {
+            if (typeof (successCallback) === 'function') {
+                successCallback(result);
+            }
+        }).error(function () {
+            if (typeof (errorCallback) === 'function') {
+                errorCallback();
+            }
+        });
+    };
 });
