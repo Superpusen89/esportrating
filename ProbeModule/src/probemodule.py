@@ -1,8 +1,10 @@
 
-
+from flask import Flask, request
 import MySQLdb
 import requests
 import pprint
+import urllib
+import json
 
 try:
     conn = MySQLdb.connect(host="localhost", user="root", passwd="HenrietteIda", db="esportrating")
@@ -21,5 +23,5 @@ endpoint = 'http://api.steampowered.com/IDOTA2Match_570/GetMatchDetails/v0001/'
 response = requests.get(endpoint, params=query_params)
 url = response.url
 print url
-data = response.json
+data = response.json()['result']['radiant_win']
 pprint.pprint(data)
