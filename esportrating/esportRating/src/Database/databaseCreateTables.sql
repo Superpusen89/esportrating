@@ -1,16 +1,16 @@
 
+
 DROP TABLE User_profile;
-DROP TABLE Tournament;
 DROP TABLE Player_match;
 DROP TABLE Player;
 DROP TABLE Matches;
 DROP TABLE Team;
-
+DROP TABLE Tournament;
 
 CREATE TABLE Team
 (
     id INTEGER NOT NULL AUTO_INCREMENT, 
-    team_id INTEGER,
+    team_id INTEGER UNIQUE,
     team_name CHAR(80),
     PRIMARY KEY (id)
 );
@@ -18,11 +18,14 @@ CREATE TABLE Team
 CREATE TABLE Player
 (
     id INTEGER NOT NULL AUTO_INCREMENT,
-    player_id INTEGER,
+    player_id INTEGER UNIQUE,
     username CHAR(80),
     base_rating FLOAT,
     display_rating FLOAT,
     team_id INTEGER,
+    avatar VARCHAR(200),
+    realname CHAR(80),
+    countrycode CHAR(5),
     PRIMARY KEY (id),
     FOREIGN KEY (team_id) REFERENCES Team(id)
 );
@@ -30,7 +33,7 @@ CREATE TABLE Player
 CREATE TABLE Tournament
 (
     id INTEGER NOT NULL AUTO_INCREMENT,
-    tournament_id INTEGER,
+    tournament_id INTEGER UNIQUE,
     time_start TIMESTAMP,
     time_end TIMESTAMP,
     tournament_name CHAR(80),
@@ -82,6 +85,7 @@ INSERT INTO Player (player_id, username, base_rating, display_rating, team_id) V
 INSERT INTO Tournament (tournament_name) VALUES ('TheFirst');
 INSERT INTO Matches (tournament_id, winning_team_id, losing_team_id) VALUES (1, 1, 2); 
 INSERT INTO Matches (tournament_id, winning_team_id, losing_team_id) VALUES (1, 1, 2); 
+INSERT INTO Matches (tournament_id, winning_team_id, losing_team_id) VALUES (1, 2, 1);
 INSERT INTO Player_match (match_id, player_id, team_id) VALUES (1, 1, 1);
 INSERT INTO Player_match (match_id, player_id, team_id) VALUES (1, 2, 1);
 INSERT INTO Player_match (match_id, player_id, team_id) VALUES (1, 3, 1);
@@ -94,3 +98,9 @@ INSERT INTO Player_match (match_id, player_id, team_id) VALUES (2, 3, 1);
 INSERT INTO Player_match (match_id, player_id, team_id) VALUES (2, 4, 2);
 INSERT INTO Player_match (match_id, player_id, team_id) VALUES (2, 5, 2);
 INSERT INTO Player_match (match_id, player_id, team_id) VALUES (2, 6, 2);
+INSERT INTO Player_match (match_id, player_id, team_id) VALUES (3, 1, 1);
+INSERT INTO Player_match (match_id, player_id, team_id) VALUES (3, 2, 1);
+INSERT INTO Player_match (match_id, player_id, team_id) VALUES (3, 3, 1);
+INSERT INTO Player_match (match_id, player_id, team_id) VALUES (3, 4, 2);
+INSERT INTO Player_match (match_id, player_id, team_id) VALUES (3, 5, 2);
+INSERT INTO Player_match (match_id, player_id, team_id) VALUES (3, 6, 2);
