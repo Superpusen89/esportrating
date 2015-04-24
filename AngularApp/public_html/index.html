@@ -18,6 +18,14 @@
         <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.6.0/ui-bootstrap-tpls.min.js"></script>
         <!--    <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.11.0/ui-bootstrap-tpls.min.js"></script>-->
 
+        <!--        <script src="lib/AngularProgress/ngProgress.js"></script>
+                <link rel="stylesheet" href="ngProgress.css">-->
+
+        <script type="text/javascript" src="sortable.js"></script>
+
+        <!-- input type=date -->
+        <script src="//cdn.jsdelivr.net/webshim/1.14.5/polyfiller.js"></script>
+
         <script src="app/app.js"></script>
         <script src="app/controllers/PlayersController.js"></script>
         <script src="app/controllers/PlayerController.js"></script>
@@ -35,7 +43,7 @@
             <div ng-include="'app/layout/header.html'"></div>
         </div>
         <div id="page-wrap">
-            <section ng-view></section>
+            <section id="container" ng-view></section>
         </div>
     </body>
 </html>

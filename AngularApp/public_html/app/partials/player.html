@@ -6,6 +6,9 @@
     Username: <a href="#" editable-text="player.data[0].username" onbeforesave="saveData($data)">{{player.data[0].username|| "empty" }}</a> <br>
     Team id: <a href="#" editable-text="player.data[0].id">{{player.data[0].id|| "empty" }}</a>
 
+    
+    <img src="{{ player.data[0].avatar }}" alt="W3Schools.com" style="width:104px;height:142px">
+    
     Team name: 
     <a href="#" editable-text="player.data[0].team_name" onbeforesave="validateInput($data)" e-typeahead="team.team_name for team in teams | filter:$viewValue | limitTo:8">
         {{ player.data[0].team_name || "empty" }}

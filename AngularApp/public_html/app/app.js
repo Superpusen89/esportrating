@@ -1,5 +1,8 @@
-var app = angular.module('clientApp', ['ngRoute', 'xeditable', 'ui.bootstrap']);
+var app = angular.module('clientApp', ['ngRoute', 'xeditable', 'ui.bootstrap']); /* 'ngProgress' */
 
+    webshims.setOptions('forms-ext', {types: 'date'});
+    webshims.polyfill('forms forms-ext');
+    
 app.config(function ($routeProvider) {
     $routeProvider
             .when('/players', {

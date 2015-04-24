@@ -163,7 +163,7 @@ def crossdomain(origin=None, methods=None, headers=None,
 @app.route('/player/<int:player_id>', methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def get_player(player_id):
-        cursor.execute("SELECT p.id, username, display_rating, base_rating, team_name, p.team_id, t.id FROM (Player p join Team t on p.team_id = t.id) WHERE p.id = '%d'" % (player_id))
+        cursor.execute("SELECT avatar, p.id, username, display_rating, base_rating, team_name, p.team_id, t.id FROM (Player p join Team t on p.team_id = t.id) WHERE p.id = '%d'" % (player_id))
         data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
                                             row) for row in cursor.fetchall()]]
         return jsonify(data=data)
@@ -344,7 +344,7 @@ def get_match(match_id):
 #api.add_resource(Tournament, '/tournament') #GET all tournaments, POST new torunament: '{"tournament_id":INT, "time_start":TIMESTAMP, "time_end":TIMESTAMP, "tournament_name":STRING}'
 #api.add_resource(Team, '/team') #GET all teams, POST new team: '{"team_id":INT, "team_name":"STRING"}'
 #api.add_resource(Player, '/player') #GET player by username: '{"username":"STRING"}', POST new player: '{"player_id":INT, "username":"STRING", "team_id":INT(has to already exist)}'
-
+  
 if __name__ == '__main__':
     app.run(host="0.0.0.0",
             port=int("5001"))

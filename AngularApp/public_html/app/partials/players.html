@@ -1,29 +1,28 @@
-<h3> Players view </h3>
+<!--CODE TAKEN FROM https://yoast.com/articles/sortable-table/-->
 
-<div>Status players: {{status}}</div><br>
-<div>Status teams: {{statusTeams}}</div><br>
+<section id="ranking_container">
 
-Search: <input type="text" ng-model="searchText">
+<p class="search"> <input class="searchfield" type="text" placeholder="Search" ng-model="searchText"> </p>
 
-<select ng-model="sortorder">
-    <option value="username">Username (A-Z)</option>
-    <option value="-username">Username (Z-A)</option>
-    <option value="team_name">Team name (A-Z)</option>
-    <option value="-display_rating">Rating</option>
-</select>
+<table class="sortable" id="id">
+    <tr>
+        <th>Name</th>
+        <th>Team</th>
+        <th>Score</th>
+    </tr>
+    <tr ng-repeat="player in players| filter:searchText | orderBy:sortorder">
+        <td>
+            <a href="#/player/{{ player.id }}"> {{ player.username }} </a> 
+        </td>
+        <td> {{ player.team_name }}</td> 
+        <td>{{ player.display_rating }}</td>
+    </tr>
+</table>
 
-<ul>
-    <li ng-repeat="player in players| filter:searchText | orderBy:sortorder">
-        <a href="#/player/{{player.id}}"> 
-            {{ player.username}} 
-        </a> - {{ player.team_name}} - {{player.display_rating}}
-        <!-- <button has-role="write" ng-click="editPlayer(player.id)">
-             &times;
-         </button> -->
-    </li>
-</ul>
+<div>{{ status }}</div><br>
+</section>
 
-Search: <input type="text" ng-model="searchTeam">
+<!--Search: <input type="text" ng-model="searchTeam">
 
 <ul>
     <li ng-repeat="team in teams| filter:searchTeam | orderBy:'id'">
@@ -38,16 +37,4 @@ Search: <input type="text" ng-model="searchTeam">
         <input ng-model="newPlayer.team_id" type="number" placeholder="Team id">
         <input type="submit" value="Add Player" ng-disabled="!newPlayer.username || !newPlayer.team_id">
     </form>
-</div>
-
-<div class="lipsum">
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed molestie sem id nibh auctor condimentum. Nunc sed mauris venenatis, sollicitudin ex aliquet, consequat mauris. Duis quis risus convallis, iaculis mi eu, mollis massa. Nulla congue sodales dui in maximus. Integer urna massa, condimentum in elit non, tincidunt hendrerit mauris. Sed odio nibh, varius vel consectetur sed, tristique ullamcorper tellus. Aliquam cursus interdum ex, consequat gravida mauris ultrices ac. Maecenas ornare rutrum velit id sollicitudin. Sed convallis interdum odio, ac tristique lectus. Nullam quis dictum purus, ac congue turpis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Phasellus vulputate pharetra turpis, vitae pellentesque sapien. Integer eu purus sit amet justo efficitur sollicitudin et quis turpis. In ornare tempus blandit.
-
-Sed orci mauris, sodales eget varius quis, semper a odio. Nam sollicitudin velit eget malesuada dignissim. Nulla congue pellentesque erat ut lacinia. Nulla sed odio eu massa scelerisque efficitur. Proin euismod imperdiet magna. Pellentesque ornare elementum sodales. Nam hendrerit mi id elementum imperdiet. Nunc eleifend bibendum elit, eu facilisis elit volutpat sed. Sed libero nunc, varius nec turpis eu, interdum laoreet enim. Morbi ac faucibus velit. Aliquam euismod at elit id sollicitudin. Maecenas posuere tellus eget massa eleifend faucibus.
-
-Nam luctus vulputate orci a volutpat. Ut sed diam dolor. Sed ipsum sem, ultricies eu ex bibendum, pharetra lobortis tortor. Maecenas accumsan ex non ipsum porttitor, ut fermentum massa dapibus. Quisque vitae eros sem. Maecenas at nisl tortor. Phasellus condimentum magna at eros pretium, a commodo turpis placerat.
-
-Praesent ante risus, hendrerit eu bibendum ut, vulputate a lacus. Vestibulum at leo arcu. Mauris vel urna at lorem hendrerit lacinia a ac ligula. Duis sit amet nulla suscipit, consectetur leo ut, iaculis odio. Suspendisse fringilla velit a dui efficitur hendrerit. Nam id magna quis risus viverra ultrices sit amet vitae est. Suspendisse blandit molestie elit sed congue.
-
-Donec rutrum mi et risus posuere, in malesuada mi ornare. Nunc nec diam egestas tortor placerat condimentum. Mauris placerat nisl a neque aliquam congue sed lacinia risus. Nulla a blandit felis. Proin sed aliquam diam. Ut rutrum odio in nunc lobortis varius. Morbi posuere sed lectus vitae viverra. Fusce at imperdiet velit. Cras nec fringilla metus. Quisque condimentum dui velit, at tempus metus sagittis sit amet. Nunc efficitur lorem a ullamcorper suscipit. Vestibulum commodo orci a nisl iaculis efficitur. Vestibulum dictum magna blandit eleifend rutrum. Fusce suscipit ornare neque ut fringilla.
-</div>
+</div>-->

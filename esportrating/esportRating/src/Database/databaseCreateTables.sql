@@ -23,6 +23,7 @@ CREATE TABLE Player
     base_rating FLOAT,
     display_rating FLOAT,
     team_id INTEGER,
+    avatar VARCHAR(200),
     PRIMARY KEY (id),
     FOREIGN KEY (team_id) REFERENCES Team(id)
 );

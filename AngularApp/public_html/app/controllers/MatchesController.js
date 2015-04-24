@@ -1,10 +1,9 @@
 app.controller('MatchesController', function ($scope, daoMatches) {
-    $scope.status = "Loading...";
-
+    $scope.status = "";
 
     daoMatches.getAll(function (matches) {
         $scope.matches = matches.data;
-        $scope.status = "Successfully loaded matches";
+        $scope.status = "";
     }, function () {
         $scope.status = "Error loading matches";
     });

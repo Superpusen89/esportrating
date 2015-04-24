@@ -2,10 +2,9 @@ app.controller('PlayersController', function ($scope, daoPlayers) {
     $scope.status = "Loading...";
     $scope.statusTeams = "Loading...";
 
-
     daoPlayers.getAll(function (players) {
         $scope.players = players.data;
-        $scope.status = "Successfully loaded Players";
+        $scope.status = "";
     }, function () {
         $scope.status = "Error loading Players";
     });
