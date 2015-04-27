@@ -28,19 +28,39 @@
         </tr>
     </table>
 
-    <div>{{status}}</div><br>
 
     <div id="newmatch">
         Add a new match:<br>
-        <form ng-submit="addMatch()">
-            <!--<input ng-model="newMatch.team_1_id" type="text" placeholder="Team 1" typeahead="team.id as team.team_name for team in teams | filter:$viewValue | limitTo:8" typeahead-editable="false" typeahead-input-formatter="formatLabel($model)">-->
-            <input ng-model="newMatch.team_1_id" type="number" placeholder="Team 1">
-            <input ng-model="newMatch.team_2_id" type="number" placeholder="Team 2">
-            <input ng-model="newMatch.winning_team_id" type="number" placeholder="Winning team">
-            <input ng-model="newMatch.losing_team_id" type="number" placeholder="Losing team">
-            <input ng-model="newMatch.match_time_start" type="date" placeholder="Time start">
-            <input ng-model="newMatch.match_time_end" type="date" placeholder="Time end">
-            <input ng-model="newMatch.tournament_id" type="number" placeholder="Tournament id">
+
+        <!--           -->
+
+
+
+        <div>{{status}}</div><br>
+
+        <form ng-submit="addMatch()" name="newMatch">
+            <!--            <table>
+                            <tr ng-repeat="subscription in entities">
+                                <td>
+                                    <input type="checkbox" ng-model="subscription.checked" ng-click="updateSelection($index, entities)" />
+                                </td>
+                            </tr>
+                        </table>-->
+            <ul ng-repeat="subscription in entities">
+                <li id="{{'team' + $index}}">
+                    Winning team <input type="checkbox" ng-model="subscription.checked" ng-click="updateSelection($index, entities)" />
+                </li>
+            </ul>
+            <input name="team1" ng-model="newMatch.team_1_id"type="text" placeholder="Team 1" typeahead="team.id as team.id + ' ' + team.team_name for team in teams | filter:$viewValue | limitTo:8" typeahead-editable="false" typeahead-input-formatter="formatLabel($model)">
+            <input name="team2"  ng-model="newMatch.team_2_id" type="text" placeholder="Team 2" typeahead="team.id as team.id + ' ' + team.team_name for team in teams | filter:$viewValue | limitTo:8" typeahead-editable="false" typeahead-input-formatter="formatLabel($model)">
+
+            <!--<input ng-model="newMatch.team_1_id" type="number" placeholder="Team 1">-->
+            <!--<input ng-model="newMatch.team_2_id" type="number" placeholder="Team 2">-->
+            <!--            <input name="winning" ng-model="newMatch.winning_team_id" type="number" placeholder="Winning team">
+                        <input name="losing" ng-model="newMatch.losing_team_id" type="number" placeholder="Losing team">-->
+            <input name="time_start" ng-model="newMatch.match_time_start" type="date" placeholder="Time start">
+            <input name="time_end" ng-model="newMatch.match_time_end" type="date" placeholder="Time end">
+            <input name="tournament" ng-model="newMatch.tournament_id" type="number" placeholder="Tournament id" typeahead="tournament.id as tournament.id + ' ' + tournament.tournament_name for team in teams | filter:$viewValue | limitTo:8" typeahead-editable="false" typeahead-input-formatter="formatTournamentLabel($model)">
             <input type="submit" value="Add match" ng-disabled="!newMatch.tournament_id || !newMatch.team_1_id || !newMatch.team_2_id">
         </form>
     </div>

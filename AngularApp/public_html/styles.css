@@ -95,7 +95,7 @@ table.sortable {
 table.sortable th, table.sortable td {
     text-align: left;
     padding: 2px 12px 2px 4px;
-   // width: 100px;
+    // width: 100px;
     border-style: none;
     font-size: 20px;
 }
@@ -176,6 +176,18 @@ table {
     font-size: 20px;
 }
 
+#matches_container ul{
+    list-style-type: none;
+    display: inline-block;
+}
+
+#team0{
+    float: left;  
+}
+
+#team1{
+    float: right;  
+}
 /*
 
 <div>Icons made by <a href="http://www.flaticon.com/authors/freepik" 
