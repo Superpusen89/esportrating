@@ -1,0 +1,26 @@
+<section id="teams_container">
+    Search: <input type="text" ng-model="searchTeam">
+
+    <table class="sortable" id="id">
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+        </tr>
+        <tr ng-repeat="team in teams| filter:searchTeam | orderBy:'id'">
+            <td>{{ team.id}} </td> 
+            <td>
+                <a href="#/team/{{team.id}}"> {{ team.team_name}} </a> 
+            </td>
+        </tr>
+    </table>
+
+    <div>{{ status}}</div><br>
+
+    <div>
+        New team:<br>
+        <form ng-submit="addTeam()">
+            <input ng-model="newTeam.team_name" type="text" placeholder="Team name">
+            <input type="submit" value="Add team" ng-disabled="!newTeam.team_name">
+        </form>
+    </div>
+</section>

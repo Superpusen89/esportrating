@@ -1,30 +1,48 @@
-<h3> Matches view </h3>
 
-<div>Status {{status}}</div><br>
+<section id="matches_container">
 
-Search: <input type="text" ng-model="searchText">
+    <p class="search"> <input class="searchfield" type="text" placeholder="Search" ng-model="searchText"></p>
 
-<ul>
-    <li ng-repeat="match in matches| filter:searchText | orderBy:sortorder">
-        <a href="#/match/{{match.id}}"> 
-            Match id: {{ match.id}} <br>
-            Start time: {{match.match_time_start}} <br>
-            End time: {{ match.match_time_end}} <br>
-            Winning team: {{ match.winning_team_id}} <br>
-            Losing team: {{ match.losing_team_id}} <br>
-            Tournament id: {{ match.tournament_id}} <br>
-        </a> 
-    </li>
-</ul>
+    <table class="sortable" id="id">
+        <tr>
+            <th> Match id </th>
+            <th> Start time </th>
+            <th> End time </th>
+            <th> Team 1 </th>
+            <th> Team 2 </th>
+            <th> Winning team </th>
+            <th> Losing team </th>
+            <th> Tournament id </th>
+        </tr>
+        <tr ng-repeat="match in matches| filter:searchText | orderBy:sortorder">
+            <td>
+                <a href="#/match/{{match.id}}"> {{ match.id}} </a> 
+            </td>
+            <td>{{ match.match_time_start}}</td>
+            <td>{{ match.match_time_end}}</td>
+            <td>{{ match.team_1_id}}</td>
+            <td>{{ match.team_2_id}}</td>
+            <td>{{ match.winning_team_id}}</td>
+            <td>{{ match.losing_team_id}}</td>
+            <td>{{ match.tournament_id}}</td>
+        </tr>
+    </table>
 
-<div>
-    New match:<br>
-    <form ng-submit="addMatch()">
-        <input ng-model="newMatch.winning_team_id" type="number" placeholder="Winning team">
-        <input ng-model="newMatch.losing_team_id" type="number" placeholder="Losing team">
-        <input ng-model="newMatch.time_start" type="date" placeholder="Time start">
-        <input ng-model="newMatch.time_end" type="date" placeholder="Time end">
-        <input ng-model="newMatch.tournament_id" type="number" placeholder="Tournament id">
-        <input type="submit" value="Add match" ng-disabled="!newMatch.tournament_id">
-    </form>
-</div>
+    <div>{{status}}</div><br>
+
+    <div id="newmatch">
+        Add a new match:<br>
+        <form ng-submit="addMatch()">
+            <!--<input ng-model="newMatch.team_1_id" type="text" placeholder="Team 1" typeahead="team.id as team.team_name for team in teams | filter:$viewValue | limitTo:8" typeahead-editable="false" typeahead-input-formatter="formatLabel($model)">-->
+            <input ng-model="newMatch.team_1_id" type="number" placeholder="Team 1">
+            <input ng-model="newMatch.team_2_id" type="number" placeholder="Team 2">
+            <input ng-model="newMatch.winning_team_id" type="number" placeholder="Winning team">
+            <input ng-model="newMatch.losing_team_id" type="number" placeholder="Losing team">
+            <input ng-model="newMatch.match_time_start" type="date" placeholder="Time start">
+            <input ng-model="newMatch.match_time_end" type="date" placeholder="Time end">
+            <input ng-model="newMatch.tournament_id" type="number" placeholder="Tournament id">
+            <input type="submit" value="Add match" ng-disabled="!newMatch.tournament_id || !newMatch.team_1_id || !newMatch.team_2_id">
+        </form>
+    </div>
+
+</section>

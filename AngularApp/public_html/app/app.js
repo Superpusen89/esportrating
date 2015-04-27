@@ -1,4 +1,7 @@
-var app = angular.module('clientApp', ['ngRoute', 'xeditable', 'ui.bootstrap']);
+var app = angular.module('clientApp', ['ngRoute', 'xeditable', 'ui.bootstrap']); /* 'ngResource', 'ngProgress' */
+
+webshims.setOptions('forms-ext', {types: 'date'});
+webshims.polyfill('forms forms-ext');
 
 app.config(function ($routeProvider) {
     $routeProvider
@@ -28,6 +31,14 @@ app.config(function ($routeProvider) {
             })
             .when('/login', {
                 templateUrl: 'app/partials/login.html'
+            })
+            .when('/teams', {
+                controller: 'TeamsController',
+                templateUrl: 'app/partials/teams.html'
+            })
+            .when('/team/:teamId', {
+                controller: 'TeamController',
+                templateUrl: 'app/partials/team.html'
             })
             .otherwise({redirectTo: '/players'});
 });

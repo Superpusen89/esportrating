@@ -15,6 +15,8 @@ CREATE TABLE Team
     PRIMARY KEY (id)
 )CHARACTER SET utf8 COLLATE utf8_unicode_ci; /*CHARACTER SET utf8 COLLATE utf8_unicode_ci*/
 
+
+
 CREATE TABLE Player
 (
     id INTEGER NOT NULL AUTO_INCREMENT,
@@ -45,8 +47,10 @@ CREATE TABLE Matches
     id INTEGER NOT NULL AUTO_INCREMENT,
     match_id INTEGER,
     tournament_id INTEGER,
-    winning_team_id INTEGER,
-    losing_team_id INTEGER,
+    team_1_id INTEGER,
+    team_2_id INTEGER,
+    winning_team_id INTEGER, 
+    losing_team_id INTEGER, 
     match_time_start TIMESTAMP,
     match_time_end TIMESTAMP,
     PRIMARY KEY (id),
@@ -76,12 +80,20 @@ CREATE TABLE User_profile
 # Testdata
 INSERT INTO Team (team_name) VALUES ('Superpusene');
 INSERT INTO Team (team_name) VALUES ('Guttah');
-INSERT INTO Player (player_id, username, base_rating, display_rating, team_id) VALUES (null, 'Superpusen', 1200, 1200, 1);
-INSERT INTO Player (player_id, username, base_rating, display_rating, team_id) VALUES (null, 'LobNobIda', 1300, 1300, 1);
-INSERT INTO Player (player_id, username, base_rating, display_rating, team_id) VALUES (null, 'EirikStrongMan', 1200, 1200, 1);
-INSERT INTO Player (player_id, username, base_rating, display_rating, team_id) VALUES (null, 'TommyTeabag', 1400, 1400, 2);
-INSERT INTO Player (player_id, username, base_rating, display_rating, team_id) VALUES (null, 'Kettelz', 1400, 1400, 2);
-INSERT INTO Player (player_id, username, base_rating, display_rating, team_id) VALUES (null, 'Tedzky', 1400, 1400, 2);
+INSERT INTO Team (team_name) VALUES ('Unicode');
+INSERT INTO Player (player_id, username, base_rating, display_rating, team_id, countrycode) VALUES (null, 'Superpusen', 1200, 1200, 1, 'af');
+INSERT INTO Player (player_id, username, base_rating, display_rating, team_id, countrycode) VALUES (null, 'LobNobIda', 1300, 1300, 1, 'au');
+INSERT INTO Player (player_id, username, base_rating, display_rating, team_id, countrycode) VALUES (null, 'EirikStrongMan', 1200, 1200, 1, 'ar');
+INSERT INTO Player (player_id, username, base_rating, display_rating, team_id, countrycode) VALUES (null, 'TommyTeabag', 1400, 1400, 2, 'bv');
+INSERT INTO Player (player_id, username, base_rating, display_rating, team_id, countrycode) VALUES (null, 'Kettelz', 1400, 1400, 2, 'aw');
+INSERT INTO Player (player_id, username, base_rating, display_rating, team_id, countrycode) VALUES (null, 'Tedzky', 1400, 1400, 2, 'no');
+-- INSERT INTO Player (player_id, username, base_rating, display_rating, team_id) VALUES (null, '여보세요', 1400, 1400, 3);
+-- INSERT INTO Player (player_id, username, base_rating, display_rating, team_id) VALUES (null, '有什么需要我帮你的', 1400, 1400, 3);
+-- INSERT INTO Player (player_id, username, base_rating, display_rating, team_id) VALUES (null, 'お久しぶりですね', 1400, 1400, 3);
+-- INSERT INTO Player (player_id, username, base_rating, display_rating, team_id) VALUES (null, 'Trademark™', 1400, 1400, 3);
+-- INSERT INTO Player (player_id, username, base_rating, display_rating, team_id) VALUES (null, ' أهلا صديقي/صديقتي!', 1400, 1400, 3);
+-- INSERT INTO Player (player_id, username, base_rating, display_rating, team_id) VALUES (null, 'Øystein', 1400, 1400, 3);
+INSERT INTO Player (username, base_rating, display_rating, team_id, countrycode) VALUES ('Gemzi', 1348, 1354, 2, 'aq');
 INSERT INTO Tournament (tournament_name) VALUES ('TheFirst');
 INSERT INTO Matches (tournament_id, winning_team_id, losing_team_id) VALUES (1, 1, 2); 
 INSERT INTO Matches (tournament_id, winning_team_id, losing_team_id) VALUES (1, 1, 2); 
@@ -104,3 +116,8 @@ INSERT INTO Player_match (match_id, player_id, team_id) VALUES (3, 3, 1);
 INSERT INTO Player_match (match_id, player_id, team_id) VALUES (3, 4, 2);
 INSERT INTO Player_match (match_id, player_id, team_id) VALUES (3, 5, 2);
 INSERT INTO Player_match (match_id, player_id, team_id) VALUES (3, 6, 2);
+
+ 
+
+ 
+ 

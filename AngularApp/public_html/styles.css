@@ -18,53 +18,167 @@ body{
     height: 100%;
 }
 
-section{
+#container{
     margin: 0 auto;
-    width: 80%; 
+    width: 70%; 
+    min-height: 90%;
     color: #DBDBDB; 
     background-color: #050E15;
-    padding: 20px;
+    padding-top: 25px;
+    padding-right: 50px; 
+    padding-left: 50px;
+    padding-bottom: 70px; //top right bottom left 
 }
 
 header{
-    text-align: right; 
     width: 100%;
     position: fixed;
     top: 0px;
 }
 
 #admin{ 
-    color: green;
+    text-align: right; 
+    color: white;
 }
 
 #menu{
     background-color: #050E15; 
     height: 63px;
-    color: black;
-    -khtml-opacity:.70; 
-    -moz-opacity:.70; 
-    -ms-filter:”alpha(opacity=70)”;
-    filter:alpha(opacity=70);
-    filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0.7);
-    opacity:.70; 
+    line-height: 63px;
+    color: #DBDBDB;
+    font-size: 25px;
+    font-style: oblique; 
+    text-align: center; 
+
+    //text-transform: uppercase;
+    /*    -khtml-opacity:.70; 
+        -moz-opacity:.70; 
+        -ms-filter:”alpha(opacity=70)”;
+        filter:alpha(opacity=70);
+        filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0.7);
+        opacity:.70; */
+}
+
+#menu.a:visited {
+    color: #DBDBDB !important;
 }
 
 nav ul li {
     display: inline; 
+    padding: 10px;
 }
 
-body a:link {
-    text-decoration: none;
+a {
+    color: #DBDBDB; 
 }
 
-body a:visited {
-    text-decoration: none;
+a:link {
+    color: #DBDBDB;
 }
 
-/*body a:hover {
-    color: red; 
-}*/
-
-body a:active {
-    text-decoration: underline;
+a:visited {
+    color: #DBDBDB;
 }
+
+a:hover, a:visited:hover{
+    color: #DBDBDB;
+}
+
+a:active {
+    color: #DBDBDB;
+}
+
+/* SORTABLE */
+table.sortable {
+    border-collapse: collapse;
+}
+table.sortable th, table.sortable td {
+    text-align: left;
+    padding: 2px 12px 2px 4px;
+   // width: 100px;
+    border-style: none;
+    font-size: 20px;
+}
+table.sortable th {
+    background-color: #2A4F62;
+}
+table.sortable tr.odd td {
+    background-color: #336075 ;
+    color: #DBDBDB;
+}
+table.sortable tr.even td {
+    background-color: #2A4F62;
+    color: #DBDBDB;
+}
+
+/* END SORTABLE */
+
+/* RANKING SEARCH */
+
+table {
+    width: 100%;
+}
+
+.search{
+    text-align: right; 
+}
+
+.searchfield{
+    background: #DBDBDB url(app/resources/search.png) right no-repeat;
+    background-size: 15px 15px;
+    border: solid 1px black;
+    //background: url(app/resources/search.png) no-repeat scroll 7px 7px;
+}
+
+::-webkit-input-placeholder { /* WebKit browsers */
+    color:    gray;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color:    gray;
+    opacity:  1;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color:    gray;
+    opacity:  1;
+}
+:-ms-input-placeholder { /* Internet Explorer 10+ */
+    color:    gray;
+}
+
+/* END RANKING SEARCH */
+
+#ranking_container {
+    margin: 0 auto;
+    width: 70%; 
+    min-height: 90%;
+    color: #DBDBDB; 
+    background-color: #050E15;
+    padding-top: 25px;
+    padding-right: 50px; 
+    padding-left: 50px;
+    padding-bottom: 70px; //top right bottom left 
+}
+
+#matches_container {
+    margin: 0 auto;
+    width: 100%; 
+    min-height: 90%;
+    color: #DBDBDB; 
+    background-color: #050E15;
+    padding-top: 25px;
+    padding-right: 50px; 
+    padding-left: 50px;
+    padding-bottom: 70px; //top right bottom left 
+}
+
+#newmatch{
+    padding-top: 40px;
+    font-size: 20px;
+}
+
+/*
+
+<div>Icons made by <a href="http://www.flaticon.com/authors/freepik" 
+title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a>             is licensed by 
+<a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></div>
+*/
