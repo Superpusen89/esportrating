@@ -36,6 +36,10 @@ app.config(function ($routeProvider) {
                 controller: 'TeamsController',
                 templateUrl: 'app/partials/teams.html'
             })
+            .when('/team/:teamId', {
+                controller: 'TeamController',
+                templateUrl: 'app/partials/team.html'
+            })
             .otherwise({redirectTo: '/players'});
 });
 

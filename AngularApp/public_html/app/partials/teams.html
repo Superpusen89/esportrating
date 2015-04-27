@@ -8,7 +8,9 @@
         </tr>
         <tr ng-repeat="team in teams| filter:searchTeam | orderBy:'id'">
             <td>{{ team.id}} </td> 
-            <td>{{ team.team_name}}</td>
+            <td>
+                <a href="#/team/{{team.id}}"> {{ team.team_name}} </a> 
+            </td>
         </tr>
     </table>
 

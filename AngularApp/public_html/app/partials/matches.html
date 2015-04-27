@@ -33,14 +33,15 @@
     <div id="newmatch">
         Add a new match:<br>
         <form ng-submit="addMatch()">
+            <!--<input ng-model="newMatch.team_1_id" type="text" placeholder="Team 1" typeahead="team.id as team.team_name for team in teams | filter:$viewValue | limitTo:8" typeahead-editable="false" typeahead-input-formatter="formatLabel($model)">-->
             <input ng-model="newMatch.team_1_id" type="number" placeholder="Team 1">
             <input ng-model="newMatch.team_2_id" type="number" placeholder="Team 2">
             <input ng-model="newMatch.winning_team_id" type="number" placeholder="Winning team">
             <input ng-model="newMatch.losing_team_id" type="number" placeholder="Losing team">
-            <input ng-model="newMatch.time_start" type="date" placeholder="Time start">
-            <input ng-model="newMatch.time_end" type="date" placeholder="Time end">
+            <input ng-model="newMatch.match_time_start" type="date" placeholder="Time start">
+            <input ng-model="newMatch.match_time_end" type="date" placeholder="Time end">
             <input ng-model="newMatch.tournament_id" type="number" placeholder="Tournament id">
-            <input type="submit" value="Add match" ng-disabled="!newMatch.tournament_id">
+            <input type="submit" value="Add match" ng-disabled="!newMatch.tournament_id || !newMatch.team_1_id || !newMatch.team_2_id">
         </form>
     </div>
 

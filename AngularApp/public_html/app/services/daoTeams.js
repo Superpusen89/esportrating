@@ -50,4 +50,17 @@ app.service('daoTeams', function ($http, REST) {
         });
     };
 
+    this.edit = function (team_id, team_name, successCallback, errorCallback) {
+        var newTeam = {team_id: team_id, team_name: team_name};
+        $http.put(REST.path + 'team', newTeam).success(function (result) {
+            if (typeof (successCallback) === 'function') {
+                successCallback(result);
+            }
+        }).error(function () {
+            if (typeof (errorCallback) === 'function') {
+                errorCallback();
+            }
+        });
+    };
+
 });

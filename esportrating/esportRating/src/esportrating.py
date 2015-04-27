@@ -230,7 +230,7 @@ def edit_player():
 @app.route('/team/<int:team_id>', methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def get_team(team_id):
-    cursor.execute("SELECT team_name FROM Team WHERE id = '%d'" % (team_id))
+    cursor.execute("SELECT * FROM Team WHERE id = '%d'" % (team_id))
     data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
                                         row) for row in cursor.fetchall()]]
         
@@ -261,7 +261,26 @@ def create_teams():
     team_name = request.get_json().get('team_name', '')
     cursor.execute("INSERT INTO Team (team_name) VALUES ('%s')" % (team_name))
     conn.commit()
-    return "%s is added" % team_name 
+    #return "%s is added" % team_name
+
+    cursor.execute("SELECT LAST_INSERT_ID()")
+    team_id = cursor.fetchone()[0]
+    return "%d" % team_id; 
+        
+#    cursor.execute("select * from Matches")
+#    data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
+#                                        row) for row in cursor.fetchall()]]
+
+    return jsonify(data=team_id)
+
+@app.route('/team', methods=['PUT', 'OPTIONS'])
+@crossdomain(origin='*')
+def edit_team():
+    team_id = request.get_json().get('team_id', '')
+    team_name = request.get_json().get('team_name', '')
+    cursor.execute("UPDATE Team SET team_name = '%s' where id = '%d'" % (team_name, team_id))
+    conn.commit()
+    return "%s is updated!" % team_id
 
 @app.route('/tournament/<int:tournament_id>', methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
@@ -333,14 +352,18 @@ def create_match():
         winning_team_id = request.get_json().get('winning_team_id', '')
         losing_team_id = request.get_json().get('losing_team_id', '')
         tournament_id = request.get_json().get('tournament_id', '')
-        cursor.execute("INSERT INTO Matches (tournament_id, team_1_id, team_2_id, winning_team_id, losing_team_id, match_time_start, match_time_end) VALUES ('%d', '%d', '%d', '%d', '%d', '%s', '%s')" % (tournament_id, team_1_id, team_2_id, time_start, time_end))
+        cursor.execute("INSERT INTO Matches (tournament_id, team_1_id, team_2_id, winning_team_id, losing_team_id, match_time_start, match_time_end) VALUES ('%d', '%d', '%d', '%d', '%d', '%s', '%s')" % (tournament_id, team_1_id, team_2_id, winning_team_id, losing_team_id, time_start, time_end))
         conn.commit()
+        
         cursor.execute("SELECT LAST_INSERT_ID()")
         match_id = cursor.fetchone()[0]
-        if(winning_team_id and losing_team_id is not None):
+        return "%d" % match_id; 
+
+# NEEDS TO BE NOT 0
+        if(winning_team_id and losing_team_id != -1): 
             eloCalc(match_id)
 
-        return "Match is added!"
+#        return "Match is added!"
 
 @app.route('/match', methods=['PUT', 'OPTIONS'])
 @crossdomain(origin='*')
