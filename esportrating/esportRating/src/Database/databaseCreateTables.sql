@@ -51,8 +51,8 @@ CREATE TABLE Matches
     team_2_id INTEGER,
     winning_team_id INTEGER, 
     losing_team_id INTEGER, 
-    match_time_start TIMESTAMP,
-    match_time_end TIMESTAMP,
+    match_time_start INT(11),
+    match_time_end INT(11),
     PRIMARY KEY (id),
     FOREIGN KEY (tournament_id) REFERENCES Tournament(id)
 );

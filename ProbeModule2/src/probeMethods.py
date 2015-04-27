@@ -85,29 +85,10 @@ def getPlayerSummaries(steam_id):
         dataPerson.append([username, avatar, realname, countrycode])
     return dataPerson
     
-def insertTeam(team_id, team_name):
-    cursor.execute(queries.q3 % (team_id))
-    test = cursor.fetchone()[0]
-    if test == 0:
-        cursor.execute(queries.q4 % (team_id, team_name))
-        conn.commit()
+
+        #UFERDIG
+
         
-def getMatchDetails(match_id):
-    query_params3 = { 'key': queryParams.key,
-                        'match_id': match_id 
-                               }
-    response = requests.get(queryParams.endpoint3, params=query_params3)
-    #data = response.json()['result']['players']
-    exists = 0
-    try:
-        radiant_win = response.json()['result']['radiant_win']
-        radiant_id = response.json()['result']['radiant_team_id']
-        dire_id = response.json()['result']['dire_team_id']
-        start_time = (response.json()['result']['start_time'])
-        duration = (response.json()['result']['duration'])
-        exists += 1
-        print "exists skjer"
-    except KeyError: pass
     
 def getMatchDetailsTeamName(match_id):
     del dataTeamNames[:]
@@ -124,11 +105,57 @@ def getMatchDetailsTeamName(match_id):
     dataTeamNames.append([radiant_name, dire_name])
     return dataTeamNames
 
+def insertTournament(league_id, league_name):
+    cursor.execute(queries.q1 % (league_id))
+    test = cursor.fetchone()[0]
+    if test == 0:
+        cursor.execute(queries.q2 % (league_id, league_name))
+        conn.commit()
+        return 1
+    return -1
+
+def insertTeam(team_id, team_name):
+    cursor.execute(queries.q3 % (team_id))
+    test = cursor.fetchone()[0]
+    if test == 0:
+        cursor.execute(queries.q4 % (team_id, team_name))
+        conn.commit()
+
 def insertPlayer(account_id, username, team_id, avatar, realname, countrycode):
     cursor.execute(queries.q5 % (account_id))
     test = cursor.fetchone()[0]
     if test == 0:
-        print 'INSERT INTO Player'
-        print username
         cursor.execute(queries.q6 % (account_id, (username + unichr(300)), 1200, 1200, team_id, avatar, realname, countrycode))
+        conn.commit()
+        
+def insertMatches(match_id, league_id, radiant_team_id, dire_team_id):
+    radiant_win = None
+    query_params3 = { 'key': queryParams.key,
+                        'match_id': match_id 
+                               }
+    response = requests.get(queryParams.endpoint3, params=query_params3)
+    try:
+        start_time = response.json()['result']['start_time']
+        duration = response.json()['result']['duration']
+        radiant_win = response.json()['result']['radiant_win']
+    except KeyError: pass
+    if radiant_win != None: #AND timestamp?
+        end_time = start_time + duration
+        cursor.execute(queries.q7 % (match_id))
+        test = cursor.fetchone()[0]
+        if test == 0:
+            if radiant_win:
+                cursor.execute(queries.q8 % (match_id, league_id, radiant_team_id, dire_team_id, start_time, end_time))
+                conn.commit()
+            else:
+                cursor.execute(queries.q9 % (match_id, league_id, dire_team_id, radiant_team_id, start_time, end_time))
+                conn.commit() 
+    
+
+def insertPlayerMatch(match_id, account_id, team_id):
+    cursor.execute(queries.q10 % (match_id, account_id))
+    test = cursor.fetchone()[0]
+    if test == 0:
+        print 'INSERT INTO Player_match'
+        cursor.execute(queries.q11 % (match_id, account_id, team_id))
         conn.commit()
