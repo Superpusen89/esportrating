@@ -28,14 +28,14 @@ app.controller('PlayerController', function ($scope, $routeParams, daoPlayers) {
         }
 
         if ($.inArray(data, teamarray) !== -1) {
-            console.log('1. Data in the array: ' + data)
+            console.log('1. Data in the array: ' + data);
             daoPlayers.getTeamId(data, function (data) {
                 $scope.team_id = data;
-                console.log('2. Data sent to scope.team_id: ' + data)
-                console.log('3. scope.team_id received : ' + data)
+                console.log('2. Data sent to scope.team_id: ' + data);
+                console.log('3. scope.team_id received : ' + data);
             });
             
-            console.log('4. scope.team_id outside of function : ' + $scope.team_id)
+            console.log('4. scope.team_id outside of function : ' + $scope.team_id);
             var player_id = parseInt($routeParams.playerId);
             var username = $scope.player.data[0].username;
             var team_id = $scope.team_id.data[0].id;

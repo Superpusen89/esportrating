@@ -61,4 +61,16 @@ app.service('daoMatches', function ($http, REST) {
             }
         });
     };
+
+    this.getAllTournaments = function (successCallback, errorCallback) {
+        $http.get(REST.path + 'tournament').success(function (result) {
+            if (typeof (successCallback) === 'function') {
+                successCallback(result);
+            }
+        }).error(function () {
+            if (typeof (errorCallback) === 'function') {
+                errorCallback();
+            }
+        });
+    };
 });
