@@ -2,39 +2,24 @@
 
 <section id="ranking_container">
 
-<p class="search"> <input class="searchfield" type="text" placeholder="Search" ng-model="searchText"> </p>
+    <p class="search"> <input class="searchfield" type="text" placeholder="Search" ng-model="searchText"> </p>
 
-<table class="sortable" id="id">
-    <tr>
-        <th>Name</th>
-        <th>Team</th>
-        <th>Score</th>
-    </tr>
-    <tr ng-repeat="player in players| filter:searchText | orderBy:sortorder">
-        <td>
-            <a href="#/player/{{ player.id }}"> {{ player.username }} </a> 
-        </td>
-        <td> {{ player.team_name }}</td> 
-        <td>{{ player.display_rating }}</td>
-    </tr>
-</table>
+    <table class="sortable" id="id">
+        <tr>
+            <th>Name</th>
+            <th>Country</th>
+            <th>Team</th>
+            <th>Score</th>
+        </tr>
+        <tr ng-repeat="player in players| filter:searchText | orderBy:sortorder">
+            <td>
+                <a href="#/player/{{ player.id}}"> {{ player.username}} </a> 
+            </td>
+            <td><img src="app/resources/flags/{{player.countrycode}}.png" alt="{{player.countrycode}}" title="{{player.countrycode}}"></td>
+            <td> {{ player.team_name}}</td> 
+            <td>{{ player.display_rating}}</td>
+        </tr>
+    </table>
 
-<div>{{ status }}</div><br>
+    <div>{{ status}}</div><br>
 </section>
-
-<!--Search: <input type="text" ng-model="searchTeam">
-
-<ul>
-    <li ng-repeat="team in teams| filter:searchTeam | orderBy:'id'">
-        {{ team.id}} - {{ team.team_name}}
-    </li>
-</ul>
-
-<div>
-    New player:<br>
-    <form ng-submit="addPlayer()">
-        <input ng-model="newPlayer.username" type="text" placeholder="Username">
-        <input ng-model="newPlayer.team_id" type="number" placeholder="Team id">
-        <input type="submit" value="Add Player" ng-disabled="!newPlayer.username || !newPlayer.team_id">
-    </form>
-</div>-->

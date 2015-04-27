@@ -1,8 +1,8 @@
 var app = angular.module('clientApp', ['ngRoute', 'xeditable', 'ui.bootstrap']); /* 'ngProgress' */
 
-    webshims.setOptions('forms-ext', {types: 'date'});
-    webshims.polyfill('forms forms-ext');
-    
+webshims.setOptions('forms-ext', {types: 'date'});
+webshims.polyfill('forms forms-ext');
+
 app.config(function ($routeProvider) {
     $routeProvider
             .when('/players', {
@@ -31,6 +31,10 @@ app.config(function ($routeProvider) {
             })
             .when('/login', {
                 templateUrl: 'app/partials/login.html'
+            })
+            .when('/teams', {
+                controller: 'TeamsController',
+                templateUrl: 'app/partials/teams.html'
             })
             .otherwise({redirectTo: '/players'});
 });

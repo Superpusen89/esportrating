@@ -29,17 +29,4 @@ app.controller('PlayersController', function ($scope, daoPlayers) {
         $scope.newPlayer.username = '';
         $scope.newPlayer.team_id = '';
     };
-
-    /**** TEAM ****/
-
-    daoPlayers.getAllTeams(function (teams) {
-        $scope.teams = teams.data;
-        $scope.statusTeams = "Successfully loaded Teams";
-    }, function () {
-        $scope.statusTeams = "Error loading Teams";
-    });
-
-    $scope.sortorder = ['display_rating', 'username'];
-
-
 });

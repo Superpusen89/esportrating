@@ -1,16 +1,22 @@
-from flask import Flask, request, json, jsonify
-from flask.ext.restful import Api, Resource, reqparse, fields, marshal
-from decimal import Decimal
 import MySQLdb
-import sys
-import time
+from datetime import timedelta
+from decimal import Decimal
+from flask import Flask
+from flask import current_app
+from flask import json
+from flask import jsonify
+from flask import make_response
+from flask import request
+from flask.ext.restful import Api
+from flask.ext.restful import Resource
+from flask.ext.restful import fields
+from flask.ext.restful import marshal
+from flask.ext.restful import reqparse
+from functools import update_wrapper
 import math
 import queries
-
-#acces-control-allow-origin
-from datetime import timedelta
-from flask import make_response, request, current_app
-from functools import update_wrapper
+import sys
+import time
 
 app = Flask(__name__)
 api = Api(app)
@@ -31,13 +37,13 @@ except MySQLdb.Error, e:
 
        
 def check(match_id):
-    cursor.execute("SELECT COUNT(points) FROM Player_match WHERE match_id = '%s'" %(match_id))
+    cursor.execute("SELECT COUNT(points) FROM Player_match WHERE match_id = '%s'" % (match_id))
     count = cursor.fetchone()[0]
     if(count != 0):
         resetDisplayRating(match_id)
 
 def resetDisplayRating(match_id):
-    cursor.execute("SELECT points, player_id FROM Player_match WHERE match_id='%s'" %(match_id)) #MATCH_ID
+    cursor.execute("SELECT points, player_id FROM Player_match WHERE match_id='%s'" % (match_id)) #MATCH_ID
     pointsExist = cursor.fetchall()
     for row in pointsExist:
         player_id = Decimal(row[1])
@@ -60,7 +66,7 @@ def eloCalc(match_id):
     A = float(cursor.fetchone()[0])
     
     #Elo-rating formula
-    Es = 1.0/(1.0+math.pow(10.0, ((B-A)/400.0)))
+    Es = 1.0 / (1.0 + math.pow(10.0, ((B-A) / 400.0)))
     print "Es: '%s'" % Es 
     R = round(Decimal(15 * (1-Es)), 2) #winning team points
     
@@ -194,89 +200,89 @@ def crossdomain(origin=None, methods=None, headers=None,
 @app.route('/player/<int:player_id>', methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def get_player(player_id):
-        cursor.execute("SELECT avatar, p.id, username, display_rating, base_rating, team_name, p.team_id, t.id FROM (Player p join Team t on p.team_id = t.id) WHERE p.id = '%d'" % (player_id))
-        data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
-                                            row) for row in cursor.fetchall()]]
-        return jsonify(data=data)
+    cursor.execute("SELECT avatar, p.id, countrycode, username, display_rating, base_rating, team_name, p.team_id, t.id FROM (Player p join Team t on p.team_id = t.id) WHERE p.id = '%d'" % (player_id))
+    data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
+                                        row) for row in cursor.fetchall()]]
+    return jsonify(data=data)
 
 @app.route('/player', methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*')
 def create_player():
-        username = request.get_json().get('username', '')
-        team_id = request.get_json().get('team_id', '')
-        cursor.execute("INSERT INTO Player (username, base_rating, display_rating, team_id) VALUES ('%s', '%d', '%d', '%d')" % (username, 1200, 1200, team_id))
-        conn.commit()
-        return "%s is added" % username
+    username = request.get_json().get('username', '')
+    team_id = request.get_json().get('team_id', '')
+    cursor.execute("INSERT INTO Player (username, base_rating, display_rating, team_id) VALUES ('%s', '%d', '%d', '%d')" % (username, 1200, 1200, team_id))
+    conn.commit()
+    return "%s is added" % username
         
 
 @app.route('/player', methods=['PUT', 'OPTIONS'])
 @crossdomain(origin='*')
 def edit_player():
-        player_id = request.get_json().get('player_id', '')
-        username = request.get_json().get('username', '')
-        team_id = request.get_json().get('team_id', '')
-        base_rating = request.get_json().get('base_rating', '')
-        dispaly_rating = request.get_json().get('display_rating', '')
-        cursor.execute("UPDATE Player SET username = '%s', base_rating = '%d', display_rating = '%d', team_id = '%d' where id = '%d'" % (username, base_rating, dispaly_rating, team_id, player_id))
-        conn.commit()
-        return "%s is updated!" % username
+    player_id = request.get_json().get('player_id', '')
+    username = request.get_json().get('username', '')
+    team_id = request.get_json().get('team_id', '')
+    base_rating = request.get_json().get('base_rating', '')
+    dispaly_rating = request.get_json().get('display_rating', '')
+    cursor.execute("UPDATE Player SET username = '%s', base_rating = '%d', display_rating = '%d', team_id = '%d' where id = '%d'" % (username, base_rating, dispaly_rating, team_id, player_id))
+    conn.commit()
+    return "%s is updated!" % username
 
 @app.route('/team/<int:team_id>', methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def get_team(team_id):
-        cursor.execute("SELECT team_name FROM Team WHERE id = '%d'" % (team_id))
-        data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
-                                            row) for row in cursor.fetchall()]]
+    cursor.execute("SELECT team_name FROM Team WHERE id = '%d'" % (team_id))
+    data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
+                                        row) for row in cursor.fetchall()]]
         
-        return jsonify(data=data)
+    return jsonify(data=data)
     
 @app.route('/team/<team_name>', methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def get_team_by_name(team_name):
-        cursor.execute("SELECT id FROM Team WHERE team_name = '%s'" % (team_name))
-        data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
-                                            row) for row in cursor.fetchall()]]
+    cursor.execute("SELECT id FROM Team WHERE team_name = '%s'" % (team_name))
+    data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
+                                        row) for row in cursor.fetchall()]]
         
-        return jsonify(data=data)
+    return jsonify(data=data)
 
 @app.route('/team', methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def get_teams():
-        cursor.execute("SELECT * FROM Team")
-        data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
-                                            row) for row in cursor.fetchall()]]
+    cursor.execute("SELECT * FROM Team")
+    data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
+                                        row) for row in cursor.fetchall()]]
         
-        return jsonify(data=data)
+    return jsonify(data=data)
 
 @app.route('/team', methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*')
 def create_teams():
-        #team_id = request.get_json().get('team_id', '')
-        team_name = request.get_json().get('team_name', '')
-        cursor.execute("INSERT INTO Team (team_name) VALUES ('%s')" % (team_name))
-        conn.commit()
-        return "%s is added" % team_name 
+    #team_id = request.get_json().get('team_id', '')
+    team_name = request.get_json().get('team_name', '')
+    cursor.execute("INSERT INTO Team (team_name) VALUES ('%s')" % (team_name))
+    conn.commit()
+    return "%s is added" % team_name 
 
 @app.route('/tournament/<int:tournament_id>', methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def get_tournament(tournament_id):
-        cursor.execute("SELECT * FROM Tournament WHERE id = '%d'" % (tournament_id))
-        data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
-                                            row) for row in cursor.fetchall()]]
-        return jsonify(data=data)
+    cursor.execute("SELECT * FROM Tournament WHERE id = '%d'" % (tournament_id))
+    data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
+                                        row) for row in cursor.fetchall()]]
+    return jsonify(data=data)
 
 @app.route('/tournament', methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def get_tournaments():
-        cursor.execute("select * from Tournament")
-        data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
-                                            row) for row in cursor.fetchall()]]
-        return jsonify(data=data)
+    cursor.execute("select * from Tournament")
+    data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
+                                        row) for row in cursor.fetchall()]]
+    return jsonify(data=data)
 
 @app.route('/tournament', methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*')
 def create_tournament():
-       # tournament_id = request.get_json().get('tournament_id', '')
+    # tournament_id = request.get_json().get('tournament_id', '')
         time_start = request.get_json().get('time_start', '')
         time_end = request.get_json().get('time_end', '')
         tournament_name = request.get_json().get('tournament_name', '')
@@ -287,45 +293,47 @@ def create_tournament():
 @app.route('/tournament', methods=['PUT', 'OPTIONS'])
 @crossdomain(origin='*')
 def edit_tournament():
-        tournament_id = request.get_json().get('tournament_id', '')
-        time_start = request.get_json().get('time_start', '')
-        time_end = request.get_json().get('time_end', '')
-        tournament_name = request.get_json().get('tournament_name', '')
-        cursor.execute("UPDATE Tournament SET time_start = '%s', time_end = '%s', tournament_name = '%s' where id = '%d'" % (time_start, time_end, tournament_name, tournament_id))
-        conn.commit()
-        return "%s is updated!" % tournament_name 
+    tournament_id = request.get_json().get('tournament_id', '')
+    time_start = request.get_json().get('time_start', '')
+    time_end = request.get_json().get('time_end', '')
+    tournament_name = request.get_json().get('tournament_name', '')
+    cursor.execute("UPDATE Tournament SET time_start = '%s', time_end = '%s', tournament_name = '%s' where id = '%d'" % (time_start, time_end, tournament_name, tournament_id))
+    conn.commit()
+    return "%s is updated!" % tournament_name 
    
 @app.route('/getplayers', methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def getplayers():
-   # order_by = order by enten username eller display_name, maa sendes med GET'en fra clienten
-    cursor.execute("select username, p.id, display_rating, team_name from Player p, Team t WHERE p.team_id = t.id") # ORDER BY username desc")# % (order_by))
-    data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
-                                        row) for row in cursor.fetchall()]]
+    # order_by = order by enten username eller display_name, maa sendes med GET'en fra clienten
+        cursor.execute("select username, p.id, countrycode, display_rating, team_name from Player p, Team t WHERE p.team_id = t.id") # ORDER BY username desc")# % (order_by))
+        data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
+                                            row) for row in cursor.fetchall()]]
     
-    print data
-    return jsonify(data=data)
+        print data
+        return jsonify(data=data)
 
 
 @app.route('/match', methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def get_matches():
-        cursor.execute("select * from Matches")
-        data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
-                                            row) for row in cursor.fetchall()]]
+    cursor.execute("select * from Matches")
+    data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
+                                        row) for row in cursor.fetchall()]]
 
-        return jsonify(data=data)
+    return jsonify(data=data)
 
 @app.route('/match', methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*')
 def create_match():
-       # tournament_id = request.get_json().get('tournament_id', '')
+    # tournament_id = request.get_json().get('tournament_id', '')
         time_start = request.get_json().get('match_time_start', '')
         time_end = request.get_json().get('match_time_end', '')
+        team_1_id = request.get_json().get('team_1_id', '')
+        team_2_id = request.get_json().get('team_2_id', '')
         winning_team_id = request.get_json().get('winning_team_id', '')
         losing_team_id = request.get_json().get('losing_team_id', '')
         tournament_id = request.get_json().get('tournament_id', '')
-        cursor.execute("INSERT INTO Matches (tournament_id, winning_team_id, losing_team_id, match_time_start, match_time_end) VALUES ('%d', '%d', '%d', '%s', '%s')" % (tournament_id, winning_team_id, losing_team_id, time_start, time_end))
+        cursor.execute("INSERT INTO Matches (tournament_id, team_1_id, team_2_id, winning_team_id, losing_team_id, match_time_start, match_time_end) VALUES ('%d', '%d', '%d', '%d', '%d', '%s', '%s')" % (tournament_id, team_1_id, team_2_id, time_start, time_end))
         conn.commit()
         cursor.execute("SELECT LAST_INSERT_ID()")
         match_id = cursor.fetchone()[0]
@@ -337,30 +345,32 @@ def create_match():
 @app.route('/match', methods=['PUT', 'OPTIONS'])
 @crossdomain(origin='*')
 def update_match(match_id):
-        #match_id = 1 #Faa tak i id'en til matchen det er snakk om
-        time_start = request.get_json().get('time_start', '')
-        time_end = request.get_json().get('time_end', '')
-        winning_team_id = request.get_json().get('winning_team_id', '')
-        losing_team_id = request.get_json().get('losing_team_id', '')
-        cursor.execute("UPDATE Matches SET winning_team_id = '%d', losing_team_id = '%d', match_time_start = '%s', match_time_end = '%s')" % (winning_team_id, losing_team_id, time_start, time_end))
-        if(winning_team_id and losing_team_id != null):
-            eloCalc(match_id)
+    #match_id = 1 #Faa tak i id'en til matchen det er snakk om
+    time_start = request.get_json().get('time_start', '')
+    time_end = request.get_json().get('time_end', '')
+    team_1_id = request.get_json().get('team_1_id', '')
+    team_2_id = request.get_json().get('team_2_id', '')
+    winning_team_id = request.get_json().get('winning_team_id', '')
+    losing_team_id = request.get_json().get('losing_team_id', '')
+    cursor.execute("UPDATE Matches SET team_1_id = '%d', team_2_id = '%d', winning_team_id = '%d', losing_team_id = '%d', match_time_start = '%s', match_time_end = '%s')" % (team_1_id, team_2_id, winning_team_id, losing_team_id, time_start, time_end))
+    if(winning_team_id and losing_team_id != null):
+        eloCalc(match_id)
             
-        conn.commit()
+    conn.commit()
 
-        cursor.execute("UPDATE Matches SET winning_team_id = '%d', losing_team_id = '%d', match_time_start = '%s', match_time_end = '%s' WHERE id = '%s')" % (winning_team_id, losing_team_id, time_start, time_end, match_id))
-        conn.commit()        
-        check(match_id)
-        Elo_calc(match_id)
-        return "Match is updated!"
+    cursor.execute("UPDATE Matches SET team_1_id = '%d', team_2_id = '%d', winning_team_id = '%d', losing_team_id = '%d', match_time_start = '%s', match_time_end = '%s' WHERE id = '%s')" % (team_1_id, team_2_id, winning_team_id, losing_team_id, time_start, time_end, match_id))
+    conn.commit()        
+    check(match_id)
+    Elo_calc(match_id)
+    return "Match is updated!"
 
 @app.route('/match/<int:match_id>', methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def get_match(match_id):
-        cursor.execute("SELECT * FROM Matches WHERE p.id = '%d'" % (match_id))
-        data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
-                                            row) for row in cursor.fetchall()]]
-        return jsonify(data=data)
+    cursor.execute("SELECT * FROM Matches WHERE p.id = '%d'" % (match_id))
+    data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
+                                        row) for row in cursor.fetchall()]]
+    return jsonify(data=data)
     
     
 
