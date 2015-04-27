@@ -20,7 +20,7 @@ app.controller('PlayersController', function ($scope, daoPlayers) {
 //        var team_name = $scope.team_name.data[0].team_name;
 
         daoPlayers.add(username, team_id, function () {
-//            $scope.players.push({username: username, team_name: team_name});
+            $scope.players.push({username: username, team_id: team_id});
             $scope.players.push({username: username});
             $scope.status = "Successfully created new Player " + username;
         }, function () {

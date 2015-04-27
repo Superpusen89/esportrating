@@ -14,12 +14,11 @@
 
     <div>{{ status}}</div><br>
 
-    <!--    <div>
-            New player:<br>
-            <form ng-submit="addPlayer()">
-                <input ng-model="newPlayer.username" type="text" placeholder="Username">
-                <input ng-model="newPlayer.team_id" type="number" placeholder="Team id">
-                <input type="submit" value="Add Player" ng-disabled="!newPlayer.username || !newPlayer.team_id">
-            </form>
-        </div> -->
+    <div>
+        New team:<br>
+        <form ng-submit="addTeam()">
+            <input ng-model="newTeam.team_name" type="text" placeholder="Team name">
+            <input type="submit" value="Add team" ng-disabled="!newTeam.team_name">
+        </form>
+    </div>
 </section>
