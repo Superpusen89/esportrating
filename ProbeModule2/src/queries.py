@@ -1,0 +1,6 @@
+q1 = "SELECT EXISTS(SELECT id FROM Tournament WHERE tournament_id = '%d')"
+q2 = "INSERT INTO Tournament (tournament_id, tournament_name) VALUES ('%d', '%s')"
+q3 = "SELECT EXISTS(SELECT id FROM Team WHERE team_id = '%d')"
+q4 = "INSERT INTO Team (team_id, team_name) VALUES ('%d', '%s')"
+q5 = "SELECT EXISTS(SELECT id FROM Player WHERE player_id = '%d')"
+q6 = "INSERT INTO Player (player_id, username, base_rating, display_rating, team_id, avatar, realname, countrycode) VALUES ('%d', '%s', '%d', '%d', (SELECT id from Team WHERE team_id = '%d'), '%s', '%s', '%s')"
