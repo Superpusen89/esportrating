@@ -13,7 +13,9 @@ CREATE TABLE Team
     team_id INTEGER UNIQUE,
     team_name CHAR(80),
     PRIMARY KEY (id)
-)CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+)CHARACTER SET utf8 COLLATE utf8_unicode_ci; /*CHARACTER SET utf8 COLLATE utf8_unicode_ci*/
+
+
 
 CREATE TABLE Player
 (

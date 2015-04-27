@@ -368,6 +368,15 @@ def create_match():
 @app.route('/match', methods=['PUT', 'OPTIONS'])
 @crossdomain(origin='*')
 def update_match(match_id):
+        #match_id = 1 #Faa tak i id'en til matchen det er snakk om
+        time_start = request.get_json().get('time_start', '')
+        time_end = request.get_json().get('time_end', '')
+        winning_team_id = request.get_json().get('winning_team_id', '')
+        losing_team_id = request.get_json().get('losing_team_id', '')
+        cursor.execute("UPDATE Matches SET winning_team_id = '%d', losing_team_id = '%d', match_time_start = '%s', match_time_end = '%s')" % (winning_team_id, losing_team_id, time_start, time_end))
+        if(winning_team_id and losing_team_id != -1 and end_time != None):
+            eloCalc(match_id)
+
     #match_id = 1 #Faa tak i id'en til matchen det er snakk om
     time_start = request.get_json().get('time_start', '')
     time_end = request.get_json().get('time_end', '')
@@ -378,6 +387,7 @@ def update_match(match_id):
     cursor.execute("UPDATE Matches SET team_1_id = '%d', team_2_id = '%d', winning_team_id = '%d', losing_team_id = '%d', match_time_start = '%s', match_time_end = '%s')" % (team_1_id, team_2_id, winning_team_id, losing_team_id, time_start, time_end))
     if(winning_team_id and losing_team_id != null):
         eloCalc(match_id)
+
             
     conn.commit()
 
