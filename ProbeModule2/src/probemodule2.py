@@ -9,14 +9,15 @@ import time
 import probeMethods
 import queries
 
-try:
-    conn = MySQLdb.connect(host="localhost", user="root", passwd="HenrietteIda", db="esportrating", charset='utf8', use_unicode=True)
-    cursor = conn.cursor()
-    
-except MySQLdb.Error, e:
-    print "Error %d: %s" % (e.args[0], e.args[1])
-    sys.exit(1)
+#try:
+#    conn = MySQLdb.connect(host="localhost", user="root", passwd="HenrietteIda", db="esportrating", charset='utf8', use_unicode=True)
+#    cursor = conn.cursor()
+#    
+#except MySQLdb.Error, e:
+#    print "Error %d: %s" % (e.args[0], e.args[1])
+#    sys.exit(1)
 
+probeMethods.openDatabaseConn()
     
 #Variables
 dataLeagues = []

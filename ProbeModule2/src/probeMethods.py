@@ -1,19 +1,17 @@
 import queryParams
 from flask import Flask, request
+from configparser import ConfigParser
+from python_mysql_dbconfig import read_db_config
+from mysql.connector import MySQLConnection, Error
 import MySQLdb
 import requests
 import pprint
 import urllib
 import json
 import queries
+import sys
 
-try:
-    conn = MySQLdb.connect(host="localhost", user="root", passwd="HenrietteIda", db="esportrating", charset='utf8', use_unicode=True)
-    cursor = conn.cursor()
-    
-except MySQLdb.Error, e:
-    print "Error %d: %s" % (e.args[0], e.args[1])
-    sys.exit(1)
+
 
 #Variables
 dataLeague = []
@@ -21,6 +19,36 @@ dataMatchHistory = []
 dataPerson = []
 dataTeamNames = []
 dataMatchHistoryPlayers = []
+
+
+def openDatabaseConn():
+    db_config = read_db_config()
+    
+    try:
+        print('Connecting to MySQL database...')
+        conn = MySQLConnection(**db_config)
+        cursor = conn.cursor()
+#        if conn.is_connected():
+#            
+#            print('connection established.')
+#        else:
+#            print('connection failed.')
+ 
+    except Error as error:
+        print(error)
+ 
+#    finally:
+#        conn.close()
+#        print('Connection closed.')
+    
+#    try:
+#        conn = MySQLdb.connect(**db_config)
+#        cursor = conn.cursor()
+#        print "database OK"
+#
+#    except MySQLdb.Error, e:
+#        print "Error %d: %s" % (e.args[0], e.args[1])
+#        sys.exit(1)
 
 
 def getLeagueListing():
@@ -84,11 +112,7 @@ def getPlayerSummaries(steam_id):
         
         dataPerson.append([username, avatar, realname, countrycode])
     return dataPerson
-    
-
-        #UFERDIG
-
-        
+            
     
 def getMatchDetailsTeamName(match_id):
     del dataTeamNames[:]
