@@ -31,14 +31,9 @@ print len(dataLeagues)
 for row in dataLeagues:
     league_id = row[0]
     league_name = row[1]
-    cursor.execute(queries.q1 % (league_id))
-    test = cursor.fetchone()[0]
-    if test == 0:
-        print "INSERT INTO Tournament"
-        cursor.execute(queries.q2 % (league_id, league_name))
-        conn.commit()
-        del dataMatchHistory[:]
-        
+    res = probeMethods.insertTournament(league_id, league_name)
+    if res == 1:     
+        del dataMatchHistory[:]    
         dataMatchHistory = probeMethods.getMatchHistory(league_id)
         
         pprint.pprint(dataMatchHistory[0])
@@ -49,32 +44,24 @@ for row in dataLeagues:
             print radiant_team_id
             dire_team_id = row[2]
             print dire_team_id
+            probeMethods.insertMatches(match_id, league_id, radiant_team_id, dire_team_id)
             del dataMatchHistoryPlayers[:]
             dataMatchHistoryPlayers = probeMethods.getMatchDetailsPlayers(match_id)
             for rowrow in dataMatchHistoryPlayers:
-                
-                pprint.pprint(rowrow)
                 account_id = rowrow[0]
-                print "account_id: ", account_id
                 player_slot = rowrow[1]
-                print "player_slot: ", player_slot
                 steam_id = account_id + 76561197960265728
-                dataTeamNames = probeMethods.getMatchDetailsTeamName(match_id)            
-                print "INSERT INTO Team"
+                dataTeamNames = probeMethods.getMatchDetailsTeamName(match_id)
                 probeMethods.insertTeam(radiant_team_id, dataTeamNames[0][0])
                 probeMethods.insertTeam(dire_team_id, dataTeamNames[0][1])
                 del dataTeamNames[:]
                 dataPerson = probeMethods.getPlayerSummaries(steam_id)
-                print "dataPerson"
-                pprint.pprint(dataPerson)
                 for row in dataPerson:
-                    print "dataPerson: ", row
-                    print "player_slot: ", player_slot
-                    print "username? : ", row[0]
                     if row[0] != None:
-                        print "if skjer!"
                         if player_slot < 128:
-                            probeMethods.insertPlayer(account_id, row[0], radiant_team_id, row[1], row[2], row[3])
+                            probeMethods.insertPlayer(account_id, row[0], radiant_team_id, row[1], row[2], row[3]) 
+                            probeMethods.insertPlayerMatch(match_id, account_id, radiant_team_id)
                         else:
                             probeMethods.insertPlayer(account_id, row[0], dire_team_id, row[1], row[2], row[3])
+                            probeMethods.insertPlayerMatch(match_id, account_id, dire_team_id)
                 
