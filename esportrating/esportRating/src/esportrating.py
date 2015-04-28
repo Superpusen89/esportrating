@@ -267,8 +267,9 @@ def get_teams():
 def create_teams():
     #team_id = request.get_json().get('team_id', '')
     team_name = request.get_json().get('team_name', '')
-    cursor.execute("INSERT INTO Team (team_name) VALUES ('%s')" % (team_name))
-#    cursor.execute('INSERT INTO Team (team_name) VALUES (:1)', [team_name])
+#    q = queries.insertTeam
+#    cursor.execute("INSERT INTO Team (team_name) VALUES ('%s')" % (team_name))
+    cursor.execute('INSERT INTO Team (team_name) VALUES (%s)', [team_name])
     conn.commit()
     #return "%s is added" % team_name
 
