@@ -50,6 +50,21 @@ app.controller('MatchesController', function ($scope, daoMatches) {
                 $scope.checked1 = 0;
             }
 
+            var checkedBoxes2 = getCheckedBoxes("pcheckbox2");
+            for (i = 0; i < checkedBoxes2.length; i++) {
+                console.log('!!!!!!!!!' + $scope.match + ' ' + checkedBoxes2[i].value + ' ' + team_2_id);
+
+                var match_id2 = parseInt($scope.match);
+                var player_id2 = parseInt(checkedBoxes2[i].value);
+                daoMatches.addPlayerMatch(match_id2, player_id2, team_2_id, function () {
+                    $scope.status = "Successfully created new player_match ";
+                }, function () {
+                    $scope.status = "Error creating new player_match";
+                });
+
+                $scope.checked2 = 0;
+            }
+
 //            $scope.match, checkedBoxes[i].value, team_1_id
 
 
@@ -150,11 +165,11 @@ app.controller('MatchesController', function ($scope, daoMatches) {
     };
 
     $scope.onSelect3 = function ($model) {
-        console.log('please ' + $model);
+        console.log('please the id is ' + $model);
         player1 = $model;
         daoMatches.getPlayer(player1, function (player) {
             $scope.players1.push(player.data[0]);
-            console.log('----------' + player.data[0].id);
+            console.log('----------' + player.data[0].id + ' ' + player.data[0].username);
         });
     };
 

@@ -86,7 +86,7 @@
                         <input id="newplayer1" ng-model="newPlayers.player1" autocomplete="off" type="text" placeholder="Select different players" typeahead="player.id as player.id + ' ' + player.username + ', ' + player.team_name for player in players | filter:$viewValue | limitTo:8" typeahead-editable="false" typeahead-input-formatter="formatPlayerLabel($model)" typeahead-on-select="onSelect3($model)">
                     </td>
                     <td>
-                        <input id="newplayer1" ng-model="newPlayers.player2" autocomplete="off" type="text" placeholder="Select different players" typeahead="player.id as player.id + ' ' + player.username + ', ' + player.team_name for player in players | filter:$viewValue | limitTo:8" typeahead-editable="false" typeahead-input-formatter="formatPlayerLabel($model)" typeahead-on-select="onSelect4($model)">
+                        <input id="newplayer2" ng-model="newPlayers.player2" autocomplete="off" type="text" placeholder="Select different players" typeahead="player.id as player.id + ' ' + player.username + ', ' + player.team_name for player in players | filter:$viewValue | limitTo:8" typeahead-editable="false" typeahead-input-formatter="formatPlayerLabel($model)" typeahead-on-select="onSelect4($model)">
                     </td>
                 </tr>
                 <tr>
