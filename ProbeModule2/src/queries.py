@@ -9,5 +9,11 @@ q8 = "INSERT INTO Matches (match_id, tournament_id, winning_team_id, losing_team
 q9 = "INSERT INTO Matches (match_id, tournament_id, winning_team_id, losing_team_id, match_time_start, match_time_end) VALUES ('%d', (SELECT id FROM Tournament WHERE tournament_id = '%d'), '%d', '%d', '%d', '%d')"
 q10 = "SELECT EXISTS(SELECT * FROM Player_match WHERE match_id = (SELECT id FROM Matches WHERE match_id = '%d') AND player_id = (SELECT id FROM Player WHERE player_id = '%d'))"
 q11 = "INSERT INTO Player_match (match_id, player_id, team_id) VALUES ((SELECT id FROM Matches WHERE match_id = '%d'), (SELECT id FROM Player WHERE player_id = '%d'), '%d')"
+q12 = "SELECT username, player_id FROM Player"
+q13 = "UPDATE Player SET username = '%s' WHERE player_id = '%s'"
+q14 = "SELECT team_id, team_name FROM Team"
+q15 = "UPDATE Team SET team_name = '%s' WHERE team_id = '%s'"
+
+
 
 

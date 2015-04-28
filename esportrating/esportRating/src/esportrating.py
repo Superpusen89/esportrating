@@ -205,6 +205,14 @@ def get_player(player_id):
                                         row) for row in cursor.fetchall()]]
     return jsonify(data=data)
 
+@app.route('/team_player/<int:team_id>', methods=['GET', 'OPTIONS'])
+@crossdomain(origin='*')
+def get_team_player(team_id):
+    cursor.execute("SELECT * FROM Player WHERE team_id = '%d'" % (team_id))
+    data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
+                                        row) for row in cursor.fetchall()]]
+    return jsonify(data=data)
+
 @app.route('/player', methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*')
 def create_player():
@@ -259,7 +267,9 @@ def get_teams():
 def create_teams():
     #team_id = request.get_json().get('team_id', '')
     team_name = request.get_json().get('team_name', '')
-    cursor.execute("INSERT INTO Team (team_name) VALUES ('%s')" % (team_name))
+#    q = queries.insertTeam
+#    cursor.execute("INSERT INTO Team (team_name) VALUES ('%s')" % (team_name))
+    cursor.execute('INSERT INTO Team (team_name) VALUES (%s)', [team_name])
     conn.commit()
     #return "%s is added" % team_name
 
@@ -368,14 +378,14 @@ def create_match():
 @app.route('/match', methods=['PUT', 'OPTIONS'])
 @crossdomain(origin='*')
 def update_match(match_id):
-        #match_id = 1 #Faa tak i id'en til matchen det er snakk om
-        time_start = request.get_json().get('time_start', '')
-        time_end = request.get_json().get('time_end', '')
-        winning_team_id = request.get_json().get('winning_team_id', '')
-        losing_team_id = request.get_json().get('losing_team_id', '')
-        cursor.execute("UPDATE Matches SET winning_team_id = '%d', losing_team_id = '%d', match_time_start = '%s', match_time_end = '%s')" % (winning_team_id, losing_team_id, time_start, time_end))
-        if(winning_team_id and losing_team_id != -1 and end_time != None):
-            eloCalc(match_id)
+    #match_id = 1 #Faa tak i id'en til matchen det er snakk om
+    time_start = request.get_json().get('time_start', '')
+    time_end = request.get_json().get('time_end', '')
+    winning_team_id = request.get_json().get('winning_team_id', '')
+    losing_team_id = request.get_json().get('losing_team_id', '')
+    cursor.execute("UPDATE Matches SET winning_team_id = '%d', losing_team_id = '%d', match_time_start = '%s', match_time_end = '%s')" % (winning_team_id, losing_team_id, time_start, time_end))
+    if(winning_team_id and losing_team_id != -1 and end_time != None):
+        eloCalc(match_id)
 
     #match_id = 1 #Faa tak i id'en til matchen det er snakk om
     time_start = request.get_json().get('time_start', '')

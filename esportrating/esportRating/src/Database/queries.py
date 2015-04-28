@@ -7,3 +7,6 @@
 findAVG = "SELECT AVG(base_rating) FROM Player WHERE id= ANY (SELECT player_id FROM Player_match WHERE match_id = '%s') AND team_id=(SELECT %s FROM Matches WHERE id='%s')"
 findID = "SELECT id FROM Player WHERE id= ANY (SELECT player_id FROM Player_match WHERE match_id = '%s') AND team_id=(SELECT %s FROM Matches WHERE id='%s')"
 updatePoints = "UPDATE Player_match set points = '%s' WHERE match_id = '%s' AND player_id = '%d'"
+
+
+insertTeam = "INSERT INTO Team (team_name) VALUES (%s)"

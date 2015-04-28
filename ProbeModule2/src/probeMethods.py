@@ -11,7 +11,13 @@ import json
 import queries
 import sys
 
+try:
+    conn = MySQLdb.connect(host="localhost", user="root", passwd="HenrietteIda", db="esportrating", charset='utf8', use_unicode=True)
+    cursor = conn.cursor()
 
+except MySQLdb.Error, e:
+    print "Error %d: %s" % (e.args[0], e.args[1])
+    sys.exit(1)
 
 #Variables
 dataLeague = []
@@ -19,28 +25,19 @@ dataMatchHistory = []
 dataPerson = []
 dataTeamNames = []
 dataMatchHistoryPlayers = []
+dataTeamPlayers = []
+
+
 
 
 def openDatabaseConn():
-    db_config = read_db_config()
-    
     try:
-        print('Connecting to MySQL database...')
-        conn = MySQLConnection(**db_config)
+        conn = MySQLdb.connect(host="localhost", user="root", passwd="HenrietteIda", db="esportrating", charset='utf8', use_unicode=True)
         cursor = conn.cursor()
-#        if conn.is_connected():
-#            
-#            print('connection established.')
-#        else:
-#            print('connection failed.')
- 
-    except Error as error:
-        print(error)
- 
-#    finally:
-#        conn.close()
-#        print('Connection closed.')
-    
+
+    except MySQLdb.Error, e:
+        print "Error %d: %s" % (e.args[0], e.args[1])
+        sys.exit(1)
 #    try:
 #        conn = MySQLdb.connect(**db_config)
 #        cursor = conn.cursor()
@@ -49,9 +46,30 @@ def openDatabaseConn():
 #    except MySQLdb.Error, e:
 #        print "Error %d: %s" % (e.args[0], e.args[1])
 #        sys.exit(1)
+#    db_config = read_db_config()
+#    
+#    try:
+#        print('Connecting to MySQL database...')
+#        conn = MySQLConnection(**db_config)
+#        cursor = conn.cursor()
+##        if conn.is_connected():
+##            
+##            print('connection established.')
+##        else:
+##            print('connection failed.')
+# 
+#    except Error as error:
+#        print(error)
+ 
+#    finally:
+#        conn.close()
+#        print('Connection closed.')
+    
+
 
 
 def getLeagueListing():
+    print "getLeagueListing"
     response = requests.get(queryParams.endpoint1, params=queryParams.query_params1)
     data = response.json()['result']['leagues']
     for row in data:
@@ -59,6 +77,7 @@ def getLeagueListing():
     return dataLeague
 
 def getMatchHistory(league_id):
+    print "getMatchHistory"
     del dataMatchHistory[:]
     query_params2 = { 'key': queryParams.key,
                     'league_id': league_id 
@@ -70,6 +89,7 @@ def getMatchHistory(league_id):
     return dataMatchHistory
 
 def getMatchDetailsPlayers(match_id):
+    print "getMatchDetailsPlayers"
     del dataMatchHistoryPlayers[:]
     query_params3 = { 'key': queryParams.key,
                     'match_id': match_id 
@@ -80,7 +100,36 @@ def getMatchDetailsPlayers(match_id):
         dataMatchHistoryPlayers.append([row['account_id'], row['player_slot']])
     return dataMatchHistoryPlayers
 
+def getTeamPlayers(team_id):
+    print "getTeamPlayers"
+    del dataTeamPlayers[:]
+    query_params5 = { 'key': queryParams.key,
+                        'start_at_team_id': team_id,
+                        'teams_requested': 1
+                               }
+    response = requests.get(queryParams.endpoint5, params=query_params5)
+    data = response.json()['result']['teams']
+    try:
+        player0 = data[0]['player_0_account_id']
+        dataTeamPlayers.append(player0)
+        player1 = data[0]['player_1_account_id']
+        dataTeamPlayers.append(player1)
+        player2 = data[0]['player_2_account_id']
+        dataTeamPlayers.append(player2)
+        player3 = data[0]['player_3_account_id']
+        dataTeamPlayers.append(player3)
+        player4 = data[0]['player_4_account_id']
+        dataTeamPlayers.append(player4)
+        player5 = data[0]['player_5_account_id']
+        dataTeamPlayers.append(player5)
+        player6 = data[0]['player_6_account_id']
+        dataTeamPlayers.append(player6)
+    except KeyError: pass
+    return dataTeamPlayers
+    
+
 def getPlayerSummaries(steam_id):
+    print "getPlayerSummaries"
     del dataPerson[:]
     query_params4 = { 'key': queryParams.key,
         'steamids': steam_id
@@ -95,15 +144,12 @@ def getPlayerSummaries(steam_id):
         try:
             personaname = data[0]['personaname']
             username = personaname.encode('ascii', 'ignore')
-            print "username fra metode: ", username
             try:
                 avatar = data[0]['avatarfull']
-                print "avatar: ", avatar
             except (KeyError, IndexError): pass
             try:
                 realname1 = data[0]['realname']
                 realname = realname1.encode('ascii', 'ignore')     
-                print "realname: ", realname
             except (KeyError, IndexError): pass
             try:
                 countrycode = data[0]['loccountrycode']
@@ -112,10 +158,27 @@ def getPlayerSummaries(steam_id):
         
         dataPerson.append([username, avatar, realname, countrycode])
     return dataPerson
+
+def getPlayerUsername(steam_id):
+    print "getPlayerUsername"
+    query_params4 = { 'key': queryParams.key,
+        'steamids': steam_id
+               } 
+    response = requests.get(queryParams.endpoint4, params=query_params4)
+    data = response.json()['response']['players']
+    for row in data:
+        username = 'null'
+        try:
+            personaname = data[0]['personaname']
+            username = personaname.encode('ascii', 'ignore')
+        except (KeyError, IndexError): pass
+    return username
+    
             
     
 def getMatchDetailsTeamName(match_id):
-    del dataTeamNames[:]
+    print "getMatchDetailsTeamName"
+    #del dataTeamNames[:]
     query_params3 = { 'key': queryParams.key,
                         'match_id': match_id 
                                }
@@ -130,6 +193,7 @@ def getMatchDetailsTeamName(match_id):
     return dataTeamNames
 
 def insertTournament(league_id, league_name):
+    print "insertTournament"
     cursor.execute(queries.q1 % (league_id))
     test = cursor.fetchone()[0]
     if test == 0:
@@ -139,6 +203,7 @@ def insertTournament(league_id, league_name):
     return -1
 
 def insertTeam(team_id, team_name):
+    print "insertTeam"
     cursor.execute(queries.q3 % (team_id))
     test = cursor.fetchone()[0]
     if test == 0:
@@ -146,13 +211,15 @@ def insertTeam(team_id, team_name):
         conn.commit()
 
 def insertPlayer(account_id, username, team_id, avatar, realname, countrycode):
+    print "insertPlayer"
     cursor.execute(queries.q5 % (account_id))
     test = cursor.fetchone()[0]
     if test == 0:
-        cursor.execute(queries.q6 % (account_id, (username + unichr(300)), 1200, 1200, team_id, avatar, realname, countrycode))
+        cursor.execute(queries.q6 % (account_id, username, 1200, 1200, team_id, avatar, realname, countrycode)) #(username + unichr(300))
         conn.commit()
         
 def insertMatches(match_id, league_id, radiant_team_id, dire_team_id):
+    print "insertMatches"
     radiant_win = None
     query_params3 = { 'key': queryParams.key,
                         'match_id': match_id 
@@ -177,9 +244,50 @@ def insertMatches(match_id, league_id, radiant_team_id, dire_team_id):
     
 
 def insertPlayerMatch(match_id, account_id, team_id):
+    print "insertPlayerMatch"
     cursor.execute(queries.q10 % (match_id, account_id))
     test = cursor.fetchone()[0]
     if test == 0:
-        print 'INSERT INTO Player_match'
         cursor.execute(queries.q11 % (match_id, account_id, team_id))
         conn.commit()
+        
+        
+def createTeams(match_id, team_1, team_2):
+    print "createTeams"
+    dataTeamNames = getMatchDetailsTeamName(match_id)
+    insertTeam(team_1, dataTeamNames[0][0])
+    insertTeam(team_2, dataTeamNames[0][1])
+    del dataTeamNames[:]
+
+def updatePlayer():
+    print "updatePlayer"
+    cursor.execute(queries.q12)
+    data = cursor.fetchall();
+    for row in data:
+        steam_id = row[1]+queryParams.steam_number
+        username = getPlayerUsername(steam_id)
+        if row[0] != username:
+            cursor.execute(queries.q13 % (username, row[1]))
+            conn.commit()
+        
+def updateTeam():
+    print "updateTeam"
+    cursor.execute(queries.q14)
+    data = cursor.fetchall()
+    for row in data:
+        team_id = row[0]
+        query_params5 = { 'key': queryParams.key,
+                        'start_at_team_id': team_id,
+                        'teams_requested': 1
+                               }
+        response = requests.get(queryParams.endpoint5, params=query_params5)
+        data = response.json()['result']['teams']
+        team_name = data[0]['name']
+        if row[1] != team_name:
+            cursor.execute(queries.q15 % (team_name, row[0]))
+            conn.commit()
+            
+        
+        
+        
+        

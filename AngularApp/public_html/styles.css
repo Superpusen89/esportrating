@@ -171,23 +171,48 @@ table {
     padding-bottom: 70px; //top right bottom left 
 }
 
+
 #newmatch{
     padding-top: 40px;
     font-size: 20px;
+    width: 57%;
 }
 
-#matches_container ul{
+#winnerchx{
     list-style-type: none;
     display: inline-block;
 }
 
 #team0{
-    float: left;  
+    float: left; 
+    padding-right: 100px;
 }
 
 #team1{
     float: right;  
 }
+
+#team1label, #team2label{
+    display: inline; 
+}
+
+#addmatchtable ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+
+    display: inline;
+    *display: inline;
+    zoom: 1 
+}
+
+/*#team1list{
+    float: left; 
+}
+#team2list{
+    float: right; 
+}*/
+
 /*
 
 <div>Icons made by <a href="http://www.flaticon.com/authors/freepik" 
