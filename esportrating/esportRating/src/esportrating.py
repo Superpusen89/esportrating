@@ -413,6 +413,17 @@ def get_match(match_id):
     data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
                                         row) for row in cursor.fetchall()]]
     return jsonify(data=data)
+
+@app.route('/player_match', methods=['POST', 'OPTIONS'])
+@crossdomain(origin='*')
+def create_player_match():
+    # tournament_id = request.get_json().get('tournament_id', '')
+    match_id = request.get_json().get('match_id', '')
+    player_id = request.get_json().get('player_id', '')
+    team_id = request.get_json().get('team_id', '')
+    cursor.execute("INSERT INTO Player_match (match_id, player_id, team_id) VALUES ('%d', '%d', '%d')" % (match_id, player_id, team_id))
+    conn.commit()
+    return "%d is added" % match_id  
     
     
 

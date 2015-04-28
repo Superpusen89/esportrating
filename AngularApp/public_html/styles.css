@@ -188,6 +188,10 @@ table {
     padding-right: 100px;
 }
 
+/*#playercheckbox3{
+    border: 8px solid red; 
+}*/
+
 #team1{
     float: right;  
 }
