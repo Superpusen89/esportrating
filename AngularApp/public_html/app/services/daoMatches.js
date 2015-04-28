@@ -73,4 +73,28 @@ app.service('daoMatches', function ($http, REST) {
             }
         });
     };
+
+    this.getTeamPlayers = function (id, successCallback, errorCallback) {
+        $http.get(REST.path + 'team_player/' + id).success(function (result) {
+            if (typeof (successCallback) === 'function') {
+                successCallback(result);
+            }
+        }).error(function () {
+            if (typeof (errorCallback) === 'function') {
+                errorCallback();
+            }
+        });
+    };
+
+    this.getAllPlayers = function (successCallback, errorCallback) {
+        $http.get(REST.path + 'getplayers').success(function (result) {
+            if (typeof (successCallback) === 'function') {
+                successCallback(result);
+            }
+        }).error(function () {
+            if (typeof (errorCallback) === 'function') {
+                errorCallback();
+            }
+        });
+    };
 });

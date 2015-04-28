@@ -45,6 +45,13 @@ app.controller('MatchesController', function ($scope, daoMatches) {
         $scope.newMatch.tournament_id = '';
     };
 
+    daoMatches.getAllPlayers(function (players) {
+        $scope.players = players.data;
+        $scope.status = "";
+    }, function () {
+        $scope.status = "Error loading Players";
+    });
+
     daoMatches.getAllTeams(function (teams) {
         $scope.teams = teams.data;
         console.log('********************** scope teams' + $scope.teams);
@@ -82,7 +89,7 @@ app.controller('MatchesController', function ($scope, daoMatches) {
             }
         }
     };
-    
+
     $scope.entities = [{
             checked: false
         }, {
@@ -97,6 +104,58 @@ app.controller('MatchesController', function ($scope, daoMatches) {
         });
     }
 
+    $("#team1label").blur(function () {
+        team1 = (document.getElementById("team1label").value);
+//        alert("The vaue is " + team1);
+
+        daoMatches.getTeamPlayers(team1, function (players) {
+            $scope.players1 = players.data;
+            console.log('********************** scope teamplayers' + team1);
+        }, function () {
+            console.log('Error loading teamplayers');
+        });
+    });
+
+    $("#team2label").blur(function () {
+        team2 = (document.getElementById("team2label").value);
+//        alert("The vaue is " + team1);
+
+        daoMatches.getTeamPlayers(team2, function (players) {
+            $scope.players2 = players.data;
+            console.log('********************** scope team2players' + team2);
+        }, function () {
+            console.log('Error loading team2players');
+        });
+    });
+
+    $scope.limit = 5;
+
+    $scope.items1 = [];
+    $scope.checked1 = 0;
+    for (var i = 0; i < 100; i++) {
+        $scope.items1.push({team1: false})
+    }
+
+    $scope.checkChanged1 = function (item1) {
+        if (item1.team1)
+            $scope.checked1++;
+        else
+            $scope.checked1--;
+    }
+
+    $scope.items2 = [];
+    $scope.checked2 = 0;
+    for (var i = 0; i < 100; i++) {
+        $scope.items2.push({team2: false})
+    }
+
+    $scope.checkChanged2 = function (item2) {
+        if (item2.team2)
+            $scope.checked2++;
+        else
+            $scope.checked2--;
+    }
 
 
 });
+
