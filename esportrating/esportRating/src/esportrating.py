@@ -40,10 +40,6 @@ try:
 except MySQLdb.Error, e:
     print "Error %d: %s" % (e.args[0], e.args[1])
     sys.exit(1)
-
-
-
-
        
 def check(match_id):
     cursor.execute("SELECT COUNT(points) FROM Player_match WHERE match_id = '%s'" % (match_id))
