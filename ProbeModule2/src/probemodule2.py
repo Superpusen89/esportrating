@@ -1,4 +1,5 @@
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python
+# -*- coding: utf-8 -*- 
 
 from flask import Flask, request
 import MySQLdb
@@ -10,6 +11,14 @@ import queryParams
 import time
 import probeMethods
 import queries
+from flask.ext.restful import Api
+from functools import update_wrapper
+
+app = Flask(__name__)
+api = Api(app)
+
+from flask.ext.cors import CORS
+cors = CORS(app) #added
 
 #try:
 #    conn = MySQLdb.connect(host="localhost", user="root", passwd="HenrietteIda", db="esportrating", charset='utf8', use_unicode=True)
@@ -35,8 +44,8 @@ teamID = []
 
 
 
-dataLeagues = probeMethods.getLeagueListing()
-#dataLeagues = [(65001, 'The_International_2012'), (65006, 'The_International'), (600, 'The_International_2014')]
+#dataLeagues = probeMethods.getLeagueListing()
+dataLeagues = [(65001, 'The_International_2012'), (65006, 'The_International'), (600, 'The_International_2014')]
 for row in dataLeagues:
     league_id = row[0]
     league_name = row[1]
@@ -57,6 +66,7 @@ for row in dataLeagues:
                 for row in dataTeamPlayers:
                     account_id = row
                     steam_id = row + queryParams.steam_number
+                    print "STEAMID: ", steam_id
                     dataPerson = probeMethods.getPlayerSummaries(steam_id)
                     for row in dataPerson:
                         print "ROW: ", row

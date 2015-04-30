@@ -1,7 +1,7 @@
 app.controller('TeamController', function ($scope, $routeParams, daoTeams) {
     $scope.status = "Loading...";
 
-    daoTeams.getTeam($routeParams.teamId, function (team) {
+    daoTeams.get($routeParams.teamId, function (team) {
         $scope.team = team;
         $scope.status = "Successfully loaded team " + $routeParams.teamId;
     }, function () {

@@ -13,7 +13,7 @@ CREATE TABLE Team
     team_id INTEGER UNIQUE,
     team_name CHAR(80),
     PRIMARY KEY (id)
-); /*CHARACTER SET utf8 COLLATE utf8_unicode_ci*/
+)CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
 
 
@@ -29,7 +29,8 @@ CREATE TABLE Player
     realname CHAR(80),
     countrycode CHAR(5),
     PRIMARY KEY (id)
-);
+)CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+
 
 CREATE TABLE Tournament
 (
@@ -39,7 +40,7 @@ CREATE TABLE Tournament
     time_end TIMESTAMP,
     tournament_name CHAR(80),
     PRIMARY KEY (id)
-);
+)CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
 CREATE TABLE Matches
 (
@@ -67,6 +68,12 @@ CREATE TABLE Player_match
     FOREIGN KEY(player_id) REFERENCES Player(id)    
 );
 
+CREATE TRIGGER lcase_insert BEFORE INSERT ON Player FOR EACH ROW
+SET NEW.countrycode = LOWER(NEW.countrycode);
+
+CREATE TRIGGER lcase_update BEFORE UPDATE ON Player FOR EACH ROW
+SET NEW.countrycode = LOWER(NEW.countrycode);
+
 CREATE TABLE User_profile
 (
     email_address CHAR(80) NOT NULL,
@@ -75,6 +82,8 @@ CREATE TABLE User_profile
     password CHAR(128), /*Kommer an på hva slags krypteringsmetode vi bruker, dette er for SHA2 (512?)*/
     PRIMARY KEY(email_address)
 )CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+
+
 
 # Testdata
 INSERT INTO Team (team_name) VALUES ('Superpusene');

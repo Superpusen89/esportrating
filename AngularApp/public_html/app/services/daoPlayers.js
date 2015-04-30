@@ -12,6 +12,30 @@ app.service('daoPlayers', function ($http, REST) {
         });
     };
 
+    this.get = function (id, successCallback, errorCallback) {
+        $http.get(REST.path + 'player/' + id).success(function (result) {
+            if (typeof (successCallback) === 'function') {
+                successCallback(result);
+            }
+        }).error(function () {
+            if (typeof (errorCallback) === 'function') {
+                errorCallback();
+            }
+        });
+    };
+
+    this.getTeamPlayers = function (id, successCallback, errorCallback) {
+        $http.get(REST.path + 'team_player/' + id).success(function (result) {
+            if (typeof (successCallback) === 'function') {
+                successCallback(result);
+            }
+        }).error(function () {
+            if (typeof (errorCallback) === 'function') {
+                errorCallback();
+            }
+        });
+    };
+
     this.add = function (username, team_id, successCallback, errorCallback) {
         var newPlayer = {username: username, team_id: team_id};
         $http.post(REST.path + 'player', newPlayer).success(function (result) {
@@ -38,53 +62,4 @@ app.service('daoPlayers', function ($http, REST) {
         });
     };
 
-    this.get = function (id, successCallback, errorCallback) {
-        $http.get(REST.path + 'player/' + id).success(function (result) {
-            if (typeof (successCallback) === 'function') {
-                successCallback(result);
-            }
-        }).error(function () {
-            if (typeof (errorCallback) === 'function') {
-                errorCallback();
-            }
-        });
-    };
-
-    /** Team **/
-
-    this.getAllTeams = function (successCallback, errorCallback) {
-        $http.get(REST.path + 'team').success(function (result) {
-            if (typeof (successCallback) === 'function') {
-                successCallback(result);
-            }
-        }).error(function () {
-            if (typeof (errorCallback) === 'function') {
-                errorCallback();
-            }
-        });
-    };
-
-    this.getTeam = function (team_id, successCallback, errorCallback) {
-        $http.get(REST.path + 'team/' + team_id).success(function (result) {
-            if (typeof (successCallback) === 'function') {
-                successCallback(result);
-            }
-        }).error(function () {
-            if (typeof (errorCallback) === 'function') {
-                errorCallback();
-            }
-        });
-    };
-    
-        this.getTeamId = function (team_name, successCallback, errorCallback) {
-        $http.get(REST.path + 'team/' + team_name).success(function (result) {
-            if (typeof (successCallback) === 'function') {
-                successCallback(result);
-            }
-        }).error(function () {
-            if (typeof (errorCallback) === 'function') {
-                errorCallback();
-            }
-        });
-    };
 });

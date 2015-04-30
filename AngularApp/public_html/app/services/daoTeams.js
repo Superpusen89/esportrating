@@ -1,7 +1,6 @@
 app.service('daoTeams', function ($http, REST) {
 
-
-    this.getAllTeams = function (successCallback, errorCallback) {
+    this.getAll = function (successCallback, errorCallback) {
         $http.get(REST.path + 'team').success(function (result) {
             if (typeof (successCallback) === 'function') {
                 successCallback(result);
@@ -13,7 +12,7 @@ app.service('daoTeams', function ($http, REST) {
         });
     };
 
-    this.getTeam = function (team_id, successCallback, errorCallback) {
+    this.get = function (team_id, successCallback, errorCallback) {
         $http.get(REST.path + 'team/' + team_id).success(function (result) {
             if (typeof (successCallback) === 'function') {
                 successCallback(result);
@@ -37,7 +36,7 @@ app.service('daoTeams', function ($http, REST) {
         });
     };
 
-    this.addTeam = function (team_name, successCallback, errorCallback) {
+    this.add = function (team_name, successCallback, errorCallback) {
         var newTeam = {team_name: team_name};
         $http.post(REST.path + 'team', newTeam).success(function (result) {
             if (typeof (successCallback) === 'function') {

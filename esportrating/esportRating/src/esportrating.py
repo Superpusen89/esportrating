@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*- 
+
 import MySQLdb
 from datetime import timedelta
 from decimal import Decimal
@@ -25,9 +28,13 @@ from flask.ext.cors import CORS
 cors = CORS(app) #added
 
 try:
-    conn = MySQLdb.connect(host="localhost", user="root", passwd="HenrietteIda", db="esportrating")
+    conn = MySQLdb.connect(host="localhost", user="root", passwd="HenrietteIda", db="esportrating", use_unicode=True, charset="utf8")
     conn.autocommit(True)
     cursor = conn.cursor()
+#    cursor.execute("SET NAMES utf8;")
+#    cursor.execute("SET NAMES utf8mb4;") #or utf8 or any other charset you want to handle
+#    cursor.execute("SET CHARACTER SET utf8mb4;") #same as above
+#    cursor.execute("SET character_set_connection=utf8mb4;") #same as above
     
 except MySQLdb.Error, e:
     print "Error %d: %s" % (e.args[0], e.args[1])
@@ -201,7 +208,7 @@ def crossdomain(origin=None, methods=None, headers=None,
 @app.route('/player/<int:player_id>', methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def get_player(player_id):
-    cursor.execute("SELECT avatar, p.id, countrycode, username, display_rating, base_rating, team_name, p.team_id, t.id FROM (Player p join Team t on p.team_id = t.id) WHERE p.id = '%d'" % (player_id))
+    cursor.execute("SELECT avatar, p.id, countrycode, username, display_rating, base_rating, team_name, p.team_id FROM (Player p join Team t on p.team_id = t.id) WHERE p.id = '%d'" % (player_id))
     data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
                                         row) for row in cursor.fetchall()]]
     return jsonify(data=data)
@@ -258,6 +265,7 @@ def get_team_by_name(team_name):
 @crossdomain(origin='*')
 def get_teams():
     cursor.execute("SELECT * FROM Team")
+#    cat = '哈哈'
     data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
                                         row) for row in cursor.fetchall()]]
         
@@ -271,6 +279,7 @@ def create_teams():
 #    q = queries.insertTeam
 #    cursor.execute("INSERT INTO Team (team_name) VALUES ('%s')" % (team_name))
     cursor.execute('INSERT INTO Team (team_name) VALUES (%s)', [team_name])
+#    cursor.execute('INSERT INTO Team (team_name) VALUES (kåre)')
     conn.commit()
     #return "%s is added" % team_name
 
@@ -411,7 +420,7 @@ def update_match(match_id):
 @app.route('/match/<int:match_id>', methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def get_match(match_id):
-    cursor.execute("SELECT * FROM Matches WHERE p.id = '%d'" % (match_id))
+    cursor.execute("SELECT * FROM Matches WHERE id = '%d'" % (match_id))
     data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
                                         row) for row in cursor.fetchall()]]
     return jsonify(data=data)

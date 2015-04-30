@@ -1,8 +1,12 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*- 
+
 import queryParams
-from flask import Flask, request
+from flask import Flask, request, json, jsonify
 from configparser import ConfigParser
 from python_mysql_dbconfig import read_db_config
 from mysql.connector import MySQLConnection, Error
+from functools import update_wrapper
 import MySQLdb
 import requests
 import pprint
@@ -12,7 +16,8 @@ import queries
 import sys
 
 try:
-    conn = MySQLdb.connect(host="localhost", user="root", passwd="HenrietteIda", db="esportrating", charset='utf8', use_unicode=True)
+    conn = MySQLdb.connect(host="localhost", user="root", passwd="HenrietteIda", db="esportrating", use_unicode=True, charset='utf8',)
+    conn.autocommit(True)
     cursor = conn.cursor()
 
 except MySQLdb.Error, e:
@@ -140,7 +145,7 @@ def getPlayerSummaries(steam_id):
         countrycode = 'null'
         try:
             personaname = data[0]['personaname']
-            username = personaname.encode('ascii', 'ignore')
+            username = personaname.encode('utf-8')
             print username
             print steam_id
             try:
@@ -148,7 +153,7 @@ def getPlayerSummaries(steam_id):
             except (KeyError, IndexError): pass
             try:
                 realname1 = data[0]['realname']
-                realname = realname1.encode('ascii', 'ignore')     
+                realname = realname1.encode('utf-8')     
             except (KeyError, IndexError): pass
             try:
                 countrycode = data[0]['loccountrycode']
@@ -169,7 +174,7 @@ def getPlayerUsername(steam_id):
         username = 'null'
         try:
             personaname = data[0]['personaname']
-            username = personaname.encode('ascii', 'ignore')
+            username = personaname #.encode('ascii', 'ignore')
         except (KeyError, IndexError): pass
     return username
 
@@ -188,14 +193,14 @@ def getPlayerSummariesver2(steam_id):
         countrycode = 'null'
         try:
             personaname = data[0]['personaname']
-            username = personaname.encode('utf-8', 'ignore')
+            username = personaname # .encode('utf-8', 'ignore')
             print username
             try:
                 avatar = data[0]['avatarfull']
             except (KeyError, IndexError): pass
             try:
                 realname1 = data[0]['realname']
-                realname = realname1.encode('ascii', 'ignore')     
+                realname = realname1 #.encode('ascii', 'ignore')     
             except (KeyError, IndexError): pass
             try:
                 countrycode = data[0]['loccountrycode']
@@ -215,7 +220,7 @@ def getPlayerUsername(steam_id):
         username = 'null'
         try:
             personaname = data[0]['personaname']
-            username = personaname.encode('ascii', 'ignore')
+            username = personaname #.encode('ascii', 'ignore')
         except (KeyError, IndexError): pass
     return username
     
