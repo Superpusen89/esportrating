@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*- 
+
 import MySQLdb
 from datetime import timedelta
 from decimal import Decimal
@@ -25,9 +28,14 @@ from flask.ext.cors import CORS
 cors = CORS(app) #added
 
 try:
-    conn = MySQLdb.connect(host="localhost", user="root", passwd="HenrietteIda", db="esportrating")
+    conn = MySQLdb.connect(host="localhost", user="root", passwd="HenrietteIda", db="esportrating", use_unicode=True, charset="utf8")
+#    , use_unicode=True, charset="utf8"
     conn.autocommit(True)
     cursor = conn.cursor()
+#    cursor.execute("SET NAMES utf8;")
+#    cursor.execute("SET NAMES utf8mb4;") #or utf8 or any other charset you want to handle
+#    cursor.execute("SET CHARACTER SET utf8mb4;") #same as above
+#    cursor.execute("SET character_set_connection=utf8mb4;") #same as above
     
 except MySQLdb.Error, e:
     print "Error %d: %s" % (e.args[0], e.args[1])
@@ -257,7 +265,8 @@ def get_team_by_name(team_name):
 @app.route('/team', methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def get_teams():
-    cursor.execute("SELECT SQL_NO_CACHE * FROM Team")
+    cursor.execute("SELECT * FROM Team")
+#    cat = '哈哈'
     data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
                                         row) for row in cursor.fetchall()]]
         
@@ -271,6 +280,7 @@ def create_teams():
 #    q = queries.insertTeam
 #    cursor.execute("INSERT INTO Team (team_name) VALUES ('%s')" % (team_name))
     cursor.execute('INSERT INTO Team (team_name) VALUES (%s)', [team_name])
+#    cursor.execute('INSERT INTO Team (team_name) VALUES (kåre)')
     conn.commit()
     #return "%s is added" % team_name
 
