@@ -26,6 +26,7 @@ cors = CORS(app) #added
 
 try:
     conn = MySQLdb.connect(host="localhost", user="root", passwd="HenrietteIda", db="esportrating")
+    conn.autocommit(True)
     cursor = conn.cursor()
     
 except MySQLdb.Error, e:

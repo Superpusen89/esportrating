@@ -26,13 +26,14 @@ dataPerson = []
 dataTeamNames = []
 dataMatchHistoryPlayers = []
 dataTeamPlayers = []
+dataPlayers = []
 
 
 
 
 def openDatabaseConn():
     try:
-        conn = MySQLdb.connect(host="localhost", user="root", passwd="HenrietteIda", db="esportrating", charset='utf8', use_unicode=True)
+        conn = MySQLdb.connect(host="localhost", user="root", passwd="HenrietteIda", db="esportrating", use_unicode=True, charset='utf8')
         cursor = conn.cursor()
 
     except MySQLdb.Error, e:
@@ -68,8 +69,8 @@ def openDatabaseConn():
 
 
 
+
 def getLeagueListing():
-    print "getLeagueListing"
     response = requests.get(queryParams.endpoint1, params=queryParams.query_params1)
     data = response.json()['result']['leagues']
     for row in data:
@@ -77,7 +78,6 @@ def getLeagueListing():
     return dataLeague
 
 def getMatchHistory(league_id):
-    print "getMatchHistory"
     del dataMatchHistory[:]
     query_params2 = { 'key': queryParams.key,
                     'league_id': league_id 
@@ -89,7 +89,6 @@ def getMatchHistory(league_id):
     return dataMatchHistory
 
 def getMatchDetailsPlayers(match_id):
-    print "getMatchDetailsPlayers"
     del dataMatchHistoryPlayers[:]
     query_params3 = { 'key': queryParams.key,
                     'match_id': match_id 
@@ -101,7 +100,6 @@ def getMatchDetailsPlayers(match_id):
     return dataMatchHistoryPlayers
 
 def getTeamPlayers(team_id):
-    print "getTeamPlayers"
     del dataTeamPlayers[:]
     query_params5 = { 'key': queryParams.key,
                         'start_at_team_id': team_id,
@@ -129,7 +127,6 @@ def getTeamPlayers(team_id):
     
 
 def getPlayerSummaries(steam_id):
-    print "getPlayerSummaries"
     del dataPerson[:]
     query_params4 = { 'key': queryParams.key,
         'steamids': steam_id
@@ -144,6 +141,55 @@ def getPlayerSummaries(steam_id):
         try:
             personaname = data[0]['personaname']
             username = personaname.encode('ascii', 'ignore')
+            print username
+            print steam_id
+            try:
+                avatar = data[0]['avatarfull']
+            except (KeyError, IndexError): pass
+            try:
+                realname1 = data[0]['realname']
+                realname = realname1.encode('ascii', 'ignore')     
+            except (KeyError, IndexError): pass
+            try:
+                countrycode = data[0]['loccountrycode']
+            except (KeyError, IndexError): pass
+        except (KeyError, IndexError): pass
+        
+        dataPerson.append([username, avatar, realname, countrycode])
+        
+    return dataPerson
+
+def getPlayerUsername(steam_id):
+    query_params4 = { 'key': queryParams.key,
+        'steamids': steam_id
+               } 
+    response = requests.get(queryParams.endpoint4, params=query_params4)
+    data = response.json()['response']['players']
+    for row in data:
+        username = 'null'
+        try:
+            personaname = data[0]['personaname']
+            username = personaname.encode('ascii', 'ignore')
+        except (KeyError, IndexError): pass
+    return username
+
+
+def getPlayerSummariesver2(steam_id):
+    del dataPerson[:]
+    query_params4 = { 'key': queryParams.key,
+        'steamids': steam_id
+               } 
+    response = requests.get(queryParams.endpoint4, params=query_params4)
+    data = response.json()['response']['players']
+    for row in data:
+        username = 'null' # IKKE ALLE SOM HAR AAPEN PROFIL
+        avatar = 'null'
+        realname = 'null'
+        countrycode = 'null'
+        try:
+            personaname = data[0]['personaname']
+            username = personaname.encode('utf-8', 'ignore')
+            print username
             try:
                 avatar = data[0]['avatarfull']
             except (KeyError, IndexError): pass
@@ -160,7 +206,6 @@ def getPlayerSummaries(steam_id):
     return dataPerson
 
 def getPlayerUsername(steam_id):
-    print "getPlayerUsername"
     query_params4 = { 'key': queryParams.key,
         'steamids': steam_id
                } 
@@ -177,7 +222,6 @@ def getPlayerUsername(steam_id):
             
     
 def getMatchDetailsTeamName(match_id):
-    print "getMatchDetailsTeamName"
     #del dataTeamNames[:]
     query_params3 = { 'key': queryParams.key,
                         'match_id': match_id 
@@ -193,33 +237,53 @@ def getMatchDetailsTeamName(match_id):
     return dataTeamNames
 
 def insertTournament(league_id, league_name):
-    print "insertTournament"
-    cursor.execute(queries.q1 % (league_id))
+    cursor.execute(queries.q1, [league_id])
     test = cursor.fetchone()[0]
     if test == 0:
-        cursor.execute(queries.q2 % (league_id, league_name))
+        cursor.execute(queries.q2, ([league_id, league_name]))
         conn.commit()
         return 1
     return -1
 
 def insertTeam(team_id, team_name):
-    print "insertTeam"
-    cursor.execute(queries.q3 % (team_id))
+    cursor.execute(queries.q3, [team_id])
     test = cursor.fetchone()[0]
     if test == 0:
-        cursor.execute(queries.q4 % (team_id, team_name))
+        cursor.execute(queries.q4, [team_id, team_name])
         conn.commit()
 
 def insertPlayer(account_id, username, team_id, avatar, realname, countrycode):
-    print "insertPlayer"
+    cursor.execute(queries.q5, [account_id])
+    test = cursor.fetchone()[0]
+    if test == 0:
+        cursor.execute(queries.q6, [account_id, username, 1200, 1200, team_id, avatar, realname, countrycode]) #(username + unichr(300))
+        conn.commit()
+        
+def insertPlayerVer1(account_id, team_id):
+    cursor.execute(queries.q5, [account_id])
+    test = cursor.fetchone()[0]
+    if test == 0:
+        steam_id = account_id+queryParams.steam_number
+        dataPlayers = getPlayerSummaries(steam_id)
+        for row in dataPlayers:
+            if row[0] != None:
+                cursor.execute(queries.q6, [account_id, row[0], 1200, 1200, row[1], row[2], row[3]]) #(username + unichr(300))
+                conn.commit()
+        del dataPlayers[:]
+        
+def insertPlayerVer2(account_id):
     cursor.execute(queries.q5 % (account_id))
     test = cursor.fetchone()[0]
     if test == 0:
-        cursor.execute(queries.q6 % (account_id, username, 1200, 1200, team_id, avatar, realname, countrycode)) #(username + unichr(300))
-        conn.commit()
+        steam_id = account_id+queryParams.steam_number
+        dataPlayers = getPlayerSummaries(steam_id)
+        for row in dataPlayers:
+            if row[0] != None:
+                cursor.execute(queries.q17, [account_id, row[0], 1200, 1200, row[1], row[2], row[3]]) #(username + unichr(300))
+                conn.commit()
+        del dataPlayers[:]
         
 def insertMatches(match_id, league_id, radiant_team_id, dire_team_id):
-    print "insertMatches"
     radiant_win = None
     query_params3 = { 'key': queryParams.key,
                         'match_id': match_id 
@@ -232,46 +296,56 @@ def insertMatches(match_id, league_id, radiant_team_id, dire_team_id):
     except KeyError: pass
     if radiant_win != None: #AND timestamp?
         end_time = start_time + duration
-        cursor.execute(queries.q7 % (match_id))
+        cursor.execute(queries.q7, [match_id])
         test = cursor.fetchone()[0]
         if test == 0:
             if radiant_win:
-                cursor.execute(queries.q8 % (match_id, league_id, radiant_team_id, dire_team_id, start_time, end_time))
+                cursor.execute(queries.q8 , [match_id, league_id, radiant_team_id, dire_team_id, start_time, end_time])
                 conn.commit()
             else:
-                cursor.execute(queries.q9 % (match_id, league_id, dire_team_id, radiant_team_id, start_time, end_time))
+                cursor.execute(queries.q9 , [match_id, league_id, dire_team_id, radiant_team_id, start_time, end_time])
                 conn.commit() 
     
 
 def insertPlayerMatch(match_id, account_id, team_id):
-    print "insertPlayerMatch"
-    cursor.execute(queries.q10 % (match_id, account_id))
+    cursor.execute(queries.q10, [match_id, account_id])
     test = cursor.fetchone()[0]
     if test == 0:
-        cursor.execute(queries.q11 % (match_id, account_id, team_id))
+        cursor.execute(queries.q11 , [match_id, account_id, team_id])
         conn.commit()
         
         
 def createTeams(match_id, team_1, team_2):
-    print "createTeams"
     dataTeamNames = getMatchDetailsTeamName(match_id)
     insertTeam(team_1, dataTeamNames[0][0])
     insertTeam(team_2, dataTeamNames[0][1])
     del dataTeamNames[:]
 
 def updatePlayer():
-    print "updatePlayer"
     cursor.execute(queries.q12)
     data = cursor.fetchall();
     for row in data:
         steam_id = row[1]+queryParams.steam_number
         username = getPlayerUsername(steam_id)
         if row[0] != username:
-            cursor.execute(queries.q13 % (username, row[1]))
+            print "UPDATE"
+            cursor.execute(queries.q13 , [username, row[1]])
+            conn.commit()
+            
+def updatePlayer2():
+    cursor.execute(queries.q16)
+    data = cursor.fetchall();
+    cursor.execute(queries.q)
+    for row in data:
+        steam_id = row[1]+queryParams.steam_number
+        username = getPlayerUsername(steam_id)
+        team_id = row[2]
+        if row[0] != username:
+            print "UPDATE"
+            cursor.execute(queries.q13, [username, row[1]])
             conn.commit()
         
 def updateTeam():
-    print "updateTeam"
     cursor.execute(queries.q14)
     data = cursor.fetchall()
     for row in data:
@@ -284,8 +358,17 @@ def updateTeam():
         data = response.json()['result']['teams']
         team_name = data[0]['name']
         if row[1] != team_name:
-            cursor.execute(queries.q15 % (team_name, row[0]))
+            cursor.execute(queries.q15, [team_name, row[0]])
             conn.commit()
+        
+def checkPlayer(account_id):
+    cursor.execute(queries.q16 , [account_id])
+    test = cursor.fetchone()[0]
+    print test
+    if test == 0:
+        print "****** IF *******", account_id
+        insertPlayerVer2(account_id)
+    return "PLAYER INSERTED"
             
         
         

@@ -3,12 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-<<<<<<< HEAD
             <file>file:/home/henriette/Bachelor/esportrating/esportRating/src/esportrating.py</file>
+            <file>file:/home/henriette/Bachelor/esportrating/esportRating/src/Database/queries.py</file>
             <file>file:/home/henriette/Bachelor/esportrating/esportRating/src/Database/databaseCreateTables.sql</file>
-=======
-            <file>file:/home/ida/Documents/Bachelor/esportrating/esportRating/src/esportrating.py</file>
->>>>>>> 622672e4bdae72ee88a86f0d91a397c8f5dedce5
         </group>
     </open-files>
 </project-private>
