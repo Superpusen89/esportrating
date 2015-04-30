@@ -26,6 +26,7 @@ cors = CORS(app) #added
 
 try:
     conn = MySQLdb.connect(host="localhost", user="root", passwd="HenrietteIda", db="esportrating")
+    conn.autocommit(True)
     cursor = conn.cursor()
     
 except MySQLdb.Error, e:
@@ -256,7 +257,7 @@ def get_team_by_name(team_name):
 @app.route('/team', methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def get_teams():
-    cursor.execute("SELECT * FROM Team")
+    cursor.execute("SELECT SQL_NO_CACHE * FROM Team")
     data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
                                         row) for row in cursor.fetchall()]]
         
@@ -410,7 +411,7 @@ def update_match(match_id):
 @app.route('/match/<int:match_id>', methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def get_match(match_id):
-    cursor.execute("SELECT * FROM Matches WHERE p.id = '%d'" % (match_id))
+    cursor.execute("SELECT * FROM Matches WHERE id = '%d'" % (match_id))
     data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
                                         row) for row in cursor.fetchall()]]
     return jsonify(data=data)

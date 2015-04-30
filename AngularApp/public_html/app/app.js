@@ -29,6 +29,10 @@ app.config(function ($routeProvider) {
                 controller: 'MatchController',
                 templateUrl: 'app/partials/match.html'
             })
+            .when('/addMatch', {
+                controller: 'AddMatchController',
+                templateUrl: 'app/partials/addMatch.html'
+            })
             .when('/login', {
                 templateUrl: 'app/partials/login.html'
             })

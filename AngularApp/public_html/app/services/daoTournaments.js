@@ -1,7 +1,7 @@
 app.service('daoTournaments', function ($http, REST) {
 
-    this.get = function (id, successCallback, errorCallback) {
-        $http.get(REST.path + 'tournament/' + id).success(function (result) {
+    this.getAll = function (successCallback, errorCallback) {
+        $http.get(REST.path + 'tournament').success(function (result) {
             if (typeof (successCallback) === 'function') {
                 successCallback(result);
             }
@@ -11,9 +11,9 @@ app.service('daoTournaments', function ($http, REST) {
             }
         });
     };
-
-    this.getAll = function (successCallback, errorCallback) {
-        $http.get(REST.path + 'tournament').success(function (result) {
+    
+    this.get = function (id, successCallback, errorCallback) {
+        $http.get(REST.path + 'tournament/' + id).success(function (result) {
             if (typeof (successCallback) === 'function') {
                 successCallback(result);
             }

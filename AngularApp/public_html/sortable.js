@@ -27,7 +27,7 @@ function sortables_init() {
 	tbls = document.getElementsByTagName("table");
 	for (ti=0;ti<tbls.length;ti++) {
 		thisTbl = tbls[ti];
-		if (((' '+thisTbl.className+' ').indexOf("sortable") != -1) && (thisTbl.id)) {
+		if (((' '+thisTbl.className+' ').indexOf("sortable") !== -1) && (thisTbl.id)) {
 			ts_makeSortable(thisTbl);
 		}
 	}
@@ -48,7 +48,7 @@ function ts_makeSortable(t) {
 	for (var i=0;i<firstRow.cells.length;i++) {
 		var cell = firstRow.cells[i];
 		var txt = ts_getInnerText(cell);
-		if (cell.className != "unsortable" && cell.className.indexOf("unsortable") == -1) {
+		if (cell.className !== "unsortable" && cell.className.indexOf("unsortable") === -1) {
 			cell.innerHTML = '<a href="#" class="sortheader" onclick="ts_resortTable(this, '+i+');return false;">'+txt+'<span class="sortarrow">&nbsp;&nbsp;<img src="'+ image_none + '" alt="&darr;"/></span></a>';
 		}
 	}

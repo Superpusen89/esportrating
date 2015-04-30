@@ -2,7 +2,7 @@ app.run(function (editableOptions) {
     editableOptions.theme = 'bs3';
 });
 
-app.controller('PlayerController', function ($scope, $routeParams, daoPlayers) {
+app.controller('PlayerController', function ($scope, $routeParams, daoPlayers, daoTeams) {
     $scope.status = "Loading...";
 
     daoPlayers.get($routeParams.playerId, function (player) {
@@ -12,7 +12,7 @@ app.controller('PlayerController', function ($scope, $routeParams, daoPlayers) {
         $scope.status = "Error loading Player " + $routeParams.playerId;
     });
 
-    daoPlayers.getAllTeams(function (teams) {
+    daoTeams.getAll(function (teams) {
         $scope.teams = teams.data;
         $scope.statusTeams = "Successfully loaded Teams";
     }, function () {
@@ -29,7 +29,7 @@ app.controller('PlayerController', function ($scope, $routeParams, daoPlayers) {
 
         if ($.inArray(data, teamarray) !== -1) {
             console.log('1. Data in the array: ' + data);
-            daoPlayers.getTeamId(data, function (data) {
+            daoTeams.getTeamId(data, function (data) {
                 $scope.team_id = data;
                 console.log('2. Data sent to scope.team_id: ' + data);
                 console.log('3. scope.team_id received : ' + data);
