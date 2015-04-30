@@ -10,7 +10,7 @@ import queryParams
 import time
 
 try:
-    conn = MySQLdb.connect(host="localhost", user="root", passwd="HenrietteIda", db="esportrating", charset='utf8', use_unicode=True)
+    conn = MySQLdb.connect(host="localhost", user="root", passwd="HenrietteIda", db="esportrating", use_unicode=True, charset='utf8')
     cursor = conn.cursor()
     
 except MySQLdb.Error, e:

@@ -28,9 +28,9 @@ CREATE TABLE Player
     avatar VARCHAR(200),
     realname CHAR(80),
     countrycode CHAR(5),
-    PRIMARY KEY (id),
-    FOREIGN KEY (team_id) REFERENCES Team(id)
+    PRIMARY KEY (id)
 )CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+
 
 CREATE TABLE Tournament
 (
@@ -68,6 +68,12 @@ CREATE TABLE Player_match
     FOREIGN KEY(player_id) REFERENCES Player(id)    
 );
 
+CREATE TRIGGER lcase_insert BEFORE INSERT ON Player FOR EACH ROW
+SET NEW.countrycode = LOWER(NEW.countrycode);
+
+CREATE TRIGGER lcase_update BEFORE UPDATE ON Player FOR EACH ROW
+SET NEW.countrycode = LOWER(NEW.countrycode);
+
 CREATE TABLE User_profile
 (
     email_address CHAR(80) NOT NULL,
@@ -77,11 +83,7 @@ CREATE TABLE User_profile
     PRIMARY KEY(email_address)
 )CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
-CREATE TRIGGER lcase_insert BEFORE INSERT ON Player FOR EACH ROW
-SET NEW.countrycode = LOWER(NEW.countrycode);
 
-CREATE TRIGGER lcase_update BEFORE UPDATE ON Player FOR EACH ROW
-SET NEW.countrycode = LOWER(NEW.countrycode);
 
 # Testdata
 INSERT INTO Team (team_name) VALUES ('Superpusene');
@@ -104,6 +106,7 @@ INSERT INTO Tournament (tournament_name) VALUES ('TheFirst');
 INSERT INTO Matches (tournament_id, winning_team_id, losing_team_id) VALUES (1, 1, 2); 
 INSERT INTO Matches (tournament_id, winning_team_id, losing_team_id) VALUES (1, 1, 2); 
 INSERT INTO Matches (tournament_id, winning_team_id, losing_team_id) VALUES (1, 2, 1);
+INSERT INTO Matches (tournament_id, winning_team_id, losing_team_id) VALUES (4, 1, 2);
 INSERT INTO Player_match (match_id, player_id, team_id) VALUES (1, 1, 1);
 INSERT INTO Player_match (match_id, player_id, team_id) VALUES (1, 2, 1);
 INSERT INTO Player_match (match_id, player_id, team_id) VALUES (1, 3, 1);
@@ -122,6 +125,12 @@ INSERT INTO Player_match (match_id, player_id, team_id) VALUES (3, 3, 1);
 INSERT INTO Player_match (match_id, player_id, team_id) VALUES (3, 4, 2);
 INSERT INTO Player_match (match_id, player_id, team_id) VALUES (3, 5, 2);
 INSERT INTO Player_match (match_id, player_id, team_id) VALUES (3, 6, 2);
+INSERT INTO Player_match (match_id, player_id, team_id) VALUES (4, 1, 1);
+INSERT INTO Player_match (match_id, player_id, team_id) VALUES (4, 2, 1);
+INSERT INTO Player_match (match_id, player_id, team_id) VALUES (4, 3, 1);
+INSERT INTO Player_match (match_id, player_id, team_id) VALUES (4, 4, 1);
+INSERT INTO Player_match (match_id, player_id, team_id) VALUES (4, 5, 1);
+INSERT INTO Player_match (match_id, player_id, team_id) VALUES (4, 6, 2);
 
  
 

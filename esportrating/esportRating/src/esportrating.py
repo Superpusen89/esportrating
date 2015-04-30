@@ -29,7 +29,6 @@ cors = CORS(app) #added
 
 try:
     conn = MySQLdb.connect(host="localhost", user="root", passwd="HenrietteIda", db="esportrating", use_unicode=True, charset="utf8")
-#    , use_unicode=True, charset="utf8"
     conn.autocommit(True)
     cursor = conn.cursor()
 #    cursor.execute("SET NAMES utf8;")
