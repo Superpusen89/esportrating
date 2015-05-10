@@ -1,4 +1,5 @@
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python
+# -*- coding: utf-8 -*- 
 
 from flask import Flask, request
 import MySQLdb
@@ -8,158 +9,125 @@ import urllib
 import json
 import queryParams
 import time
+import probeMethods
+import queries
+from flask.ext.restful import Api
+from functools import update_wrapper
 
-try:
-    conn = MySQLdb.connect(host="localhost", user="root", passwd="HenrietteIda", db="esportrating", charset='utf8', use_unicode=True)
-    cursor = conn.cursor()
-    
-except MySQLdb.Error, e:
-    print "Error %d: %s" % (e.args[0], e.args[1])
-    sys.exit(1)
+app = Flask(__name__)
+api = Api(app)
 
+from flask.ext.cors import CORS
+cors = CORS(app) #added
+
+#try:
+#    conn = MySQLdb.connect(host="localhost", user="root", passwd="HenrietteIda", db="esportrating", charset='utf8', use_unicode=True)
+#    cursor = conn.cursor()
+#    
+#except MySQLdb.Error, e:
+#    print "Error %d: %s" % (e.args[0], e.args[1])
+#    sys.exit(1)
+
+#probeMethods.getTeamPlayers(1484022)
+#
+#probeMethods.openDatabaseConn()
+#probeMethods.updatePlayer()
+#probeMethods.updateTeam()
 #Variables
-matchInfo = []
-players = []
-datas = []
+dataLeagues = []
+dataMatchHistory = []
+#dataPerson = []
+dataTeamNames = []
+dataMatchHistoryPlayers = []
+dataTeamPlayers = []
+teamID = []
 
 
-#getLeagueListing    
-response = requests.get(queryParams.endpoint1, params=queryParams.query_params1)
-data = response.json()['result']['leagues']
-for u in data:
-    datas.append([u['leagueid'], u['name']])
-#For loop for every leagueListing
-for row in datas:
-    print "for loop - leagueListing"
+
+#dataLeagues = probeMethods.getLeagueListing()
+dataLeagues = [(65001, 'The_International_2012'), (65006, 'The_International'), (600, 'The_International_2014')]
+for row in dataLeagues:
     league_id = row[0]
     league_name = row[1]
-    print league_name
-    cursor.execute("SELECT EXISTS(SELECT id FROM Tournament WHERE tournament_id = '%d')" % (league_id))
-    test = cursor.fetchone()[0]
-    if test == 0:
-        cursor.execute("INSERT INTO Tournament (tournament_id, tournament_name) VALUES ('%d', '%s')" % (league_id, league_name))
-        conn.commit()
+    res = probeMethods.insertTournament(league_id, league_name)
+    if res == 1:  
+        del dataMatchHistory[:]    
+        dataMatchHistory = probeMethods.getMatchHistory(league_id)
+        for row in dataMatchHistory:
+            match_id = row[0]
+            print "MATCH_ID: ", match_id
+            probeMethods.createTeams(match_id, row[1], row[2])
+            probeMethods.insertMatches(match_id, league_id, row[1], row[2])
+            teamID.append(row[1]) 
+            teamID.append(row[2])
+            for row in teamID:
+                team_id = row
+                del dataTeamPlayers[:]
+                dataTeamPlayers = probeMethods.getTeamPlayers(row)
+                for row in dataTeamPlayers:
+                    account_id = row
+                    steam_id = row + queryParams.steam_number
+                    dataPerson = probeMethods.getPlayerSummaries(steam_id)
+                    for row in dataPerson:
+                        if row[0] != None:
+                            probeMethods.insertPlayer(account_id, row[0], team_id, row[1], row[2], row[3]) 
 
-    #getMatchHistory for each leage_id
-    query_params2 = { 'key': queryParams.key,
-                    'league_id': id 
-                           }
-    response = requests.get(queryParams.endpoint2, params=query_params2)
-    data = response.json()['result']['matches']
-    for u in data: # MULIG DENNE IKKE ER NODVENDIG?
-        players.append(u['players'])
-        matchInfo.append([u['match_id'], u['radiant_team_id'], u['dire_team_id'], u['players']])
-    for p in matchInfo:
-        player_slot = p[3][1]['player_slot']
-        account_id = p[3][0]['account_id']
-        print account_id
-        steam_id = account_id + 76561197960265728
-        #getPlayerSummaries
-        query_params4 = { 'key': queryParams.key,
-        'steamids': steam_id
-               } 
-        response = requests.get(queryParams.endpoint4, params=query_params4)
-        data = response.json()['response']['players']
-        print "DATA PLAYER SUMMARIES:"
-        pprint.pprint(data)
-        print steam_id
-        username = 'null' # IKKE ALLE SOM HAR AAPEN PROFIL
-        avatar = 'null'
-        realname = 'null'
-        countrycode = 'null'
-        try:
-            personaname = data[0]['personaname']
-            username = personaname.encode('ascii', 'ignore')
-            print username
-        except (KeyError, IndexError) as e: pass
-        try:
-            avatar = data[0]['avatarfull']
-        except (KeyError, IndexError) as e: pass
-        try:
-            realname1 = data[0]['realname']
-            realname = realname.encode('ascii', 'ignore')
-            print realname
-        except (KeyError, IndexError) as e: pass
-        try:
-            countrycode = data[0]['loccountrycode']
-        except (KeyError, IndexError) as e: pass
-        
-        match_id = p[0] 
-        print "MATCH_ID"
-        print match_id
-        if player_slot < 128:
-            team_id = p[1] #for radiant team
-            print "TEAM_ID"
-            print team_id
-            cursor.execute("SELECT EXISTS(SELECT id FROM Team WHERE team_id = '%d')" % (team_id))
-            test = cursor.fetchone()[0]
-            if test == 0:
-                cursor.execute("INSERT INTO Team (team_id, team_name) VALUES ('%d', '%s')" % (team_id, 'null'))
-                conn.commit()
-        else:
-            team_id = p[2]
-            print "TEAM_ID"
-            print team_id
-            cursor.execute("SELECT id FROM Team WHERE team_id = '%d'" % (team_id))
-            test = cursor.fetchone()[0]
-            if test == 0:
-                cursor.execute("INSERT INTO Team (team_id, team_name) VALUES ('%d', '%s')" % (team_id, 'null'))
-                conn.commit()
-
-        #for row in datas:
-        true = 'true'
-        #getMatchDetails
-        query_params3 = { 'key': queryParams.key,
-                        'match_id': match_id 
-                               }
-        response = requests.get(queryParams.endpoint3, params=query_params3)
-        #data = response.json()['result']['players']
-        exists = 0
-        try:
-            radiant_win = response.json()['result']['radiant_win']
-            radiant_id = response.json()['result']['radiant_team_id']
-            dire_id = response.json()['result']['dire_team_id']
-            start_time = (response.json()['result']['start_time'])
-            duration = (response.json()['result']['duration'])
-            exists = 1
-            print "exists skjer"
-        except KeyError: pass
-        if exists == 1:
-            end_time = start_time + duration
-            cursor.execute("SELECT EXISTS(SELECT id FROM Matches WHERE match_id = '%d')" % (match_id))
-            test = cursor.fetchone()[0]
-            if test == 0:
-                if radiant_win:
-                    cursor.execute("INSERT INTO Matches (match_id, tournament_id, winning_team_id, losing_team_id) VALUES ('%d', (SELECT id FROM Tournament WHERE tournament_id = '%d'), '%d', '%d')" % (match_id, league_id, radiant_id, dire_id))
-                    conn.commit()
-                else:
-                    cursor.execute("INSERT INTO Matches (match_id, tournament_id, winning_team_id, losing_team_id) VALUES ('%d', (SELECT id FROM Tournament WHERE tournament_id = '%d'), '%d', '%d')" % (match_id, league_id, dire_id, radiant_id))
-                    conn.commit()    
-
-
-        cursor.execute("SELECT EXISTS(SELECT id FROM Player WHERE player_id = '%d')" % (account_id))
-        test = cursor.fetchone()[0]
-        if test == 0:
-            print 'INSERT INTO Player'
-            cursor.execute("INSERT INTO Player (player_id, username, base_rating, display_rating, team_id, avatar, realname, countrycode) VALUES ('%d', '%s', '%d', '%d', (SELECT id from Team WHERE team_id = '%d'), '%s', '%s', '%s')" % (account_id, (username + unichr(300)), 1200, 1200, team_id, avatar, realname, countrycode))
-            conn.commit()
-
-
-        cursor.execute("SELECT EXISTS(SELECT * FROM Player_match WHERE match_id = (SELECT id FROM Matches WHERE match_id = '%d') AND player_id = (SELECT id FROM Player WHERE player_id = '%d'))" % (match_id, account_id))
-        test = cursor.fetchone()[0]
-        if test == 0:
-            print 'INSERT INTO Player_match'
-            cursor.execute("INSERT INTO Player_match (match_id, player_id, team_id) VALUES ((SELECT id FROM Matches WHERE match_id = '%d'), (SELECT id FROM Player WHERE player_id = '%d'), '%d')" % (match_id, account_id, team_id))
-
-        print "Sleep"
-        time.sleep(5)
-        
-
-
-
-
-
-
-
-
-
+            del dataMatchHistoryPlayers[:]
+            dataMatchHistoryPlayers = probeMethods.getMatchDetailsPlayers(match_id)
+            for row in dataMatchHistoryPlayers:
+                account_id = row[0]
+                check = probeMethods.checkPlayer(account_id)
+                player_slot = row[1]
+                if row[0] != None:
+                    if player_slot < 128:
+                        probeMethods.insertPlayerMatch(match_id, account_id, teamID[0])              
+                    else:
+                        probeMethods.insertPlayerMatch(match_id, account_id, teamID[1])
+            del teamID[:] 
+##            print dire_team_id
+##            probeMethods.insertMatches(match_id, league_id, radiant_team_id, dire_team_id)
+##            del dataMatchHistoryPlayers[:]
+##            dataMatchHistoryPlayers = probeMethods.getMatchDetailsPlayers(match_id)
+##            for rowrow in dataMatchHistoryPlayers:
+##                account_id = rowrow[0]
+##                player_slot = rowrow[1]
+##                steam_id = account_id + queryParams.steam_number ####*****OBSOBS, SJEKK OM DETTA FUNKER
+##                dataTeamNames = probeMethods.getMatchDetailsTeamName(match_id)
+##                probeMethods.insertTeam(radiant_team_id, dataTeamNames[0][0])
+##                probeMethods.insertTeam(dire_team_id, dataTeamNames[0][1])
+##                del dataTeamNames[:]
+##                dataPerson = probeMethods.getPlayerSummaries(steam_id)
+##                for row in dataPerson:
+##                    if row[0] != None:
+##                        if player_slot < 128:
+##                            del dataTeamPlayers[:]
+##                            dataTeamPlayers = probeMethods.getTeamPlayers
+##                            for row in dataTeamPlayers:
+##                                cursor.execute
+##                            #probeMethods.insertPlayer(account_id, row[0], radiant_team_id, row[1], row[2], row[3]) 
+##                            probeMethods.insertPlayerMatch(match_id, account_id, radiant_team_id)
+##                        else:
+##                            #probeMethods.insertPlayer(account_id, row[0], dire_team_id, row[1], row[2], row[3])
+##                            probeMethods.insertPlayerMatch(match_id, account_id, dire_team_id)
+#                            
+#                            
+#                            
+#                            
+##            for rowrow in dataMatchHistoryPlayers:
+##                account_id = rowrow[0]
+##                player_slot = rowrow[1]
+##                steam_id = account_id + queryParams.steam_number ####*****OBSOBS, SJEKK OM DETTA FUNKER
+##                dataTeamNames = probeMethods.getMatchDetailsTeamName(match_id)
+##                probeMethods.insertTeam(radiant_team_id, dataTeamNames[0][0])
+##                probeMethods.insertTeam(dire_team_id, dataTeamNames[0][1])
+##                del dataTeamNames[:]
+##                dataPerson = probeMethods.getPlayerSummaries(steam_id)
+##                for row in dataPerson:
+##                    if row[0] != None:
+##                        if player_slot < 128:
+##                            probeMethods.insertPlayer(account_id, row[0], radiant_team_id, row[1], row[2], row[3]) 
+##                            probeMethods.insertPlayerMatch(match_id, account_id, radiant_team_id)
+##                        else:
+##                            probeMethods.insertPlayer(account_id, row[0], dire_team_id, row[1], row[2], row[3])
+##                            probeMethods.insertPlayerMatch(match_id, account_id, dire_team_id)
+#                

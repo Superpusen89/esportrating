@@ -3,7 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/henriette/Bachelor/ProbeModule/src/probemodule.py</file>
+            <file>file:/home/henriette/Bachelor/ProbeModule2/src/probemodule2.py</file>
+            <file>file:/home/henriette/Bachelor/ProbeModule2/src/probeMethods.py</file>
+            <file>file:/home/henriette/Bachelor/ProbeModule2/src/queries.py</file>
+            <file>file:/home/henriette/Bachelor/ProbeModule2/src/queryParams.py</file>
+            <file>file:/home/henriette/Bachelor/ProbeModule2/src/config.ini</file>
         </group>
     </open-files>
 </project-private>
