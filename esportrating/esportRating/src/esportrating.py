@@ -351,7 +351,7 @@ def getplayers():
 @app.route('/match', methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def get_matches():
-    cursor.execute("select * from Matches")
+    cursor.execute("select m.id, m.match_id, tournament_id, team_1_id, team_2_id, winning_team_id, losing_team_id, match_time_start, match_time_end, w.team_name AS winning_team, l.team_name AS losing_team FROM Matches m LEFT JOIN Team w on m.winning_team_id = w.id LEFT JOIN Team l on m.losing_team_id = l.id order by m.id;")
     data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
                                         row) for row in cursor.fetchall()]]
 

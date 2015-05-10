@@ -3,9 +3,9 @@
 
 import queryParams
 from flask import Flask, request, json, jsonify
-from configparser import ConfigParser
-from python_mysql_dbconfig import read_db_config
-from mysql.connector import MySQLConnection, Error
+#from configparser import ConfigParser
+#from python_mysql_dbconfig import read_db_config
+#from mysql.connector import MySQLConnection, Error
 from functools import update_wrapper
 import MySQLdb
 import requests
