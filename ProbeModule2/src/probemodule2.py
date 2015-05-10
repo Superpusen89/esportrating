@@ -55,6 +55,7 @@ for row in dataLeagues:
         dataMatchHistory = probeMethods.getMatchHistory(league_id)
         for row in dataMatchHistory:
             match_id = row[0]
+            print "MATCH_ID: ", match_id
             probeMethods.createTeams(match_id, row[1], row[2])
             probeMethods.insertMatches(match_id, league_id, row[1], row[2])
             teamID.append(row[1]) 
@@ -66,10 +67,8 @@ for row in dataLeagues:
                 for row in dataTeamPlayers:
                     account_id = row
                     steam_id = row + queryParams.steam_number
-                    print "STEAMID: ", steam_id
                     dataPerson = probeMethods.getPlayerSummaries(steam_id)
                     for row in dataPerson:
-                        print "ROW: ", row
                         if row[0] != None:
                             probeMethods.insertPlayer(account_id, row[0], team_id, row[1], row[2], row[3]) 
 
@@ -78,7 +77,6 @@ for row in dataLeagues:
             for row in dataMatchHistoryPlayers:
                 account_id = row[0]
                 check = probeMethods.checkPlayer(account_id)
-                print "*************************************** ACCOUNT_ID **************************", account_id
                 player_slot = row[1]
                 if row[0] != None:
                     if player_slot < 128:

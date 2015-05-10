@@ -2,11 +2,10 @@
 # -*- coding: utf-8 -*- 
 
 import queryParams
-from flask import Flask, request, json, jsonify
-from configparser import ConfigParser
+from flask import Flask, request
+#from configparser import ConfigParser
 from python_mysql_dbconfig import read_db_config
 from mysql.connector import MySQLConnection, Error
-from functools import update_wrapper
 import MySQLdb
 import requests
 import pprint
@@ -94,6 +93,7 @@ def getMatchHistory(league_id):
     return dataMatchHistory
 
 def getMatchDetailsPlayers(match_id):
+    print "getMatcgDetailsPlayers"
     del dataMatchHistoryPlayers[:]
     query_params3 = { 'key': queryParams.key,
                     'match_id': match_id 
@@ -146,8 +146,6 @@ def getPlayerSummaries(steam_id):
         try:
             personaname = data[0]['personaname']
             username = personaname.encode('utf-8')
-            print username
-            print steam_id
             try:
                 avatar = data[0]['avatarfull']
             except (KeyError, IndexError): pass
@@ -244,16 +242,22 @@ def getMatchDetailsTeamName(match_id):
 def insertTournament(league_id, league_name):
     cursor.execute(queries.q1, [league_id])
     test = cursor.fetchone()[0]
+    dataMatchHistory = getMatchHistory(league_id)
+    lenMatches = len(dataMatchHistory) #checks that every match has been registered, if not; run through again
+    cursor.execute(queries.q18, [league_id])
+    actualLenMatches = cursor.fetchone()[0]
     if test == 0:
         cursor.execute(queries.q2, ([league_id, league_name]))
         conn.commit()
+        return 1
+    if actualLenMatches < lenMatches:
         return 1
     return -1
 
 def insertTeam(team_id, team_name):
     cursor.execute(queries.q3, [team_id])
     test = cursor.fetchone()[0]
-    if test == 0:
+    if test == 0 and team_name != None:
         cursor.execute(queries.q4, [team_id, team_name])
         conn.commit()
 
@@ -283,6 +287,7 @@ def insertPlayerVer2(account_id):
         steam_id = account_id+queryParams.steam_number
         dataPlayers = getPlayerSummaries(steam_id)
         for row in dataPlayers:
+            print "insrtPlayerVer2 row: ", row
             if row[0] != None:
                 cursor.execute(queries.q17, [account_id, row[0], 1200, 1200, row[1], row[2], row[3]]) #(username + unichr(300))
                 conn.commit()
@@ -316,6 +321,7 @@ def insertPlayerMatch(match_id, account_id, team_id):
     cursor.execute(queries.q10, [match_id, account_id])
     test = cursor.fetchone()[0]
     if test == 0:
+        print "Match_id inni insertPlayerMatch: ", match_id
         cursor.execute(queries.q11 , [match_id, account_id, team_id])
         conn.commit()
         
@@ -333,7 +339,6 @@ def updatePlayer():
         steam_id = row[1]+queryParams.steam_number
         username = getPlayerUsername(steam_id)
         if row[0] != username:
-            print "UPDATE"
             cursor.execute(queries.q13 , [username, row[1]])
             conn.commit()
             
@@ -346,7 +351,6 @@ def updatePlayer2():
         username = getPlayerUsername(steam_id)
         team_id = row[2]
         if row[0] != username:
-            print "UPDATE"
             cursor.execute(queries.q13, [username, row[1]])
             conn.commit()
         
@@ -369,9 +373,7 @@ def updateTeam():
 def checkPlayer(account_id):
     cursor.execute(queries.q16 , [account_id])
     test = cursor.fetchone()[0]
-    print test
     if test == 0:
-        print "****** IF *******", account_id
         insertPlayerVer2(account_id)
     return "PLAYER INSERTED"
             

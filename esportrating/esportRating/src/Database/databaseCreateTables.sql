@@ -21,7 +21,7 @@ CREATE TABLE Player
 (
     id INTEGER NOT NULL AUTO_INCREMENT,
     player_id INTEGER UNIQUE,
-    username CHAR(80),
+    username CHAR(80) NOT NULL,
     base_rating FLOAT,
     display_rating FLOAT,
     team_id INTEGER,
