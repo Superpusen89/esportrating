@@ -4,7 +4,7 @@ html, body{
 }
 
 body{
-    background: url("app/resources/blue.jpg") no-repeat center center fixed;
+     background: url("app/resources/blurry-purple.jpg") no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -13,27 +13,53 @@ body{
 }
 
 #page-wrap{
-    margin-top: 70px;
+    margin-top: 35px;
     overflow-y: scroll; 
     height: 100%;
 }
 
 #container{
     margin: 0 auto;
-    width: 70%; 
-    min-height: 90%;
+    width: 1100px; 
+    min-height: 100%;
     color: #DBDBDB; 
     background-color: #050E15;
+    //background-color: #4D4D4D; 
+    //background-color: #404040;
     padding-top: 25px;
     padding-right: 50px; 
     padding-left: 50px;
     padding-bottom: 70px; //top right bottom left 
+    //border-radius:.25em;
+    //box-shadow:0 .08em .08em rgba(0,0,0,.25);
+    //box-shadow:0 1em .08em rgba(0,0,0,.25);
+    //border:.08em solid rgba(0,0,0,.1);box-shadow:0 0 .625em .08em rgba(0,0,0,.05);
+}
+
+@font-face {
+    font-family: TrajanusBricks;
+    src: url(app/resources/fonts/TrajanusBricks.ttf);
+}
+
+@font-face {
+    font-family: Steinerlight;
+    src: url(app/resources/fonts/Steinerlight.ttf);
 }
 
 header{
     width: 100%;
+    //width: 1100px;
     position: fixed;
     top: 0px;
+    //border:.08em solid rgba(0,0,0,.1);box-shadow:0 0 .625em .08em rgba(0,0,0,.05);
+}
+
+header #dota2logo{
+    width:auto; /* you can use % */
+    height: 50px;
+    //float: left; 
+    //padding-left: 300px;
+    //padding-right: 130px;
 }
 
 #admin{ 
@@ -43,12 +69,16 @@ header{
 
 #menu{
     background-color: #050E15; 
+    //background-color: maroon;
     height: 63px;
     line-height: 63px;
-    color: #DBDBDB;
-    font-size: 25px;
-    font-style: oblique; 
+    //color: #DBDBDB; //whiteish
+    color: #978275; 
+    font-size: 15px;
+    font-family: TrajanusBricks;
+    //font-style: oblique; 
     text-align: center; 
+    text-transform: lowercase;
 
     //text-transform: uppercase;
     /*    -khtml-opacity:.70; 
@@ -59,33 +89,37 @@ header{
         opacity:.70; */
 }
 
-#menu.a:visited {
-    color: #DBDBDB !important;
-}
+/*#menu.a:visited {
+    color: #978275 !important;
+}*/
 
-nav ul li {
+#menu ul li {
     display: inline; 
     padding: 10px;
 }
 
-a {
-    color: #DBDBDB; 
+#menu a {
+    color: #978275; 
 }
 
-a:link {
-    color: #DBDBDB;
+#menu a:link {
+    color: #978275;
 }
 
-a:visited {
-    color: #DBDBDB;
+#menu a:visited {
+    color: #978275;
 }
 
-a:hover, a:visited:hover{
-    color: #DBDBDB;
+#menu a:hover{
+    color: #978275;
 }
 
-a:active {
-    color: #DBDBDB;
+#menu a:visited:hover{
+    color: #978275;
+}
+
+#menu a:active {
+    color: #978275;
 }
 
 /* SORTABLE */
@@ -116,7 +150,7 @@ table.sortable tr.even td {
 /* RANKING SEARCH */
 
 table {
-    width: 100%;
+    width: 900px;
 }
 
 .search{
@@ -149,7 +183,7 @@ table {
 
 #ranking_container {
     margin: 0 auto;
-    width: 70%; 
+    width: 1100; 
     min-height: 90%;
     color: #DBDBDB; 
     background-color: #050E15;
@@ -223,3 +257,179 @@ table {
 title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a>             is licensed by 
 <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></div>
 */
+
+#addPlayerContainer{
+    color: lightgray;    
+    width: 440px;
+    padding-top: 20px; 
+}
+
+#addPlayerContainer h1{
+
+    //border-bottom: 1px dashed #ddd;
+    //box-shadow: 0 0 0 3px black, 0 0 0 5px #ddd, 0 0 0 10px black, 0 0 2px 10px #eee;
+    font-family: Steinerlight;
+    font-size: 2em;
+    color: #9E8F84; 
+}
+
+#addPlayerContainer p{
+    padding-top: 1em;
+    font-family: Helvetica;
+    font-size: 1em;
+    padding-bottom: 10px;
+    color: #9E8F84; 
+}
+
+#addPlayerContainer label{
+    padding-right: 30px;
+    color: #9E8F84;
+}
+
+#addPlayerContainer input, #addPlayerContainer label{
+    // display: block;
+}
+
+#addPlayerContainer input {
+    margin-bottom: 1.5em; 
+}
+
+#addPlayerContainer .status {
+    color: white;
+}
+
+#addPlayerContainer .form_group{
+    float:right;
+    clear: both;
+}
+
+#addPlayerContainer input[type=text], 
+#addPlayerContainer input[type=url], 
+#addPlayerContainer input[type=number] {
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border: 1px solid #978275;
+    outline: none;
+    color: #494949;
+    padding: 5px 8px 5px 8px;
+    box-shadow: inset 1px 1px 4px #896F5B;
+    -moz-box-shadow: inset 1px 1px 4px #896F5B;
+    -webkit-box-shadow: inset 1px 1px 4px #896F5B;
+    background: #9E8F84;
+    width:20em;
+} 
+
+#addPlayerContainer  input[type=submit],
+#addPlayerContainer  input[type=button]{
+    background: #978275;
+    border: 1px solid #896F5B;
+    padding: 5px 15px 5px 15px;
+    color: #494949;
+    box-shadow: inset -1px -1px 3px #7E7167;
+    -moz-box-shadow: inset -1px -1px 3px #7E7167;
+    -webkit-box-shadow: inset -1px -1px 3px #7E7167;
+    border-radius: 3px;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;    
+    font-weight: bold;
+}
+.required{
+    color:red;
+    font-weight:normal;
+}
+
+
+/*<style type="text/css">
+.form-style-3{
+    max-width: 450px;
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+.form-style-3 label{
+    display:block;
+    margin-bottom: 10px;
+}
+.form-style-3 label > span{
+    float: left;
+    width: 100px;
+    color: #F072A9;
+    font-weight: bold;
+    font-size: 13px;
+    text-shadow: 1px 1px 1px #fff;
+}
+.form-style-3 fieldset{
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    margin: 0px 0px 10px 0px;
+    border: 1px solid #FFD2D2;
+    padding: 20px;
+    background: #FFF4F4;
+    box-shadow: inset 0px 0px 15px #FFE5E5;
+    -moz-box-shadow: inset 0px 0px 15px #FFE5E5;
+    -webkit-box-shadow: inset 0px 0px 15px #FFE5E5;
+}
+.form-style-3 fieldset legend{
+    color: #FFA0C9;
+    border-top: 1px solid #FFD2D2;
+    border-left: 1px solid #FFD2D2;
+    border-right: 1px solid #FFD2D2;
+    border-radius: 5px 5px 0px 0px;
+    -webkit-border-radius: 5px 5px 0px 0px;
+    -moz-border-radius: 5px 5px 0px 0px;
+    background: #FFF4F4;
+    padding: 0px 8px 3px 8px;
+    box-shadow: -0px -1px 2px #F1F1F1;
+    -moz-box-shadow:-0px -1px 2px #F1F1F1;
+    -webkit-box-shadow:-0px -1px 2px #F1F1F1;
+    font-weight: normal;
+    font-size: 12px;
+}
+.form-style-3 textarea{
+    width:250px;
+    height:100px;
+}
+.form-style-3 input[type=text],
+.form-style-3 input[type=date],
+.form-style-3 input[type=datetime],
+.form-style-3 input[type=number],
+.form-style-3 input[type=search],
+.form-style-3 input[type=time],
+.form-style-3 input[type=url],
+.form-style-3 input[type=email],
+.form-style-3 select, 
+.form-style-3 textarea{
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border: 1px solid #FFC2DC;
+    outline: none;
+    color: #F072A9;
+    padding: 5px 8px 5px 8px;
+    box-shadow: inset 1px 1px 4px #FFD5E7;
+    -moz-box-shadow: inset 1px 1px 4px #FFD5E7;
+    -webkit-box-shadow: inset 1px 1px 4px #FFD5E7;
+    background: #FFEFF6;
+    width:50%;
+}
+.form-style-3  input[type=submit],
+.form-style-3  input[type=button]{
+    background: #EB3B88;
+    border: 1px solid #C94A81;
+    padding: 5px 15px 5px 15px;
+    color: #FFCBE2;
+    box-shadow: inset -1px -1px 3px #FF62A7;
+    -moz-box-shadow: inset -1px -1px 3px #FF62A7;
+    -webkit-box-shadow: inset -1px -1px 3px #FF62A7;
+    border-radius: 3px;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;    
+    font-weight: bold;
+}
+.required{
+    color:red;
+    font-weight:normal;
+}
+</style>*/

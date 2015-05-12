@@ -15,8 +15,6 @@ CREATE TABLE Team
     PRIMARY KEY (id)
 )CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
-
-
 CREATE TABLE Player
 (
     id INTEGER NOT NULL AUTO_INCREMENT,
@@ -36,8 +34,6 @@ CREATE TABLE Tournament
 (
     id INTEGER NOT NULL AUTO_INCREMENT,
     tournament_id INTEGER UNIQUE,
-    time_start TIMESTAMP,
-    time_end TIMESTAMP,
     tournament_name CHAR(80),
     PRIMARY KEY (id)
 )CHARACTER SET utf8 COLLATE utf8_unicode_ci;

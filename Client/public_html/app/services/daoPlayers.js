@@ -36,8 +36,8 @@ app.service('daoPlayers', function ($http, REST) {
         });
     };
 
-    this.add = function (username, team_id, successCallback, errorCallback) {
-        var newPlayer = {username: username, team_id: team_id};
+    this.add = function (username, team_id, avatar, real_name, country, successCallback, errorCallback) {
+        var newPlayer = {username: username, team_id: team_id, avatar: avatar, real_name: real_name, country: country};
         $http.post(REST.path + 'player', newPlayer).success(function (result) {
             if (typeof (successCallback) === 'function') {
                 successCallback(result);

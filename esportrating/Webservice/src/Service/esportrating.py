@@ -231,7 +231,18 @@ def get_team_player(team_id):
 def create_player():
     username = request.get_json().get('username', '')
     team_id = request.get_json().get('team_id', '')
-    cursor.execute("INSERT INTO Player (username, base_rating, display_rating, team_id) VALUES ('%s', '%d', '%d', '%d')" % (username, 1200, 1200, team_id))
+    avatar = request.get_json().get('avatar', '')
+    real_name = request.get_json().get('real_name', '')
+    country = request.get_json().get('country', '')
+        
+    if len(country) != 2:
+        country = 'null';
+        
+    if len(str(team_id)) == 0:
+        cursor.execute("INSERT INTO Player (username, base_rating, display_rating, avatar, realname, countrycode) VALUES ('%s', '%d', '%d', '%s', '%s', '%s')" % (username, 1200, 1200, avatar, real_name, country)) 
+    elif len(str(team_id)) != 0:    
+        cursor.execute("INSERT INTO Player (username, base_rating, display_rating, team_id, avatar, realname, countrycode) VALUES ('%s', '%d', '%d', '%d', '%s', '%s', '%s')" % (username, 1200, 1200, team_id, avatar, real_name, country))
+    
     conn.commit()
     return "%s is added" % username
         
@@ -327,10 +338,8 @@ def get_tournaments():
 @crossdomain(origin='*')
 def create_tournament():
     # tournament_id = request.get_json().get('tournament_id', '')
-        time_start = request.get_json().get('time_start', '')
-        time_end = request.get_json().get('time_end', '')
         tournament_name = request.get_json().get('tournament_name', '')
-        cursor.execute("INSERT INTO Tournament (time_start, time_end, tournament_name) VALUES ('%s', '%s', '%s')" % (time_start, time_end, tournament_name))
+        cursor.execute("INSERT INTO Tournament (tournament_name) VALUES ('%s')" % (tournament_name))
         conn.commit()
         return "%s is added" % tournament_name  
     
@@ -338,10 +347,8 @@ def create_tournament():
 @crossdomain(origin='*')
 def edit_tournament():
     tournament_id = request.get_json().get('tournament_id', '')
-    time_start = request.get_json().get('time_start', '')
-    time_end = request.get_json().get('time_end', '')
     tournament_name = request.get_json().get('tournament_name', '')
-    cursor.execute("UPDATE Tournament SET time_start = '%s', time_end = '%s', tournament_name = '%s' where id = '%d'" % (time_start, time_end, tournament_name, tournament_id))
+    cursor.execute("UPDATE Tournament SET tournament_name = '%s' where id = '%d'" % (tournament_name, tournament_id))
     conn.commit()
     return "%s is updated!" % tournament_name 
    
@@ -349,7 +356,7 @@ def edit_tournament():
 @crossdomain(origin='*')
 def getplayers():
     # order_by = order by enten username eller display_name, maa sendes med GET'en fra clienten
-        cursor.execute("select username, p.id, countrycode, display_rating, team_name from Player p, Team t WHERE p.team_id = t.id") # ORDER BY username desc")# % (order_by))
+        cursor.execute("select username, p.id, countrycode, display_rating, team_name, c.name as country from Player p LEFT JOIN Team t ON p.team_id = t.id LEFT JOIN Countries c ON p.countrycode = c.alpha_2") # ORDER BY username desc")# % (order_by))
         data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
                                             row) for row in cursor.fetchall()]]
     
@@ -360,7 +367,7 @@ def getplayers():
 @app.route('/match', methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def get_matches():
-    cursor.execute("select m.id, m.match_id, tournament_id, team_1_id, team_2_id, winning_team_id, losing_team_id, match_time_start, match_time_end, w.team_name AS winning_team, l.team_name AS losing_team FROM Matches m LEFT JOIN Team w on m.winning_team_id = w.id LEFT JOIN Team l on m.losing_team_id = l.id order by m.id;")
+    cursor.execute("select m.id, m.match_id, tournament_id, team_1_id, team_2_id, winning_team_id, losing_team_id, FROM_UNIXTIME(match_time_start) as match_time_start, FROM_UNIXTIME(match_time_end) as match_time_end, w.team_name AS winning_team, l.team_name AS losing_team FROM Matches m LEFT JOIN Team w on m.winning_team_id = w.id LEFT JOIN Team l on m.losing_team_id = l.id order by m.id;")
     data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
                                         row) for row in cursor.fetchall()]]
 
@@ -377,7 +384,7 @@ def create_match():
         winning_team_id = request.get_json().get('winning_team_id', '')
         losing_team_id = request.get_json().get('losing_team_id', '')
         tournament_id = request.get_json().get('tournament_id', '')
-        cursor.execute("INSERT INTO Matches (tournament_id, team_1_id, team_2_id, winning_team_id, losing_team_id, match_time_start, match_time_end) VALUES ('%d', '%d', '%d', '%d', '%d', '%s', '%s')" % (tournament_id, team_1_id, team_2_id, winning_team_id, losing_team_id, time_start, time_end))
+        cursor.execute("INSERT INTO Matches (tournament_id, team_1_id, team_2_id, winning_team_id, losing_team_id, match_time_start, match_time_end) VALUES ('%d', '%d', '%d', '%d', '%d', UNIX_TIMESTAMP('%s'), UNIX_TIMESTAMP('%s'))" % (tournament_id, team_1_id, team_2_id, winning_team_id, losing_team_id, time_start, time_end))
         conn.commit()
         
         cursor.execute("SELECT LAST_INSERT_ID()")
@@ -398,7 +405,7 @@ def update_match(match_id):
     time_end = request.get_json().get('time_end', '')
     winning_team_id = request.get_json().get('winning_team_id', '')
     losing_team_id = request.get_json().get('losing_team_id', '')
-    cursor.execute("UPDATE Matches SET winning_team_id = '%d', losing_team_id = '%d', match_time_start = '%s', match_time_end = '%s')" % (winning_team_id, losing_team_id, time_start, time_end))
+    cursor.execute("UPDATE Matches SET winning_team_id = '%d', losing_team_id = '%d', match_time_start = UNIX_TIMESTAMP('%s'), match_time_end = UNIX_TIMESTAMP('%s'))" % (winning_team_id, losing_team_id, time_start, time_end))
     if(winning_team_id and losing_team_id != -1 and end_time != None):
         eloCalc(match_id)
 
@@ -409,14 +416,14 @@ def update_match(match_id):
     team_2_id = request.get_json().get('team_2_id', '')
     winning_team_id = request.get_json().get('winning_team_id', '')
     losing_team_id = request.get_json().get('losing_team_id', '')
-    cursor.execute("UPDATE Matches SET team_1_id = '%d', team_2_id = '%d', winning_team_id = '%d', losing_team_id = '%d', match_time_start = '%s', match_time_end = '%s')" % (team_1_id, team_2_id, winning_team_id, losing_team_id, time_start, time_end))
+    cursor.execute("UPDATE Matches SET team_1_id = '%d', team_2_id = '%d', winning_team_id = '%d', losing_team_id = '%d', match_time_start = UNIX_TIMESTAMP('%s'), match_time_end = UNIX_TIMESTAMP('%s')))" % (team_1_id, team_2_id, winning_team_id, losing_team_id, time_start, time_end))
     if(winning_team_id and losing_team_id != null):
         eloCalc(match_id)
 
             
     conn.commit()
 
-    cursor.execute("UPDATE Matches SET team_1_id = '%d', team_2_id = '%d', winning_team_id = '%d', losing_team_id = '%d', match_time_start = '%s', match_time_end = '%s' WHERE id = '%s')" % (team_1_id, team_2_id, winning_team_id, losing_team_id, time_start, time_end, match_id))
+    cursor.execute("UPDATE Matches SET team_1_id = '%d', team_2_id = '%d', winning_team_id = '%d', losing_team_id = '%d', match_time_start = UNIX_TIMESTAMP('%s'), match_time_end = UNIX_TIMESTAMP('%s')) WHERE id = '%s')" % (team_1_id, team_2_id, winning_team_id, losing_team_id, time_start, time_end, match_id))
     conn.commit()        
     check(match_id)
     Elo_calc(match_id)
@@ -440,6 +447,14 @@ def create_player_match():
     cursor.execute("INSERT INTO Player_match (match_id, player_id, team_id) VALUES ('%d', '%d', '%d')" % (match_id, player_id, team_id))
     conn.commit()
     return "%d is added" % match_id  
+
+@app.route('/countries', methods=['GET', 'OPTIONS'])
+@crossdomain(origin='*')
+def get_countries():
+    cursor.execute("select * from Countries")
+    data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
+                                        row) for row in cursor.fetchall()]]
+    return jsonify(data=data)
     
     
 
