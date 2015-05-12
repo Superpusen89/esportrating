@@ -33,3 +33,9 @@ endpoint4 = 'http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/'
 endpoint5 = 'http://api.steampowered.com/IDOTA2Match_570/GetTeamInfoByTeamID/v0001/'
 
 
+
+#getMatchHistoryFromMatchID
+
+endpoint6 = 'http://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/v0001/'
+param = '?key=C60B2F253D948B27317D3EE293EE04ED&league_id=65001&start_at_match_id=37584550'
+
