@@ -22,11 +22,13 @@ app.controller('AddMatchController', function ($scope, daoMatches, daoPlayers, d
 
         var tournament_id = $scope.newMatch.tournament_id;
 
+        console.log('The match time is ' + match_time_start);
+ 
         daoMatches.add(match_time_start, match_time_end, team_1_id, team_2_id, winning_team_id, losing_team_id, tournament_id, function (match) {
             $scope.match = match;
             console.log('The match id is ' + $scope.match);
             console.log($scope.entities[0].checked);
-            $scope.matches.push({id: $scope.match, match_time_start: match_time_start, match_time_end: match_time_end, team_1_id: team_1_id, team_2_id: team_2_id, winning_team_id: winning_team_id, losing_team_id: losing_team_id, tournament_id: tournament_id});
+//            $scope.matches.push({id: $scope.match, match_time_start: match_time_start, match_time_end: match_time_end, team_1_id: team_1_id, team_2_id: team_2_id, winning_team_id: winning_team_id, losing_team_id: losing_team_id, tournament_id: tournament_id});
 
             var checkedBoxes = getCheckedBoxes("pcheckbox");
             for (i = 0; i < checkedBoxes.length; i++) {
@@ -72,8 +74,8 @@ app.controller('AddMatchController', function ($scope, daoMatches, daoPlayers, d
         $scope.newMatch.team_2_id = '';
         $scope.newMatch.tournament_id = '';
     };
-    
-      daoPlayers.getAll(function (players) {
+
+    daoPlayers.getAll(function (players) {
         $scope.players = players.data;
         $scope.status = "";
     }, function () {

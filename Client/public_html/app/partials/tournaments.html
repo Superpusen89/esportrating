@@ -14,7 +14,6 @@ Search: <input type="text" ng-model="searchTournament">
     <li ng-repeat="tournament in tournaments| filter:searchTournament | orderBy:'tournament_name'">
         <a href="#/tournament/{{tournament.id}}">
             {{ tournament.tournament_name}}  </a>
-        - {{ tournament.time_start}} - {{ tournament.time_end}}
     </li>
 </ul>
 
@@ -22,8 +21,6 @@ Search: <input type="text" ng-model="searchTournament">
     New Tournament<br>
     <form ng-submit="addTournament()">
         <input ng-model="newTournament.tournament_name" type="text" placeholder="Tournament name">
-        <input ng-model="newTournament.time_start" type="date" placeholder="Start time">
-        <input ng-model="newTournament.time_end" type="date" placeholder="End time">
         <input type="submit" value="Add tournament" ng-disabled="!newTournament.tournament_name">
     </form>
 </div>

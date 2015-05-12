@@ -45,13 +45,16 @@
         <script src="app/controllers/TeamController.js"></script>
         <script src="app/services/daoTeams.js"></script>
         <script src="app/services/daoPlayerMatch.js"></script>
+        <script src="app/controllers/AddPlayerController.js"></script>
+        <script src="app/services/daoCountries.js"></script>
+
     </head>
 
     <body>
-        <div id="header">
-            <div ng-include="'app/layout/header.html'"></div>
-        </div>
         <div id="page-wrap">
+            <div id="header">
+                <div ng-include="'app/layout/header.html'"></div>
+            </div>
             <section id="container" ng-view></section>
         </div>
     </body>

@@ -28,7 +28,7 @@ app.service('daoMatches', function ($http, REST) {
         var newMatch = {match_time_start: match_time_start, match_time_end: match_time_end, team_1_id: team_1_id, team_2_id: team_2_id, winning_team_id: winning_team_id, losing_team_id: losing_team_id, tournament_id: tournament_id};
         $http.post(REST.path + 'match', newMatch).success(function (result) {
             if (typeof (successCallback) === 'function') {
-                successCallback(result);
+                successCallback(result);                  
             }
         }).error(function () {
             if (typeof (errorCallback) === 'function') {
