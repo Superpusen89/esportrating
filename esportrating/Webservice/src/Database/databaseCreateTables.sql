@@ -6,6 +6,7 @@ DROP TABLE Player;
 DROP TABLE Matches;
 DROP TABLE Team;
 DROP TABLE Tournament;
+DROP TABLE Game_period;
 
 CREATE TABLE Team
 (
@@ -62,6 +63,11 @@ CREATE TABLE Player_match
     PRIMARY KEY(match_id, player_id),
     FOREIGN KEY(match_id) REFERENCES Matches(id),
     FOREIGN KEY(player_id) REFERENCES Player(id)    
+);
+
+CREATE TABLE Game_period
+(
+    current_month INTEGER NOT NULL
 );
 
 CREATE TRIGGER lcase_insert BEFORE INSERT ON Player FOR EACH ROW

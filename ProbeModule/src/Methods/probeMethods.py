@@ -28,6 +28,7 @@ import queryParams
 import requests
 import sys
 import urllib
+import datetime
 
 try:
     conn = MySQLdb.connect(host="localhost", user="root", passwd="HenrietteIda", db="esportrating", use_unicode=True, charset='utf8', )
@@ -48,6 +49,11 @@ dataTeamPlayers = []
 dataPlayers = []
 numberAPI = []
 
+
+def setDate():
+    month = datetime.datetime.now().second
+    cursor.execute(queries.q25 % [month])
+    conn.commit()
 
 
 def openDatabaseConn():

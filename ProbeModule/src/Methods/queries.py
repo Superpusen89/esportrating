@@ -21,6 +21,9 @@ q20 = "DELETE FROM Matches WHERE match_id = %s"
 q21 = "DELETE FROM Player_match WHERE match_id = (SELECT id FROM Matches WHERE match_id = %s)"
 q22 = "SELECT COUNT(id) FROM Matches WHERE tournament_id = (SELECT id FROM Tournament WHERE tournament_id = %s);"
 q23 = "UPDATE Player SET base_rating=display_rating"
+q24 = "SELECT current_month FROM Game_period"
+q25 = "INSERT INTO Game_period VALUES (%s)"
+q26 = "UPDATE Game_period SET current_month = %s"
 
 
 

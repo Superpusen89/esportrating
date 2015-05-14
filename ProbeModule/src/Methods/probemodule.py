@@ -33,6 +33,10 @@ dataTeamPlayers = []
 teamID = []
 antallKallTot = 0
 
+
+probeMethods.setDate(); # Runs ONE TIME before probemodule starts
+
+
 #dataLeagues = probeMethods.getLeagueListing()
 dataLeagues = [(65001, 'The_International_2012'), (65006, 'The_International'), (600, 'The_International_2014')]
 for row in dataLeagues:

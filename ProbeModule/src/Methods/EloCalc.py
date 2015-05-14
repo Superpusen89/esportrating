@@ -26,11 +26,12 @@ def updateBaseRating():
 
 
 def getMonth():
-    month = datetime.datetime.now().second
-    print "month", month
-    print "prevMonth", Month.prevMonth
-    if month != Month.prevMonth:
-        Month.prevMonth = month
+    month = datetime.datetime.now().month
+    cursor.execute(queries.q24)
+    prevMonth = cursor.fetchone()[0]
+    if month != prevMonth:
+        cursor.execute(queries.q26 % [month])
+        conn.commit()
         updateBaseRating()
     return 0
     
@@ -69,14 +70,11 @@ def setDisplayRating(match_id):
         
 def calculate(match_id):
     getMonth()
-    team1 = 'winning_team_id'
-    team2 = 'losing_team_id'
     print "match_id i kalkis: ", match_id
     cursor.execute(queries.findAVG3, [match_id, match_id]) #finds losing team's average score
     B = float(cursor.fetchone()[0])
     cursor.execute(queries.findAVG4, [match_id, match_id]) #finds winning team's average score
     A = float(cursor.fetchone()[0])
-    
     #Elo-rating formula
     Es = 1.0 / (1.0 + math.pow(10.0, ((B-A) / 400.0)))
     print "Es: ", Es 
