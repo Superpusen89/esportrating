@@ -4,7 +4,7 @@ html, body{
 }
 
 body{
-    background: url("app/resources/blurry-purple.jpg") no-repeat center center fixed;
+    background: url("app/resources/blue.jpg") no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -13,7 +13,7 @@ body{
 }
 
 #page-wrap{
-    margin-top: 35px;
+    margin-top: 70px;
     overflow-y: scroll; 
     height: 100%;
 }
