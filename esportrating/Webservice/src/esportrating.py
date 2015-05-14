@@ -230,9 +230,9 @@ def create_player():
         country = 'null';
         
     if len(str(team_id)) == 0:
-        cursor.execute("INSERT INTO Player (username, base_rating, display_rating, avatar, realname, countrycode) VALUES ('%s', '%d', '%d', '%s', '%s', '%s')" % (username, 1200, 1200, avatar, real_name, country)) 
+        cursor.execute("INSERT INTO Player (username, base_rating, display_rating, avatar, realname, countrycode) VALUES (%s, %s, %s, %s, %s, %s)" , [username, 1200, 1200, avatar, real_name, country]) 
     elif len(str(team_id)) != 0:    
-        cursor.execute("INSERT INTO Player (username, base_rating, display_rating, team_id, avatar, realname, countrycode) VALUES ('%s', '%d', '%d', '%d', '%s', '%s', '%s')" % (username, 1200, 1200, team_id, avatar, real_name, country))
+        cursor.execute("INSERT INTO Player (username, base_rating, display_rating, team_id, avatar, realname, countrycode) VALUES (%s, %s, %s, %s, %s, %s, %s)" , [username, 1200, 1200, team_id, avatar, real_name, country])
     
     conn.commit()
     return "%s is added" % username

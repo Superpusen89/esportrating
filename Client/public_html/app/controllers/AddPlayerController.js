@@ -3,6 +3,9 @@ app.controller('AddPlayerController', function ($scope, daoPlayers, daoTeams, da
 
 
     $scope.addPlayer = function () {
+        
+        $scope.status = "";
+                
         var username = $scope.newPlayer.username;
         var team_id = $scope.newPlayer.team_id;
         var avatar = $scope.newPlayer.avatar;
@@ -15,16 +18,17 @@ app.controller('AddPlayerController', function ($scope, daoPlayers, daoTeams, da
         for (i = 0; i < $scope.teams.length; i++) {
             teamarray.push($scope.teams[i].id);
         }
-//
-//        var countryarray = [];
-//        for (i = 0; i < $scope.countries.length; i++) {
-//            countryarray.push($scope.countries[i].alpha_2);
-//        }
+
+        var countryarray = [];
+        for (i = 0; i < $scope.countries.length; i++) {
+            countryarray.push($scope.countries[i].alpha_2);
+        }
 
         var inputTeam = document.getElementById("teamlabel").value;
-        if (($.inArray(team_id, teamarray) !== -1 || inputTeam == null || inputTeam == "")) {
+        var inputCountry = document.getElementById("countrylabel").value; 
+        if (($.inArray(team_id, teamarray) !== -1 || inputTeam == null || inputTeam == "") && ($.inArray(country, countryarray) !== -1 || inputCountry == null || inputCountry == "")) {
             console.log("team_id inside thing: " + team_id);
-//            && ($.inArray(country, countryarray) !== -1 || country == null || country == "")
+//            
 
             daoPlayers.add(username, team_id, avatar, real_name, country, function () {
                 $scope.status = "Successfully created new Player " + username;
@@ -37,29 +41,17 @@ app.controller('AddPlayerController', function ($scope, daoPlayers, daoTeams, da
             $scope.newPlayer.real_name = '';
             $scope.newPlayer.country = '';
         } else {
-            if ($.inArray(team_id, teamarray) !== -1) {
-                $scope.status = "The team exists";
+            if ($.inArray(team_id, teamarray) !== -1 || inputTeam == null || inputTeam == "") {
+                console.log("The team exists");
             } else {
-                $scope.status = "The team does not exist/you have to chose from the dropdownlist";
+                $scope.status += "The team does not exist/you have to chose from the dropdownlist\n";
             }
-//            if($.inArray(country, countryarray) !== -1){
-//                $scope.status += "The country exists";
-//            }else{
-//                $scope.status += "The country does not exist/you have to chose from the dropdownlist";
-//            }
-
+            if($.inArray(country, countryarray) !== -1){
+                console.log("The country exists");
+            }else{
+                $scope.status += "The country does not exist/you have to chose from the dropdownlist";
+            } 
         }
-
-//        daoPlayers.add(username, team_id, avatar, real_name, country, function () {
-//            $scope.status = "Successfully created new Player " + username;
-//        }, function () {
-//            $scope.status = "Error creating new Player";
-//        });
-//        $scope.newPlayer.username = '';
-//        $scope.newPlayer.team_id = '';
-//        $scope.newPlayer.avatar = '';
-//        $scope.newPlayer.real_name = '';
-//        $scope.newPlayer.country = '';
     };
 
     daoTeams.getAll(function (teams) {
