@@ -12,16 +12,25 @@ from flask import Flask, request, json, jsonify
 #from mysql.connector import MySQLConnection, Error
 from functools import update_wrapper
 
+
 import MySQLdb
-import requests
-import pprint
-import urllib
+from decimal import Decimal
+from flask import Flask
+from flask import json
+from flask import jsonify
+from flask import request
+from functools import update_wrapper
 import json
+import math
+import pprint
 import queries
+import queryParams
+import requests
 import sys
+import urllib
 
 try:
-    conn = MySQLdb.connect(host="localhost", user="root", passwd="HenrietteIda", db="esportrating", use_unicode=True, charset='utf8',)
+    conn = MySQLdb.connect(host="localhost", user="root", passwd="HenrietteIda", db="esportrating", use_unicode=True, charset='utf8', )
     conn.autocommit(True)
     cursor = conn.cursor()
 
@@ -37,7 +46,7 @@ dataTeamNames = []
 dataMatchHistoryPlayers = []
 dataTeamPlayers = []
 dataPlayers = []
-
+numberAPI = []
 
 
 
@@ -48,52 +57,44 @@ def openDatabaseConn():
 
     except MySQLdb.Error, e:
         print "Error %d: %s" % (e.args[0], e.args[1])
-        sys.exit(1)
-#    try:
-#        conn = MySQLdb.connect(**db_config)
-#        cursor = conn.cursor()
-#        print "database OK"
-#
-#    except MySQLdb.Error, e:
-#        print "Error %d: %s" % (e.args[0], e.args[1])
-#        sys.exit(1)
-#    db_config = read_db_config()
-#    
-#    try:
-#        print('Connecting to MySQL database...')
-#        conn = MySQLConnection(**db_config)
-#        cursor = conn.cursor()
-##        if conn.is_connected():
-##            
-##            print('connection established.')
-##        else:
-##            print('connection failed.')
-# 
-#    except Error as error:
-#        print(error)
- 
-#    finally:
-#        conn.close()
-#        print('Connection closed.')
-    
-
-
+        sys.exit(1)   
 
 
 def getLeagueListing():
     response = requests.get(queryParams.endpoint1, params=queryParams.query_params1)
-    data = response.json()['result']['leagues']
+    numberAPI.append(1)
+    try:
+        data = response.json()['result']['leagues']
+    except KeyError: pass
     for row in data:
         dataLeague.append([row['leagueid'], row['name']])
     return dataLeague
 
 def getMatchHistory(league_id):
     del dataMatchHistory[:]
-    query_params2 = { 'key': queryParams.key,
-                    'league_id': league_id 
-                           }
+    query_params2 = {'key': queryParams.key,
+        'league_id': league_id 
+            }
     response = requests.get(queryParams.endpoint2, params=query_params2)
-    data = response.json()['result']['matches']
+    numberAPI.append(1)
+    try:    
+        data = response.json()['result']['matches']
+    except KeyError: pass
+    for row in data:
+        dataMatchHistory.append([row['match_id'], row['radiant_team_id'], row['dire_team_id'], row['players']])
+    return dataMatchHistory
+
+def getMatchHistoryV2(league_id, match_id):
+    del dataMatchHistory[:]
+    query_params2 = {'key': queryParams.key,
+        'league_id': league_id,
+        'start_at_match_id': match_id
+            }
+    response = requests.get(queryParams.endpoint2, params=query_params2)
+    numberAPI.append(1)
+    try:    
+        data = response.json()['result']['matches']
+    except KeyError: pass
     for row in data:
         dataMatchHistory.append([row['match_id'], row['radiant_team_id'], row['dire_team_id'], row['players']])
     return dataMatchHistory
@@ -101,23 +102,29 @@ def getMatchHistory(league_id):
 def getMatchDetailsPlayers(match_id):
     print "getMatcgDetailsPlayers"
     del dataMatchHistoryPlayers[:]
-    query_params3 = { 'key': queryParams.key,
-                    'match_id': match_id 
-                           }
+    query_params3 = {'key': queryParams.key,
+        'match_id': match_id 
+            }
     response = requests.get(queryParams.endpoint3, params=query_params3)
-    data = response.json()['result']['players']
-    for row in data:
-        dataMatchHistoryPlayers.append([row['account_id'], row['player_slot']])
+    numberAPI.append(1)
+    try:
+        data = response.json()['result']['players']
+        for row in data:
+            dataMatchHistoryPlayers.append([row['account_id'], row['player_slot']])
+    except KeyError: pass
     return dataMatchHistoryPlayers
 
 def getTeamPlayers(team_id):
     del dataTeamPlayers[:]
-    query_params5 = { 'key': queryParams.key,
-                        'start_at_team_id': team_id,
-                        'teams_requested': 1
-                               }
+    query_params5 = {'key': queryParams.key,
+        'start_at_team_id': team_id,
+        'teams_requested': 1
+            }
     response = requests.get(queryParams.endpoint5, params=query_params5)
-    data = response.json()['result']['teams']
+    numberAPI.append(1)
+    try:
+        data = response.json()['result']['teams']
+    except KeyError: pass
     try:
         player0 = data[0]['player_0_account_id']
         dataTeamPlayers.append(player0)
@@ -139,11 +146,14 @@ def getTeamPlayers(team_id):
 
 def getPlayerSummaries(steam_id):
     del dataPerson[:]
-    query_params4 = { 'key': queryParams.key,
+    query_params4 = {'key': queryParams.key,
         'steamids': steam_id
-               } 
+            } 
     response = requests.get(queryParams.endpoint4, params=query_params4)
-    data = response.json()['response']['players']
+    numberAPI.append(1)
+    try:
+        data = response.json()['response']['players']
+    except KeyError: pass
     for row in data:
         username = 'null' # IKKE ALLE SOM HAR AAPEN PROFIL
         avatar = 'null'
@@ -169,11 +179,14 @@ def getPlayerSummaries(steam_id):
     return dataPerson
 
 def getPlayerUsername(steam_id):
-    query_params4 = { 'key': queryParams.key,
+    query_params4 = {'key': queryParams.key,
         'steamids': steam_id
-               } 
+            } 
     response = requests.get(queryParams.endpoint4, params=query_params4)
-    data = response.json()['response']['players']
+    numberAPI.append(1)
+    try:
+        data = response.json()['response']['players']
+    except KeyError: pass
     for row in data:
         username = 'null'
         try:
@@ -185,11 +198,14 @@ def getPlayerUsername(steam_id):
 
 def getPlayerSummariesver2(steam_id):
     del dataPerson[:]
-    query_params4 = { 'key': queryParams.key,
+    query_params4 = {'key': queryParams.key,
         'steamids': steam_id
-               } 
+            }
     response = requests.get(queryParams.endpoint4, params=query_params4)
-    data = response.json()['response']['players']
+    numberAPI.append(1)
+    try:
+        data = response.json()['response']['players']
+    except KeyError: pass
     for row in data:
         username = 'null' # IKKE ALLE SOM HAR AAPEN PROFIL
         avatar = 'null'
@@ -215,11 +231,14 @@ def getPlayerSummariesver2(steam_id):
     return dataPerson
 
 def getPlayerUsername(steam_id):
-    query_params4 = { 'key': queryParams.key,
+    query_params4 = {'key': queryParams.key,
         'steamids': steam_id
-               } 
+            } 
     response = requests.get(queryParams.endpoint4, params=query_params4)
-    data = response.json()['response']['players']
+    numberAPI.append(1)
+    try:
+        data = response.json()['response']['players']
+    except KeyError: pass
     for row in data:
         username = 'null'
         try:
@@ -232,10 +251,11 @@ def getPlayerUsername(steam_id):
     
 def getMatchDetailsTeamName(match_id):
     #del dataTeamNames[:]
-    query_params3 = { 'key': queryParams.key,
-                        'match_id': match_id 
-                               }
+    query_params3 = {'key': queryParams.key,
+        'match_id': match_id 
+            }
     response = requests.get(queryParams.endpoint3, params=query_params3)
+    numberAPI.append(1)
     radiant_name = 'null'
     dire_name = 'null'
     try:
@@ -257,7 +277,7 @@ def insertTournament(league_id, league_name):
         conn.commit()
         return 1
     if actualLenMatches < lenMatches:
-        return 1
+        return 2 #return siste registrerte match
     return -1
 
 def insertTeam(team_id, team_name):
@@ -278,7 +298,7 @@ def insertPlayerVer1(account_id, team_id):
     cursor.execute(queries.q5, [account_id])
     test = cursor.fetchone()[0]
     if test == 0:
-        steam_id = account_id+queryParams.steam_number
+        steam_id = account_id + queryParams.steam_number
         dataPlayers = getPlayerSummaries(steam_id)
         for row in dataPlayers:
             if row[0] != None:
@@ -290,21 +310,22 @@ def insertPlayerVer2(account_id):
     cursor.execute(queries.q5 % (account_id))
     test = cursor.fetchone()[0]
     if test == 0:
-        steam_id = account_id+queryParams.steam_number
+        steam_id = account_id + queryParams.steam_number
         dataPlayers = getPlayerSummaries(steam_id)
         for row in dataPlayers:
-            print "insrtPlayerVer2 row: ", row
             if row[0] != None:
+                print "TEAM_ID PLAYERVER2: ", row[1]
                 cursor.execute(queries.q17, [account_id, row[0], 1200, 1200, row[1], row[2], row[3]]) #(username + unichr(300))
                 conn.commit()
         del dataPlayers[:]
         
 def insertMatches(match_id, league_id, radiant_team_id, dire_team_id):
     radiant_win = None
-    query_params3 = { 'key': queryParams.key,
-                        'match_id': match_id 
-                               }
+    query_params3 = {'key': queryParams.key,
+        'match_id': match_id 
+            }
     response = requests.get(queryParams.endpoint3, params=query_params3)
+    numberAPI.append(1)
     try:
         start_time = response.json()['result']['start_time']
         duration = response.json()['result']['duration']
@@ -316,19 +337,21 @@ def insertMatches(match_id, league_id, radiant_team_id, dire_team_id):
         test = cursor.fetchone()[0]
         if test == 0:
             if radiant_win:
-                cursor.execute(queries.q8 , [match_id, league_id, radiant_team_id, dire_team_id, start_time, end_time])
+                cursor.execute(queries.q8, [match_id, league_id, radiant_team_id, dire_team_id, radiant_team_id, dire_team_id, start_time, end_time])
                 conn.commit()
+                print "INSERT MATCHES FERDIG"
             else:
-                cursor.execute(queries.q9 , [match_id, league_id, dire_team_id, radiant_team_id, start_time, end_time])
+                cursor.execute(queries.q9, [match_id, league_id, radiant_team_id, dire_team_id, dire_team_id, radiant_team_id, start_time, end_time])
                 conn.commit() 
+                print "INSERT MATCHES FERDIG"
+    
     
 
 def insertPlayerMatch(match_id, account_id, team_id):
     cursor.execute(queries.q10, [match_id, account_id])
     test = cursor.fetchone()[0]
     if test == 0:
-        print "Match_id inni insertPlayerMatch: ", match_id
-        cursor.execute(queries.q11 , [match_id, account_id, team_id])
+        cursor.execute(queries.q11, [match_id, account_id, team_id])
         conn.commit()
         
         
@@ -342,10 +365,10 @@ def updatePlayer():
     cursor.execute(queries.q12)
     data = cursor.fetchall();
     for row in data:
-        steam_id = row[1]+queryParams.steam_number
+        steam_id = row[1] + queryParams.steam_number
         username = getPlayerUsername(steam_id)
         if row[0] != username:
-            cursor.execute(queries.q13 , [username, row[1]])
+            cursor.execute(queries.q13, [username, row[1]])
             conn.commit()
             
 def updatePlayer2():
@@ -353,7 +376,7 @@ def updatePlayer2():
     data = cursor.fetchall();
     cursor.execute(queries.q)
     for row in data:
-        steam_id = row[1]+queryParams.steam_number
+        steam_id = row[1] + queryParams.steam_number
         username = getPlayerUsername(steam_id)
         team_id = row[2]
         if row[0] != username:
@@ -365,25 +388,65 @@ def updateTeam():
     data = cursor.fetchall()
     for row in data:
         team_id = row[0]
-        query_params5 = { 'key': queryParams.key,
-                        'start_at_team_id': team_id,
-                        'teams_requested': 1
-                               }
-        response = requests.get(queryParams.endpoint5, params=query_params5)
-        data = response.json()['result']['teams']
+        query_params5 = {'key': queryParams.key,
+            'start_at_team_id': team_id,
+            'teams_requested': 1
+                }
+        try:
+            response = requests.get(queryParams.endpoint5, params=query_params5)
+            data = response.json()['result']['teams']
+        except KeyError: pass
         team_name = data[0]['name']
         if row[1] != team_name:
             cursor.execute(queries.q15, [team_name, row[0]])
             conn.commit()
         
 def checkPlayer(account_id):
-    cursor.execute(queries.q16 , [account_id])
+    cursor.execute(queries.q16, [account_id])
     test = cursor.fetchone()[0]
     if test == 0:
         insertPlayerVer2(account_id)
     return "PLAYER INSERTED"
-            
+
+def checkNumberOfMatches(league_id, lenMatches):
+    cursor.execute()
+
+def checkMatchExist(match_id):
+    cursor.execute(queries.q7, [match_id])
+    test = cursor.fetchone()[0]
+    if test == 0:
+        return 1;
+    else:
+        print "Hopper over match ", match_id
+        return -1;
+    
+   
+   
+def getStartAtMatchId(league_id):
+    cursor.execute(queries.q22, [league_id])
+    test = cursor.fetchone()[0]
+    if test > 0:
+        try:
+            cursor.execute(queries.q19, [league_id])
+            res = cursor.fetchone()[0]
+            cursor.execute(queries.q21, [res])
+            conn.commit()
+            print "player_match_id ", res, " sletta"
+            cursor.execute(queries.q20, [res])
+            conn.commit()
+            print "match_id ", res, " sletta"
+            return res #return siste registrerte match
+        except TypeError: pass
+    return -1
+
+
+    
+
         
-        
+def APIcalls():
+    res = len(numberAPI)
+    del numberAPI[:] 
+    return res
+ 
         
         

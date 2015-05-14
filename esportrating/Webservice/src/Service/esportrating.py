@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*- 
 
-import MySQLdb
+#import MySQLdb
 from datetime import timedelta
 from decimal import Decimal
 from flask import Flask
@@ -20,6 +20,7 @@ import math
 import queries
 import sys
 import time
+import databaseconnector
 
 app = Flask(__name__)
 api = Api(app)
@@ -27,18 +28,22 @@ api = Api(app)
 from flask.ext.cors import CORS
 cors = CORS(app) #added
 
-try:
-    conn = MySQLdb.connect(host="localhost", user="root", passwd="HenrietteIda", db="esportrating", use_unicode=True, charset="utf8")
-    conn.autocommit(True)
-    cursor = conn.cursor()
-#    cursor.execute("SET NAMES utf8;")
-#    cursor.execute("SET NAMES utf8mb4;") #or utf8 or any other charset you want to handle
-#    cursor.execute("SET CHARACTER SET utf8mb4;") #same as above
-#    cursor.execute("SET character_set_connection=utf8mb4;") #same as above
-    
-except MySQLdb.Error, e:
-    print "Error %d: %s" % (e.args[0], e.args[1])
-    sys.exit(1)
+#try:
+#    conn = MySQLdb.connect(host="localhost", user="root", passwd="HenrietteIda", db="esportrating", use_unicode=True, charset="utf8")
+#    conn.autocommit(True)
+#    cursor = conn.cursor()
+##    cursor.execute("SET NAMES utf8;")
+##    cursor.execute("SET NAMES utf8mb4;") #or utf8 or any other charset you want to handle
+##    cursor.execute("SET CHARACTER SET utf8mb4;") #same as above
+##    cursor.execute("SET character_set_connection=utf8mb4;") #same as above
+#    
+#except MySQLdb.Error, e:
+#    print "Error %d: %s" % (e.args[0], e.args[1])
+#    sys.exit(1)
+
+cursor = databaseconnector.databaseConn();
+
+
        
 def check(match_id):
     cursor.execute("SELECT COUNT(points) FROM Player_match WHERE match_id = '%s'" % (match_id))
@@ -64,10 +69,12 @@ def resetDisplayRating(match_id):
 def eloCalc(match_id):
     team1 = 'winning_team_id'
     team2 = 'losing_team_id'
-    cursor.execute(queries.findAVG % (match_id, team2, match_id)) #finds losing team's average score
+    cursor.execute(queries.findAVG2 % (match_id, team2, match_id)) #finds losing team's average score
     B = float(cursor.fetchone()[0])
-    cursor.execute(queries.findAVG % (match_id, team1, match_id)) #finds winning team's average score
+    print "B probe: ", B
+    cursor.execute(queries.findAVG2 % (match_id, team1, match_id)) #finds winning team's average score
     A = float(cursor.fetchone()[0])
+    print "A probe: ", A
     
     #Elo-rating formula
     Es = 1.0 / (1.0 + math.pow(10.0, ((B-A) / 400.0)))
@@ -115,7 +122,9 @@ def eloCalc(match_id):
 #    setDisplayRating(match_id)
 #    print match_id
 
-        
+    
+eloCalc(37613366)        
+
 def setDisplayRating(match_id):
     cursor.execute("SELECT pm.points, p.id FROM Player_match pm, Player p WHERE match_id='%s' AND pm.player_id=p.id" % (match_id))
     data = cursor.fetchall()
