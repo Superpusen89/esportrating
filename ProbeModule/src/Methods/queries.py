@@ -24,7 +24,9 @@ q23 = "UPDATE Player SET base_rating=display_rating"
 q24 = "SELECT current_month FROM Game_period"
 q25 = "INSERT INTO Game_period VALUES (%s)"
 q26 = "UPDATE Game_period SET current_month = %s"
-
+q27 = "SELECT match_id, FROM_UNIXTIME(match_time_start, \"%m\") FROM Matches ORDER BY match_time_start"
+q28 = "SELECT p.id, p.display_rating, (SELECT COUNT(match_id) FROM Player_match WHERE player_id = p.id) AS num_match FROM Player p JOIN Player_match pm ON p.id = pm.player_id GROUP BY p.id ORDER BY display_rating desc, num_match desc"
+q29 = "UPDATE Player SET rank = %s WHERE id = %s"
 
 
 #ELO-calc

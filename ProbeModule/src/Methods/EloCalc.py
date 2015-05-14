@@ -55,6 +55,7 @@ def resetDisplayRating(match_id):
             print Display_rating
             cursor.execute("UPDATE Player SET display_rating = %s WHERE id = %s", [newDisplay_rating, player_id])
             conn.commit()
+    orderRank()
         
 def setDisplayRating(match_id):
     cursor.execute("SELECT pm.points, p.id FROM Player_match pm, Player p WHERE match_id=(SELECT id FROM Matches WHERE match_id = %s) AND pm.player_id=p.id", [match_id])
@@ -67,6 +68,7 @@ def setDisplayRating(match_id):
         newDisplay_rating = display_rating + points
         cursor.execute("UPDATE Player SET display_rating = %s WHERE id = %s", [newDisplay_rating, player_id])
         conn.commit()
+    orderRank()
         
 def calculate(match_id):
     getMonth()
@@ -96,3 +98,38 @@ def calculate(match_id):
         cursor.execute(queries.updatePoints, [R, match_id, id])
         conn.commit()
     setDisplayRating(match_id) #run this method
+    
+    
+def calculateAll():
+    cursor.execute(queries.q27)
+    data = cursor.fetchall()
+    month = 0
+    for row in data:
+        if month != row[1]:
+            print "month: ", month, ", row[1]: ", row[1]
+            month = row[1]            
+            updateBaseRating()
+        print "kalkulerer ", row[0]
+        calculate(row[0])
+        
+        
+def orderRank():
+    cursor.execute(queries.q28)
+    data = cursor.fetchall()
+    length = len(data)
+    i = 1
+    rank = 1
+    for row in data:
+        if i<length-1:
+            if row[1] == data[i][1]: #Hvis begge har lik score
+                if row[2] == data[i][2]:
+                    cursor.execute(queries.q29, [rank, row[0]]) #Hvis begge har like mange matches
+                else:
+                    cursor.execute(queries.q29, [rank, row[0]]) #Hvis den forste har flere matches
+                    rank += 1
+            else:
+                cursor.execute(queries.q29, [rank, row[0]]) #Naar den forste har fler points
+                rank += 1
+            i += 1
+    cursor.execute(queries.q29, [rank, data[length-1][0]])
+    

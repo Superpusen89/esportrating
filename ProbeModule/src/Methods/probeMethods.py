@@ -51,8 +51,8 @@ numberAPI = []
 
 
 def setDate():
-    month = datetime.datetime.now().second
-    cursor.execute(queries.q25 % [month])
+    month = datetime.datetime.now().month
+    cursor.execute(queries.q25, [month])
     conn.commit()
 
 

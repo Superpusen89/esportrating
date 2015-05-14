@@ -13,12 +13,12 @@
 findAVG = "SELECT AVG(base_rating) FROM Player WHERE id= ANY (SELECT player_id FROM Player_match WHERE match_id = %s) AND team_id=(SELECT %s FROM Matches WHERE id=%s)"
 findAVGnew = "SELECT AVG(base_rating) FROM Player WHERE id= ANY (SELECT player_id FROM Player_match WHERE match_id = %s AND team_id=(SELECT %s FROM Matches WHERE id=%s)"
 findID = "SELECT id FROM Player WHERE id= ANY (SELECT player_id FROM Player_match WHERE match_id = %s) AND team_id=(SELECT %s FROM Matches WHERE id=%s)"
-updatePoints = "UPDATE Player_match set points = %s WHERE match_id = (SELECT id FROM Matches WHERE match_id = %s) AND player_id = %s"
+updatePoints = "UPDATE Player_match set points = %s WHERE match_id = %s AND player_id = %s"
 
-findAVG1 = "SELECT AVG(base_rating) FROM Player WHERE id=ANY(SELECT player_id FROM Player_match WHERE match_id = (SELECT id FROM Matches WHERE match_id = %s) AND team_id = (SELECT losing_team_id FROM Matches WHERE match_id = %s))"
-findAVG2 = "SELECT AVG(base_rating) FROM Player WHERE id=ANY(SELECT player_id FROM Player_match WHERE match_id = (SELECT id FROM Matches WHERE match_id = %s) AND team_id = (SELECT winning_team_id FROM Matches WHERE match_id = %s))"
-findID1 = "SELECT id FROM Player WHERE id= ANY (SELECT player_id FROM Player_match WHERE match_id = (SELECT id FROM Matches WHERE match_id = %s) AND team_id = (SELECT winning_team_id FROM Matches WHERE match_id = %s))"
-findID2 = "SELECT id FROM Player WHERE id= ANY (SELECT player_id FROM Player_match WHERE match_id = (SELECT id FROM Matches WHERE match_id = %s) AND team_id = (SELECT losing_team_id FROM Matches WHERE match_id = %s))"
+findAVG1 = "SELECT AVG(base_rating) FROM Player WHERE id=ANY(SELECT player_id FROM Player_match WHERE match_id = %s AND team_id = (SELECT losing_team_id FROM Matches WHERE id = %s))"
+findAVG2 = "SELECT AVG(base_rating) FROM Player WHERE id=ANY(SELECT player_id FROM Player_match WHERE match_id = %s AND team_id = (SELECT winning_team_id FROM Matches WHERE id = %s))"
+findID1 = "SELECT id FROM Player WHERE id= ANY (SELECT player_id FROM Player_match WHERE match_id = %s AND team_id = (SELECT winning_team_id FROM Matches WHERE id = %s))"
+findID2 = "SELECT id FROM Player WHERE id= ANY (SELECT player_id FROM Player_match WHERE match_id = %s AND team_id = (SELECT losing_team_id FROM Matches WHERE id = %s))"
 
 #findAVG2 = "SELECT AVG(base_rating) FROM Player WHERE id=ANY(SELECT player_id FROM Player_match WHERE match_id = (SELECT id FROM Matches WHERE match_id = %s) AND team_id = (SELECT %s FROM Matches WHERE match_id=%s))"
 insertTeam = "INSERT INTO Team (team_name) VALUES (%s)"

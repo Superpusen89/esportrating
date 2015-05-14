@@ -7,6 +7,7 @@ DROP TABLE Matches;
 DROP TABLE Team;
 DROP TABLE Tournament;
 DROP TABLE Game_period;
+DROP TABLE Countries;
 
 CREATE TABLE Team
 (
@@ -27,6 +28,7 @@ CREATE TABLE Player
     avatar VARCHAR(200),
     realname CHAR(80),
     countrycode CHAR(5),
+    rank INT,
     PRIMARY KEY (id)
 )CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
