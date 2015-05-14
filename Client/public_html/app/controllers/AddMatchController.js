@@ -177,7 +177,7 @@ app.controller('AddMatchController', function ($scope, daoMatches, daoPlayers, d
         });
     };
 
-    $scope.limit = 2;
+    $scope.limit = 5;
 
     $scope.items1 = [];
     $scope.checked1 = 0;
