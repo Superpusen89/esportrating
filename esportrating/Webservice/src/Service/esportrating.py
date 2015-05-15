@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*- 
 
-#import MySQLdb
+import MySQLdb
 from datetime import timedelta
+
 from decimal import Decimal
 from flask import Flask
 from flask import current_app
@@ -20,6 +21,7 @@ import math
 import queries
 import sys
 import time
+import datetime
 import databaseconnector
 
 app = Flask(__name__)
@@ -28,22 +30,46 @@ api = Api(app)
 from flask.ext.cors import CORS
 cors = CORS(app) #added
 
-#try:
-#    conn = MySQLdb.connect(host="localhost", user="root", passwd="HenrietteIda", db="esportrating", use_unicode=True, charset="utf8")
-#    conn.autocommit(True)
-#    cursor = conn.cursor()
-##    cursor.execute("SET NAMES utf8;")
-##    cursor.execute("SET NAMES utf8mb4;") #or utf8 or any other charset you want to handle
-##    cursor.execute("SET CHARACTER SET utf8mb4;") #same as above
-##    cursor.execute("SET character_set_connection=utf8mb4;") #same as above
-#    
-#except MySQLdb.Error, e:
-#    print "Error %d: %s" % (e.args[0], e.args[1])
-#    sys.exit(1)
+try:
+    conn = MySQLdb.connect(host="localhost", user="root", passwd="HenrietteIda", db="esportrating", use_unicode=True, charset="utf8")
+    conn.autocommit(True)
+    cursor = conn.cursor()
+#    cursor.execute("SET NAMES utf8;")
+#    cursor.execute("SET NAMES utf8mb4;") #or utf8 or any other charset you want to handle
+#    cursor.execute("SET CHARACTER SET utf8mb4;") #same as above
+#    cursor.execute("SET character_set_connection=utf8mb4;") #same as above
+    
+except MySQLdb.Error, e:
+    print "Error %d: %s" % (e.args[0], e.args[1])
+    sys.exit(1)
 
-cursor = databaseconnector.databaseConn();
+#cursor = databaseconnector.databaseConn();
 
 
+def getMonth():
+    month = datetime.datetime.now().month
+    print "month: ", month
+    cursor.execute(queries.q24)
+    prevMonth = cursor.fetchone()[0]
+    print "prevMonth: ", prevMonth
+    if month != prevMonth:
+        cursor.execute(queries.q26 % [month])
+        conn.commit()
+        updateBaseRating()
+    return 0
+
+
+def setDisplayRating(match_id):
+    cursor.execute("SELECT pm.points, p.id FROM Player_match pm, Player p WHERE match_id='%s' AND pm.player_id=p.id" % (match_id))
+    data = cursor.fetchall()
+    for row in data:
+        points = float(row[0])
+        player_id = float(row[1])
+        cursor.execute("SELECT display_rating FROM Player WHERE id = '%s'" % player_id)
+        display_rating = float(cursor.fetchone()[0])
+        newDisplay_rating = display_rating + points
+        cursor.execute("UPDATE Player SET display_rating = '%s' WHERE id = '%d'" % (newDisplay_rating, player_id))
+        conn.commit()
        
 def check(match_id):
     cursor.execute("SELECT COUNT(points) FROM Player_match WHERE match_id = '%s'" % (match_id))
@@ -57,44 +83,47 @@ def resetDisplayRating(match_id):
     for row in pointsExist:
         player_id = Decimal(row[1])
         points = Decimal(row[0])
-        if(points != null):
+        if(points != None):
             cursor.execute("SELECT display_rating FROM Player WHERE id = '%s'" % (player_id))
             display_rating = Decimal(cursor.fetchone()[0])
             newDisplay_rating = display_rating - points
-            print Display_rating
+            print display_rating
+            print newDisplay_rating
             cursor.execute("UPDATE Player SET display_rating = '%s' WHERE id = '%d'" % (newDisplay_rating, player_id))
             conn.commit()
     
 
 def eloCalc(match_id):
-    team1 = 'winning_team_id'
-    team2 = 'losing_team_id'
-    cursor.execute(queries.findAVG2 % (match_id, team2, match_id)) #finds losing team's average score
+    getMonth()
+    print "match_id i kalkis: ", match_id
+    cursor.execute(queries.findAVG1, [match_id, match_id]) #finds losing team's average score
     B = float(cursor.fetchone()[0])
-    print "B probe: ", B
-    cursor.execute(queries.findAVG2 % (match_id, team1, match_id)) #finds winning team's average score
+    print "B: ", B
+    cursor.execute(queries.findAVG2, [match_id, match_id]) #finds winning team's average score
     A = float(cursor.fetchone()[0])
-    print "A probe: ", A
-    
+    print "A: ", A
     #Elo-rating formula
     Es = 1.0 / (1.0 + math.pow(10.0, ((B-A) / 400.0)))
-    print "Es: '%s'" % Es 
+    print "Es: ", Es 
     R = round(Decimal(15 * (1-Es)), 2) #winning team points
-    
-    cursor.execute(queries.findID % (match_id, team1, match_id)) #finds every participating player on winning team
+    print "R: ", R
+    cursor.execute(queries.findID1, [match_id, match_id]) #finds every participating player on winning team
     ID = cursor.fetchall()
     for row in ID: #for each player -> update points
         id = row[0]
-        cursor.execute(queries.updatePoints % (R, match_id, id))
+        print "for each player -> update points", id
+        cursor.execute(queries.updatePoints, [R, match_id, id])
         conn.commit()
     R = -R #losing team points
-    cursor.execute(queries.findID % (match_id, team2, match_id)) #finds every participating player on winning team
+    cursor.execute(queries.findID2, [match_id, match_id]) #finds every participating player on winning team
     ID = cursor.fetchall()
     for row in ID: #for each player -> update points
         id = row[0]
-        cursor.execute(queries.updatePoints % (R, match_id, id))
+        print "for each player -> update points", id
+        cursor.execute(queries.updatePoints, [R, match_id, id])
         conn.commit()
     setDisplayRating(match_id) #run this method
+#    
 #    team1 = 'winning_team_id'
 #    team2 = 'losing_team_id'
 #    won = 1
@@ -136,6 +165,33 @@ def setDisplayRating(match_id):
         newDisplay_rating = display_rating + points
         cursor.execute("UPDATE Player SET display_rating = '%s' WHERE id = '%d'" % (newDisplay_rating, player_id))
         conn.commit()
+#    cursor.execute(queries.findAVG2 % (match_id, team2, match_id)) #finds losing team's average score
+#    B = float(cursor.fetchone()[0])
+#    print "B probe: ", B
+#    cursor.execute(queries.findAVG2 % (match_id, team1, match_id)) #finds winning team's average score
+#    A = float(cursor.fetchone()[0])
+#    print "A probe: ", A
+#    
+#    #Elo-rating formula
+#    Es = 1.0 / (1.0 + math.pow(10.0, ((B-A) / 400.0)))
+#    print "Es: '%s'" % Es 
+#    R = round(Decimal(15 * (1-Es)), 2) #winning team points
+#    
+#    cursor.execute(queries.findID % (match_id, team1, match_id)) #finds every participating player on winning team
+#    ID = cursor.fetchall()
+#    for row in ID: #for each player -> update points
+#        id = row[0]
+#        cursor.execute(queries.updatePoints % (R, match_id, id))
+#        conn.commit()
+#    R = -R #losing team points
+#    cursor.execute(queries.findID % (match_id, team2, match_id)) #finds every participating player on winning team
+#    ID = cursor.fetchall()
+#    for row in ID: #for each player -> update points
+#        id = row[0]
+#        cursor.execute(queries.updatePoints % (R, match_id, id))
+#        conn.commit()
+#    setDisplayRating(match_id) #run this method
+       
 
 
 
@@ -384,16 +440,16 @@ def add_match():
         winning_team_id = request.get_json().get('winning_team_id', '')
         losing_team_id = request.get_json().get('losing_team_id', '')
         tournament_id = request.get_json().get('tournament_id', '')
-        cursor.execute("INSERT INTO Matches (tournament_id, team_1_id, team_2_id, winning_team_id, losing_team_id, match_time_start, match_time_end) VALUES ('%d', '%d', '%d', '%d', '%d', UNIX_TIMESTAMP('%s'), UNIX_TIMESTAMP('%s'))" % (tournament_id, team_1_id, team_2_id, winning_team_id, losing_team_id, time_start, time_end))
+        cursor.execute("INSERT INTO Matches (tournament_id, team_1_id, team_2_id, winning_team_id, losing_team_id, match_time_start, match_time_end) VALUES ('%d', '%d', '%d', '%d', '%d', UNIX_TIMESTAMP('%s'), UNIX_TIMESTAMP('%s'))" % (tournament_id, team_1_id, team_2_id, winning_team_id, losing_team_id, '2014-05-14', '2014-05-14'))#time_start, time_end))
         conn.commit()
-        
         cursor.execute("SELECT LAST_INSERT_ID()")
         match_id = cursor.fetchone()[0]
-        return "%d" % match_id; 
+        eloCalc(match_id)
+        return "match_id som blir sendt til kalkis esportrating: ", match_id; 
 
 # NEEDS TO BE NOT 0
-        if(winning_team_id and losing_team_id != -1): 
-            eloCalc(match_id)
+        #if(winning_team_id and losing_team_id != -1): 
+            
 
 #        return "Match is added!"
 
@@ -417,16 +473,22 @@ def update_match(match_id):
     winning_team_id = request.get_json().get('winning_team_id', '')
     losing_team_id = request.get_json().get('losing_team_id', '')
 #    cursor.execute("UPDATE Matches SET team_1_id = '%d', team_2_id = '%d', winning_team_id = '%d', losing_team_id = '%d', match_time_start = UNIX_TIMESTAMP('%s'), match_time_end = UNIX_TIMESTAMP('%s')))" % (team_1_id, team_2_id, winning_team_id, losing_team_id, time_start, time_end))
+
     if(winning_team_id and losing_team_id != null):
         eloCalc(match_id)
 
             
     conn.commit()
 
+#    if(winning_team_id and losing_team_id != null):
+#        eloCalc(match_id)
+#    conn.commit()
     cursor.execute("UPDATE Matches SET team_1_id = '%d', team_2_id = '%d', winning_team_id = '%d', losing_team_id = '%d', match_time_start = UNIX_TIMESTAMP('%s'), match_time_end = UNIX_TIMESTAMP('%s')) WHERE id = '%s')" % (team_1_id, team_2_id, winning_team_id, losing_team_id, time_start, time_end, match_id))
-    conn.commit()        
+    conn.commit()    
+    print "CHECK"
     check(match_id)
-    Elo_calc(match_id)
+    print "ELO-CALC"
+    eloCalc(match_id)
     return "Match is updated!"
 
 @app.route('/match/<int:match_id>', methods=['GET', 'OPTIONS'])
