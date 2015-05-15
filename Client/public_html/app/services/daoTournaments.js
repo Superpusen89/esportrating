@@ -25,8 +25,8 @@ app.service('daoTournaments', function ($http, REST) {
     };
 
     this.add = function (tournament_name, successCallback, errorCallback) {
-        var newPlayer = {tournament_name: tournament_name};
-        $http.post(REST.path + 'tournament', newPlayer).success(function (result) {
+        var newTournament = {tournament_name: tournament_name};
+        $http.post(REST.path + 'tournament', newTournament).success(function (result) {
             if (typeof (successCallback) === 'function') {
                 successCallback(result);
             }
@@ -38,8 +38,8 @@ app.service('daoTournaments', function ($http, REST) {
     };
 
     this.edit = function (tournament_id, tournament_name, successCallback, errorCallback) {
-        var newPlayer = {tournament_id: tournament_id, tournament_name: tournament_name};
-        $http.put(REST.path + 'tournament', newPlayer).success(function (result) {
+        var newTournament = {tournament_id: tournament_id, tournament_name: tournament_name};
+        $http.put(REST.path + 'tournament', newTournament).success(function (result) {
             if (typeof (successCallback) === 'function') {
                 successCallback(result);
             }

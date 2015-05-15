@@ -9,6 +9,8 @@ app.controller('AddMatchController', function ($scope, daoMatches, daoPlayers, d
         var winning_team_id = -1;
         var losing_team_id = -1;
 
+        console.log("Match time start: " + match_time_start);
+
         if ($scope.entities[0].checked === true) {
             winning_team_id = $scope.newMatch.team_1_id;
             losing_team_id = $scope.newMatch.team_2_id;
@@ -23,7 +25,7 @@ app.controller('AddMatchController', function ($scope, daoMatches, daoPlayers, d
         var tournament_id = $scope.newMatch.tournament_id;
 
         console.log('The match time is ' + match_time_start);
- 
+
         daoMatches.add(match_time_start, match_time_end, team_1_id, team_2_id, winning_team_id, losing_team_id, tournament_id, function (match) {
             $scope.match = match;
             console.log('The match id is ' + $scope.match);
@@ -63,7 +65,7 @@ app.controller('AddMatchController', function ($scope, daoMatches, daoPlayers, d
 //            $scope.match, checkedBoxes[i].value, team_1_id
 
 
-            $scope.status = "Successfully created new match ";
+            $scope.status = "Successfully created new match";
         }, function () {
             $scope.status = "Error creating new match";
         });

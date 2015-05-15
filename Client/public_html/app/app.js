@@ -1,7 +1,7 @@
 var app = angular.module('clientApp', ['ngRoute', 'xeditable', 'ui.bootstrap']); /* 'ngResource', 'ngProgress' */
 
-webshims.setOptions('forms-ext', {types: 'date'});
-webshims.polyfill('forms forms-ext');
+//webshims.setOptions('forms-ext', {types: 'date'});
+//webshims.polyfill('forms forms-ext');
 
 app.config(function ($routeProvider) {
     $routeProvider
@@ -20,6 +20,10 @@ app.config(function ($routeProvider) {
             .when('/tournament/:tournamentId', {
                 controller: 'TournamentController',
                 templateUrl: 'app/partials/tournament.html'
+            })
+            .when('/addTournament', {
+                controller: 'AddTournamentController',
+                templateUrl: 'app/partials/addTournament.html'
             })
             .when('/matches', {
                 controller: 'MatchesController',

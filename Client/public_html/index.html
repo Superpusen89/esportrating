@@ -22,20 +22,13 @@
         <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.6.0/ui-bootstrap-tpls.min.js"></script>
         <!--    <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.11.0/ui-bootstrap-tpls.min.js"></script>-->
 
-        <!--        <script src="lib/AngularProgress/ngProgress.js"></script>
-                <link rel="stylesheet" href="ngProgress.css">-->
-
-
-        <!--        <script src="lib/AngularResource/angular-resource.js"></script>-->
-        <!-- input type=date -->
-        <script src="//cdn.jsdelivr.net/webshim/1.14.5/polyfiller.js"></script>
-
         <script src="app/app.js"></script>
         <script src="app/controllers/PlayersController.js"></script>
         <script src="app/controllers/PlayerController.js"></script>
         <script src="app/services/daoPlayers.js"></script>
         <script src="app/controllers/TournamentsController.js"></script>
         <script src="app/controllers/TournamentController.js"></script>
+        <script src="app/controllers/AddTournamentController.js"></script>
         <script src="app/services/daoTournaments.js"></script>
         <script src="app/controllers/MatchesController.js"></script>
         <script src="app/controllers/MatchController.js"></script>
@@ -50,7 +43,7 @@
 
     </head>
 
-    <body>
+    <body ng-app="app">
         <div id="page-wrap">
             <div id="header">
                 <div ng-include="'app/layout/header.html'"></div>

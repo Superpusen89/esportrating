@@ -6,6 +6,7 @@ DROP TABLE Player;
 DROP TABLE Matches;
 DROP TABLE Team;
 DROP TABLE Tournament;
+DROP TABLE Countries; 
 
 CREATE TABLE Team
 (
