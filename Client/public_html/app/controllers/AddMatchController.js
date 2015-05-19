@@ -37,6 +37,7 @@ app.controller('AddMatchController', function ($scope, daoMatches, daoPlayers, d
                 console.log('!!!!!!!!!' + $scope.match + ' ' + checkedBoxes[i].value + ' ' + team_1_id);
 
                 var match_id = parseInt($scope.match);
+                
                 var player_id = parseInt(checkedBoxes[i].value);
 
                 daoPlayerMatch.add(match_id, player_id, team_1_id, function () {
@@ -55,7 +56,7 @@ app.controller('AddMatchController', function ($scope, daoMatches, daoPlayers, d
                 var match_id2 = parseInt($scope.match);
                 var player_id2 = parseInt(checkedBoxes2[i].value);
                 
-                daoPlayerMatch.add(match_id2, player_id2, team_2_id, function () {
+                daoPlayerMatch.add(match_id, player_id2, team_2_id, function () {
                     $scope.status = "Successfully created new player_match ";
                 }, function () {
                     $scope.status = "Error creating new player_match";

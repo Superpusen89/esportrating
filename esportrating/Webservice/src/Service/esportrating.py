@@ -448,11 +448,17 @@ def add_match():
     tournament_id = request.get_json().get('tournament_id', '')
     cursor.execute("INSERT INTO Matches (tournament_id, team_1_id, team_2_id, winning_team_id, losing_team_id, match_time_start, match_time_end) VALUES ('%d', '%d', '%d', '%d', '%d', UNIX_TIMESTAMP('%s'), UNIX_TIMESTAMP('%s'))" % (tournament_id, team_1_id, team_2_id, winning_team_id, losing_team_id, time_start, time_end))
     conn.commit()
+    
     cursor.execute("SELECT LAST_INSERT_ID()")
     match_id = cursor.fetchone()[0]
-    eloCalc(match_id)
+    return "%d" % match_id; 
+
+#    cursor.execute("SELECT LAST_INSERT_ID()")
+#    match_id = cursor.fetchone()[0]
+#    eloCalc(match_id)
 #        return "match_id som blir sendt til kalkis esportrating: ", match_id; 
-    return "%d" % match_id
+#    return "%d" % match_id
+#    return "yay"
 
 # NEEDS TO BE NOT 0
     #if(winning_team_id and losing_team_id != -1): 
