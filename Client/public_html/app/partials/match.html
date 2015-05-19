@@ -1,9 +1,51 @@
-<h3> Match view </h3>
+<section id="editMatchContainer">
 
-<div>Status: {{status}}</div><br>
+    <h1> Edit match </h1>
 
-<div>
-    Match id: <a href="#">{{match.data[0].id|| "empty" }}</a> <br>
-</div> 
+    <form ng-submit="editMatch()" name="newMatch" id="newMatch">
+        <p>All fields are required</p>
 
-<!--editable-text="match.data[0].id" onbeforesave="saveData($data)"-->
+        <ul id="winnerchx" ng-repeat="subscription in entities" required="">
+            <li id="{{'team'+$index}}">
+                <label>Winning team <input type="checkbox" id="{{'cb'+$index}}" ng-model="subscription.checked" ng-click="updateSelection($index, entities)" /></label>
+            </li>
+        </ul>
+
+        <!--<label id="team1label">Team name: </label>-->
+        <input name="team1linput" id="team_1" required="" autocomplete="off" ng-model="newMatch.team_1_id" type="text" placeholder="Team 1" typeahead="team.id as team.id + ' ' + team.team_name for team in teams | filter:$viewValue | limitTo:8" typeahead-editable="false" typeahead-input-formatter="formatLabel($model)" typeahead-on-select="onSelect1($model)">
+
+        <!--<label id="team2label">Team name: </label>-->
+        <input name="team2linput"  id="team_2" required="" autocomplete="off" ng-model="newMatch.team_2_id" type="text" placeholder="Team 2" typeahead="team.id as team.id + ' ' + team.team_name for team in teams | filter:$viewValue | limitTo:8" typeahead-editable="false" typeahead-input-formatter="formatLabel($model)" typeahead-on-select="onSelect2($model)">
+
+        <div id="team1list">
+            <ul  ng-repeat="player in players1">
+                <li id="{{'playercheckbox'+$index}}">
+                    <label><input type="checkbox" value="{{player.player_id}}" id="{{'pcb'+$index}}" name="pcheckbox" ng-model="item1.team1" ng-change="checkChanged1(item1)" ng-disabled="checked1 == limit && !item1.team1"/>{{player.player_id}} {{player.username}} </label>
+                </li>
+            </ul>
+        </div>
+
+        <div id="team2list">
+            <ul ng-repeat="player2 in players2">
+                <li id="{{'playercheckbox'+$index}}">
+                    <label>{{player2.player_id}} {{player2.username}} <input value="{{player2.player_id}}" type="checkbox" name="pcheckbox2" ng-model="item2.team2" ng-change="checkChanged2(item2)" ng-disabled="checked2 == limit && !item2.team2"></label>
+                </li>
+            </ul>
+        </div>
+        <!--this thing should trigger a function to add the value-->
+        
+        <input id="newplayer1" ng-model="newPlayers.player1" autocomplete="off" type="text" placeholder="Select different players" typeahead="player.player_id as player.player_id + ' ' + player.username + ', ' + player.team_name for player in players | filter:$viewValue | limitTo:8" typeahead-editable="false" typeahead-input-formatter="formatPlayerLabel($model)" typeahead-on-select="onSelect3($model)">
+        <input id="newplayer2" ng-model="newPlayers.player2" autocomplete="off" type="text" placeholder="Select different players" typeahead="player.player_id as player.player_id + ' ' + player.username + ', ' + player.team_name for player in players | filter:$viewValue | limitTo:8" typeahead-editable="false" typeahead-input-formatter="formatPlayerLabel($model)" typeahead-on-select="onSelect4($model)">
+
+        <input id="start_time" name="time_start" required="" ng-model="newMatch.match_time_start" type="datetime-local" placeholder="Time start, yyyy-MM-dd HH:mm:ss">
+  
+        
+        <input id="end_time" name="time_end" required="" ng-model="newMatch.match_time_end" type="datetime-local" placeholder="Time end, yyyy-MM-dd HH:mm:ss">
+
+        <input id="tournament" name="tournament" required="" autocomplete="off" ng-model="newMatch.tournament_id" type="text" placeholder="Tournament id" typeahead="tournament.id as tournament.id + ' ' + tournament.tournament_name for tournament in tournaments | filter:$viewValue | limitTo:8" typeahead-editable="false" typeahead-input-formatter="formatTournamentLabel($model)">
+
+        <input type="submit" value="Update match">
+
+        <div>{{status}}</div><br>
+    </form>
+</section>

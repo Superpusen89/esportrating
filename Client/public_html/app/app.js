@@ -48,6 +48,10 @@ app.config(function ($routeProvider) {
                 controller: 'TeamController',
                 templateUrl: 'app/partials/team.html'
             })
+            .when('/addTeam', {
+                controller: 'AddTeamController',
+                templateUrl: 'app/partials/addTeam.html'
+            })
             .when('/addPlayer', {
                 controller: 'AddPlayerController',
                 templateUrl: 'app/partials/addPlayer.html'

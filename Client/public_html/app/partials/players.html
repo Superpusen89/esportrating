@@ -6,18 +6,22 @@
 
     <table class="sortable" id="id">
         <tr>
+            <th>Rank<th>
             <th>Name</th>
             <th>Country</th>
-            <th>Team</th>
             <th>Score</th>
+            <th>Team</th>
+
         </tr>
         <tr ng-repeat="player in players| filter:searchText | orderBy:sortorder">
+            <td>{{ player.rank}}</td>
             <td>
                 <a href="#/player/{{ player.id}}"> {{ player.username}} </a> 
             </td>
             <td><img src="app/resources/flags/{{player.countrycode}}.png" alt="{{player.country}}" title="{{player.country}}"></td>
-            <td> {{ player.team_name}}</td> 
             <td>{{ player.display_rating}}</td>
+            <td> {{ player.team_name}}</td> 
+
         </tr>
     </table>
 
