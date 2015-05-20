@@ -245,7 +245,7 @@ def get_team_player(team_id):
 
 @app.route('/player', methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*')
-def create_player():
+def add_player():
     username = request.get_json().get('username', '')
     team_id = request.get_json().get('team_id', '')
     avatar = request.get_json().get('avatar', '')
@@ -306,7 +306,7 @@ def get_teams():
 
 @app.route('/team', methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*')
-def create_teams():
+def add_team():
     #team_id = request.get_json().get('team_id', '')
     team_name = request.get_json().get('team_name', '')
 #    q = queries.insertTeam
@@ -345,7 +345,7 @@ def get_tournament(tournament_id):
 
 @app.route('/tournament', methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
-def get_tournaments():
+def view_tournaments():
     cursor.execute("select * from Tournament")
     data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
                                         row) for row in cursor.fetchall()]]
@@ -353,7 +353,7 @@ def get_tournaments():
 
 @app.route('/tournament', methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*')
-def create_tournament():
+def add_tournament():
     # tournament_id = request.get_json().get('tournament_id', '')
         tournament_name = request.get_json().get('tournament_name', '')
         cursor.execute("INSERT INTO Tournament (tournament_name) VALUES ('%s')" % (tournament_name))
@@ -371,7 +371,7 @@ def edit_tournament():
    
 @app.route('/getplayers', methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
-def getplayers():
+def view_ranking_list():
     # order_by = order by enten username eller display_name, maa sendes med GET'en fra clienten
         cursor.execute("select username, p.id, countrycode, display_rating, team_name, c.name as country from Player p LEFT JOIN Team t ON p.team_id = t.id LEFT JOIN Countries c ON p.countrycode = c.alpha_2") # ORDER BY username desc")# % (order_by))
         data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
@@ -383,7 +383,7 @@ def getplayers():
 
 @app.route('/match', methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
-def get_matches():
+def view_matches():
     cursor.execute("select m.id, m.match_id, tournament_id, team_1_id, team_2_id, winning_team_id, losing_team_id, FROM_UNIXTIME(match_time_start) as match_time_start, FROM_UNIXTIME(match_time_end) as match_time_end, w.team_name AS winning_team, l.team_name AS losing_team FROM Matches m LEFT JOIN Team w on m.winning_team_id = w.id LEFT JOIN Team l on m.losing_team_id = l.id order by m.id;")
     data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
                                         row) for row in cursor.fetchall()]]
@@ -392,7 +392,7 @@ def get_matches():
 
 @app.route('/match', methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*')
-def create_match():
+def add_match():
     # tournament_id = request.get_json().get('tournament_id', '')
         time_start = request.get_json().get('match_time_start', '')
         time_end = request.get_json().get('match_time_end', '')
@@ -416,7 +416,7 @@ def create_match():
 
 @app.route('/match', methods=['PUT', 'OPTIONS'])
 @crossdomain(origin='*')
-def update_match(match_id):
+def edit_match(match_id):
     #match_id = 1 #Faa tak i id'en til matchen det er snakk om
     time_start = request.get_json().get('time_start', '')
     time_end = request.get_json().get('time_end', '')
@@ -446,7 +446,7 @@ def get_match(match_id):
 
 @app.route('/player_match', methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*')
-def create_player_match():
+def add_player_match():
     # tournament_id = request.get_json().get('tournament_id', '')
     match_id = request.get_json().get('match_id', '')
     player_id = request.get_json().get('player_id', '')
