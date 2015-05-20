@@ -4,9 +4,9 @@
 
     <p class="search"> <input class="searchfield" type="text" placeholder="Search" ng-model="searchText"> </p>
 
-    <table class="sortable" id="id">
+    <table>
         <tr>
-            <th>Rank<th>
+            <th>#<th>
             <th>Name</th>
             <th>Country</th>
             <th>Score</th>
@@ -20,7 +20,9 @@
             </td>
             <td><img src="app/resources/flags/{{player.countrycode}}.png" alt="{{player.country}}" title="{{player.country}}"></td>
             <td>{{ player.display_rating}}</td>
-            <td> {{ player.team_name}}</td> 
+            <td>
+                <a href="#/team/{{ player.team_id}}">{{ player.team_name}} </a> 
+            </td> 
 
         </tr>
     </table>
@@ -28,20 +30,3 @@
     <div>{{ status}}</div><br>
 </section>
 
-
-<!--Search: <input type="text" ng-model="searchTeam">
-
-<ul>
-    <li ng-repeat="team in teams| filter:searchTeam | orderBy:'id'">
-        {{ team.id}} - {{ team.team_name}}
-    </li>
-</ul>
-
-<div>
-    New player:<br>
-    <form ng-submit="addPlayer()">
-        <input ng-model="newPlayer.username" type="text" placeholder="Username">
-        <input ng-model="newPlayer.team_id" type="number" placeholder="Team id">
-        <input type="submit" value="Add Player" ng-disabled="!newPlayer.username || !newPlayer.team_id">
-    </form>
-</div>-->

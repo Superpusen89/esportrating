@@ -418,7 +418,7 @@ def edit_tournament():
 @crossdomain(origin='*')
 def getplayers():
     # order_by = order by enten username eller display_name, maa sendes med GET'en fra clienten
-    cursor.execute("select username, rank, p.id, p.id as player_id, countrycode, display_rating, team_name, c.name as country from Player p LEFT JOIN Team t ON p.team_id = t.id LEFT JOIN Countries c ON p.countrycode = c.alpha_2 order by rank asc") # ORDER BY username desc")# % (order_by))
+    cursor.execute("select username, rank, p.id, p.id as player_id, countrycode, display_rating, p.team_id, team_name, c.name as country from Player p LEFT JOIN Team t ON p.team_id = t.id LEFT JOIN Countries c ON p.countrycode = c.alpha_2 order by rank asc") # ORDER BY username desc")# % (order_by))
     data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
                                         row) for row in cursor.fetchall()]]
 
