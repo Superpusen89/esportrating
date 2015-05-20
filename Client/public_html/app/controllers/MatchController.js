@@ -67,7 +67,7 @@ app.controller('MatchController', function ($scope, $routeParams, daoMatches, da
     });
 
     /*************************** ON PRESS SAVE ***********************************************/
-    $scope.updateMatch = function () {
+    $scope.editMatch = function () {
         var match_time_start = $scope.newMatch.match_time_start;
         var match_time_end = $scope.newMatch.match_time_end;
         var team_1_id = parseInt($scope.newMatch.team_1_id);

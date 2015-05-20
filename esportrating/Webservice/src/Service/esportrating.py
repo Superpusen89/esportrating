@@ -453,9 +453,8 @@ def add_match():
     match_id = cursor.fetchone()[0]
     return "%d" % match_id; 
 
-#    cursor.execute("SELECT LAST_INSERT_ID()")
-#    match_id = cursor.fetchone()[0]
-#    eloCalc(match_id)
+
+    eloCalc(match_id)
 #        return "match_id som blir sendt til kalkis esportrating: ", match_id; 
 #    return "%d" % match_id
 #    return "yay"
@@ -480,11 +479,11 @@ def update_match():
     tournament_id = request.get_json().get('tournament_id', '')
 
 #    if(winning_team_id and losing_team_id != null):
-#        eloCalc(match_id)
+#    resetDisplayRating(match_id)
   
     cursor.execute("UPDATE Matches SET team_1_id = '%d', team_2_id = '%d', winning_team_id = '%d', losing_team_id = '%d', match_time_start = UNIX_TIMESTAMP('%s'), match_time_end = UNIX_TIMESTAMP('%s'), tournament_id = '%d' WHERE id = '%d'" % (team_1_id, team_2_id, winning_team_id, losing_team_id, time_start, time_end, tournament_id, match_id))
     conn.commit()   
-    
+#    eloCalc(match_id)
 #    print "CHECK"
 #    check(match_id)
 #    print "ELO-CALC"
