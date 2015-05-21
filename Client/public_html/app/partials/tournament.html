@@ -1,7 +1,17 @@
-<h3> Tournament view </h3>
+<section class="tournamentContainer">
+    <h1>{{tournament.data[0].tournament_name}}</h1>    
 
-<div>Status: {{status}}</div><br>
+    <p>Click a match for match details</p>
+    <table>
+        <tr ng-repeat="match in matches| filter:searchText | orderBy:sortorder">
+            <td>
+                <a href="#/match/{{ match.id}}"> 
+                    {{match.match_time_start}} - <span class="team">{{match.team_1_name}}</span> <span class="vs">vs</span> <span class="team">{{match.team_2_name}}</span>
+                </a>
+            </td>
+        </tr>
+    </table>
 
-<div>
-    Tournament name: <a href="#" editable-text="tournament.data[0].tournament_name" onbeforesave="saveName($data)">{{tournament.data[0].tournament_name|| "empty" }}</a> <br>
-</div> 
+    <p class="info">{{status}}</p>
+    <p class="info">{{matchStatus}}</p>
+</section>

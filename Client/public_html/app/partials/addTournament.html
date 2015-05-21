@@ -1,11 +1,9 @@
-<h1> Add tournament </h1>
-
-<div>
+<section id="addTournamentContainer">
+    <h1>New tournament: </h1>
     <form ng-submit="addTournament()">
-        <label> Tournament name </label>
+        <p>Tournament name: </p>
         <input ng-model="newTournament.tournament_name" type="text">
         <input type="submit" value="Add tournament" ng-disabled="!newTournament.tournament_name">
     </form>
-</div>
-
-<div>{{status}}</div>
+    <p class="info">{{status}}</p>
+</section>

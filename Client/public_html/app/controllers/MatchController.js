@@ -3,7 +3,7 @@ app.run(function (editableOptions) {
 });
 
 app.controller('MatchController', function ($scope, $routeParams, daoMatches, daoPlayerMatch, daoTeams, daoPlayers, daoTournaments) {
-    $scope.status = "";
+    $scope.status = "Loading match ...";
 
     daoMatches.get($routeParams.matchId, function (match) {
         $scope.match = match;
@@ -12,7 +12,7 @@ app.controller('MatchController', function ($scope, $routeParams, daoMatches, da
         daoPlayerMatch.get($routeParams.matchId, $scope.match.data[0].team_1_id, function (playermatch) {
             $scope.players1 = playermatch.data;
             console.log("players1 " + $scope.players1[0].player_id)
-            $scope.status = "Successfully loaded playermatchwinner";
+            $scope.status = "";
         }, function () {
             $scope.status = "Error loading playermatchwinner";
         });
@@ -20,7 +20,7 @@ app.controller('MatchController', function ($scope, $routeParams, daoMatches, da
         /*************************** GET PLAYER_MATC FOR TEAM 1 ***********************************************/
         daoPlayerMatch.get($routeParams.matchId, $scope.match.data[0].team_2_id, function (playermatch) {
             $scope.players2 = playermatch.data;
-            $scope.status = "Successfully loaded playermatchloser";
+            $scope.status = "";
         }, function () {
             $scope.status = "Error loading playermatchloser";
         });
@@ -61,7 +61,7 @@ app.controller('MatchController', function ($scope, $routeParams, daoMatches, da
         $scope.newMatch.losing_team_id = parseInt($scope.match.data[0].losing_team_id);
         $scope.newMatch.tournament_id = parseInt($scope.match.data[0].tournament_id);
 
-        $scope.status = "Successfully loaded match " + $routeParams.matchId;
+        $scope.status = "";
     }, function () {
         $scope.status = "Error loading match " + $routeParams.matchId;
     });

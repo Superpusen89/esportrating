@@ -1,27 +1,15 @@
-<h3> Player view </h3>
+<section id="playerContainer">
 
-<div>Status: {{status}}</div><br>
+    <h1> {{player.data[0].username}} </h1> <a href="#/team/{{player.data[0].team_id}}" class="teamname">{{ player.data[0].team_name || "Not part of a team" }} </a>
 
-<div>
-    Username: <a href="#" editable-text="player.data[0].username" onbeforesave="saveUsername($data)">{{player.data[0].username|| "empty" }}</a> <br>
-    Player id: {{player.data[0].id}}
+    <img src="{{ player.data[0].avatar}}" alt="Avatar" style="width:104px;height:auto">
 
-
-    <img src="{{ player.data[0].avatar }}" alt="Avatar" style="width:104px;height:auto">
-    Edit avatar url: <a href="#" editable-text="player.data[0].avatar" onbeforesave="saveAvatar($data)">{{player.data[0].avatar || "empty"}}</a> <br>
-
-    Team name: 
-    <a href="#" ng-model="player.data[0].team_id" editable-text="player.data[0].team_name" onbeforesave="saveTeam($data)" e-typeahead="team.id as team.team_name for team in teams | filter:$viewValue | limitTo:8" e-typeahead-editable="false" e-typeahead-input-formatter="formatLabelTeam($model)">
-        {{ player.data[0].team_name || "empty" }}
-    </a>
-
-    Rating: {{player.data[0].display_rating }}
-    Country: 
-    <a href="#" editable-text="player.data[0].country" onbeforesave="saveCountry($data)" e-typeahead="country.alpha_2 as country.name for country in countries | filter:$viewValue | limitTo:8" e-typeahead-editable="false" e-typeahead-input-formatter="formatLabelCountry($model)">
-        {{player.data[0].country || "empty"}} 
-    </a>
-
-    Rank: {{player.data[0].rank || "Player is not ranked"}}
-    Real name: <a href="#" editable-text="player.data[0].realname" onbeforesave="saveRealname($data)"> {{player.data[0].realname || "empty"}}</a> <br>
+    <p class="exclude">Ranked <span class="rank">#{{player.data[0].rank|| " - Player is not ranked"}}, {{player.data[0].display_rating}} </span> points</p>
+    <p>Matches played: <span class="bold">{{player.data[0].count|| "No matches played"}}</span></p>
     
-</div> 
+    <p>Country: <span class="bold">{{player.data[0].country|| "Unknown"}}</span></p>
+
+    <p>Real name: <span class="bold">{{player.data[0].realname|| "Unknown"}}</span></p>
+
+    <p class="info">{{status}}</p>
+</section> 

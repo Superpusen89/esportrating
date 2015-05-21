@@ -1,32 +1,24 @@
 
-<section id="matches_container">
+<section id="matchesContainer">
+    <p class="search"> <input class="searchfield" type="text" placeholder="Search matches" ng-model="searchText"></p>
+    <p>Click the match time to view match details</p>
 
-    <p class="search"> <input class="searchfield" type="text" placeholder="Search" ng-model="searchText"></p>
-
-    <table class="sortable" id="id">
+    <table>
         <tr>
-            <th> Match id </th>
             <th> Start time </th>
-            <th> End time </th>
             <th> Team 1 </th>
             <th> Team 2 </th>
             <th> Winning team </th>
-            <th> Losing team </th>
-            <th> Tournament id </th>
+            <th> Tournament </th>
         </tr>
         <tr ng-repeat="match in matches| filter:searchText | orderBy:sortorder">
-            <td>
-                <a href="#/match/{{match.id}}"> {{ match.id}} </a> 
-            </td>
-            <td>{{ match.match_time_start}}</td>
-            <td>{{ match.match_time_end}}</td>
-            <td>{{ match.team_1_id}}</td>
-            <td>{{ match.team_2_id}}</td>
-            <td>{{ match.winning_team_id}}</td>
-            <td>{{ match.losing_team_id}}</td>
-            <td>{{ match.tournament_id}}</td>
+            <td><a href="#/match/{{match.id}}"> {{ match.match_time_start}}</a></td>
+            <td><a href="#/team/{{match.team_1_id}}">{{ match.team_1_name}}</a></td>
+            <td><a href="#/team/{{match.team_2_id}}">{{ match.team_2_name}}</a></td>
+            <td><a href="#/team/{{match.winning_team_id}}">{{ match.winning_team}}</a></td>
+            <td><a href="#/team/{{match.tournament_id}}">{{ match.tournament_name}}</a></td>
         </tr>
     </table>
 
-    <div>{{ status}}</div><br> 
+    <p class="info">{{status}}</p>
 </section>

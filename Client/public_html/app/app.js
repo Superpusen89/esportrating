@@ -9,17 +9,33 @@ app.config(function ($routeProvider) {
                 controller: 'PlayersController',
                 templateUrl: 'app/partials/players.html'
             })
+            .when('/editPlayers', {
+                controller: 'PlayersController',
+                templateUrl: 'app/partials/editPlayers.html'
+            })
             .when('/player/:playerId', {
                 controller: 'PlayerController',
                 templateUrl: 'app/partials/player.html'
+            })
+            .when('/editPlayer/:playerId', {
+                controller: 'PlayerController',
+                templateUrl: 'app/partials/editPlayer.html'
             })
             .when('/tournaments', {
                 controller: 'TournamentsController',
                 templateUrl: 'app/partials/tournaments.html'
             })
+            .when('/editTournaments', {
+                controller: 'TournamentsController',
+                templateUrl: 'app/partials/editTournaments.html'
+            })
             .when('/tournament/:tournamentId', {
                 controller: 'TournamentController',
                 templateUrl: 'app/partials/tournament.html'
+            })
+            .when('/editTournament/:tournamentId', {
+                controller: 'TournamentController',
+                templateUrl: 'app/partials/editTournament.html'
             })
             .when('/addTournament', {
                 controller: 'AddTournamentController',
@@ -29,9 +45,17 @@ app.config(function ($routeProvider) {
                 controller: 'MatchesController',
                 templateUrl: 'app/partials/matches.html'
             })
+            .when('/editMatches', {
+                controller: 'MatchesController',
+                templateUrl: 'app/partials/editMatches.html'
+            })
             .when('/match/:matchId', {
                 controller: 'MatchController',
                 templateUrl: 'app/partials/match.html'
+            })
+            .when('/editMatch/:matchId', {
+                controller: 'MatchController',
+                templateUrl: 'app/partials/editMatch.html'
             })
             .when('/addMatch', {
                 controller: 'AddMatchController',
@@ -44,9 +68,17 @@ app.config(function ($routeProvider) {
                 controller: 'TeamsController',
                 templateUrl: 'app/partials/teams.html'
             })
+            .when('/editTeams', {
+                controller: 'TeamsController',
+                templateUrl: 'app/partials/editTeams.html'
+            })
             .when('/team/:teamId', {
                 controller: 'TeamController',
                 templateUrl: 'app/partials/team.html'
+            })
+            .when('/editTeam/:teamId', {
+                controller: 'TeamController',
+                templateUrl: 'app/partials/editTeam.html'
             })
             .when('/addTeam', {
                 controller: 'AddTeamController',

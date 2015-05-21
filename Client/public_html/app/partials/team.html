@@ -1,11 +1,32 @@
-<h3> Team view </h3>
+<section id="teamContainer">
+    <h1> {{team.data[0].team_name|| "empty" }}</h1>
+    <p>This team has played {{team.data[0].count}} matches</p>
 
-<div>Status: {{status}}</div><br>
+    <p class="info">Click a player for more information</p>
+    <table>
+        <tr>
+            <th>Player</th>
+            <th></th>
+            <th>Score</th>
+            <th>Rank</th>
+        </tr>
+        <tr ng-repeat="player in players| filter:searchText | orderBy:sortorder">
+            <td>
+                <a href="#/player/{{player.id}}"> 
+                    {{player.username}} 
+                </a>
+            </td>
+            <td>
+                <img src="app/resources/flags/{{player.countrycode}}.png" alt="{{player.country}}" title="{{player.country}}">
+            </td>
+            <td>{{ player.display_rating}}
+            </td>
+            <td>
+                {{ player.rank}}
+            </td>
+        </tr>
+    </table>
 
-<div>
-    Name: <a href="#" editable-text="team.data[0].team_name" onbeforesave="saveData($data)">{{team.data[0].team_name|| "empty" }}</a> <br>
-    Team id: {{team.data[0].id|| "empty" }}
-
-    
-    <!--<img src="{{ player.data[0].avatar }}" alt="W3Schools.com" style="width:104px;height:142px">-->
-</div> 
+    <p class="info">{{status}}</p>
+    <p class="info">{{statusPlayers}}</p>
+</section>

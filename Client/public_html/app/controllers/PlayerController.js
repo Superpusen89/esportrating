@@ -3,7 +3,7 @@ app.run(function (editableOptions) {
 });
 
 app.controller('PlayerController', function ($scope, $routeParams, daoPlayers, daoCountries, daoTeams) {
-    $scope.status = "Loading...";
+    $scope.status = "Loading player ...";
 
     daoPlayers.get($routeParams.playerId, function (player) {
         $scope.player = player;
@@ -20,16 +20,16 @@ app.controller('PlayerController', function ($scope, $routeParams, daoPlayers, d
 
 
 
-        $scope.status = "Successfully loaded Player " + $routeParams.playerId;
+        $scope.status = "";
     }, function () {
-        $scope.status = "Error loading Player " + $routeParams.playerId;
+        $scope.status = "Error loading player " + $routeParams.playerId;
     });
 
     daoTeams.getAll(function (teams) {
         $scope.teams = teams.data;
-        $scope.statusTeams = "Successfully loaded Teams";
+        $scope.statusTeams = "";
     }, function () {
-        $scope.statusTeams = "Error loading Teams";
+        $scope.statusTeams = "Error loading teams";
     });
 
 //formats the input selector

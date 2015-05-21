@@ -1,20 +1,23 @@
-<section id="teams_container">
-    Search: <input type="text" ng-model="searchTeam">
+<section id="teamsContainer">
+    <h1>Teams</h1>
 
-    <table class="sortable" id="id">
+    <input class="searchfield" type="text" ng-model="searchTeams" placeholder="Search teams">
+    <p class="info">Click a team for more information</p>
+
+    <table>
         <tr>
-            <th>Id</th>
-            <th>Name</th>
+            <th>Team</th>
+            <th>Number of matches</th>
         </tr>
         <tr ng-repeat="team in teams| filter:searchTeam | orderBy:'id'">
-            <td>{{ team.id}} </td> 
             <td>
                 <a href="#/team/{{team.id}}"> {{ team.team_name}} </a> 
             </td>
+            <td>{{team.count}}</td>
         </tr>
     </table>
 
-    <div>{{ status}}</div><br>
+    <p class="info">{{status}}</p>
 
 
 </section>

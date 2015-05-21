@@ -3,11 +3,10 @@
     <h1>Player ranking</h1>
 
     <input class="searchfield" type="text" ng-model="searchPlayers" placeholder="Search players">
-    <p class="info">Click a player for more information</p>
+    <p class="info">Click the player you want to edit</p>
 
     <table>
         <tr>
-            <th>#</th>
             <th>Name</th>
             <th></th>
             <th>Score</th>
@@ -15,9 +14,8 @@
             <th>Matches played</th>
         </tr>
         <tr ng-repeat="player in players| filter:searchText | orderBy:sortorder">
-            <td>{{ player.rank}}</td>
             <td>
-                <a href="#/player/{{ player.id}}"> {{ player.username}} </a> 
+                <a href="#/editPlayer/{{ player.id}}"> {{player.id}} {{ player.username}} </a> 
             </td>
             <td><img src="app/resources/flags/{{player.countrycode}}.png" alt="{{player.country}}" title="{{player.country}}"></td>
             <td>{{ player.display_rating}}</td>
