@@ -28,7 +28,7 @@
         <div id="team2list">
             <ul ng-repeat="player in players2">
                 <li id="{{'playercheckbox'+$index}}">
-                    <label>{{player.username}} <input value="{{player.id}}" type="checkbox" name="pcheckbox2" ng-model="item2.team2" ng-change="checkChanged2(item2)" ng-disabled="checked2 == limit && !item2.team2"></label>
+                    <label> <input value="{{player.id}}" type="checkbox" name="pcheckbox2" ng-model="item2.team2" ng-change="checkChanged2(item2)" ng-disabled="checked2 == limit && !item2.team2">{{player.username}}</label>
                 </li>
             </ul>
         </div>

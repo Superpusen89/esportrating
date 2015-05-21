@@ -15,4 +15,5 @@ app.controller('PlayersController', function ($scope, daoPlayers) {
     }, function () {
         $scope.status = "Error loading Players";
     });
+    
 });

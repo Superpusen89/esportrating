@@ -214,6 +214,7 @@ app.controller('MatchController', function ($scope, $routeParams, daoMatches, da
         player1 = $model;
         daoPlayers.get(player1, function (player) {
             $scope.players1.push(player.data[0]);
+            document.getElementById("newplayer1").value = "";
             console.log('----------' + player.data[0].player_id + ' ' + player.data[0].username);
         });
     };
@@ -223,6 +224,7 @@ app.controller('MatchController', function ($scope, $routeParams, daoMatches, da
         player2 = $model;
         daoPlayers.get(player2, function (player) {
             $scope.players2.push(player.data[0]);
+            document.getElementById("newplayer2").value = "";
             console.log('----------' + player.data[0].player_id);
         });
     };

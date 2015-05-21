@@ -100,9 +100,20 @@ aside a, aside a:link, aside a:visited, aside a:hover, aside a:visited:hover, as
 
 /* SORTABLE */
 
-table {
+/*table {
     width: 900px;
+}*/
+
+/*tbody {
+    height: 100%;
+    overflow: auto;
 }
+
+thead > tr, tbody{
+    display:block;
+}*/
+
+
 
 table {
     border-collapse: collapse;
@@ -117,14 +128,14 @@ table th, table td {
     background-color: #2A4F62;
 }*/
 
-table tr.odd td {
+/*table tr.odd td {
     background-color: #336075;
     color: #DBDBDB;
 }
 table tr.even td {
     background-color: #2A4F62;
     color: #DBDBDB;
-}
+}*/
 
 /* END SORTABLE */
 
@@ -132,7 +143,7 @@ table tr.even td {
 
 .searchfield{
     float: right; 
-    padding: 5px;
+    padding: 0.5em;
     padding-right: 2em;
     background: #DBDBDB url(app/resources/search.png) 11.3em no-repeat;
     background-size: 15px 15px;
@@ -299,12 +310,10 @@ table tr.even td {
 
 .matchContainer #winnerchx li {
     list-style-type: none!important; 
-    padding: 0 !important; 
 }
 
 .matchContainer #t1l li, .matchContainer #t2l li {
     list-style-type: none!important; 
-    padding: 0 !important; 
 }
 
 .matchContainer{
@@ -313,11 +322,15 @@ table tr.even td {
 }
 
 .matchContainer #team2list{
-    float: left; 
+    float: left;
 }
 
 .matchContainer #team2list{
     float: right; 
+}
+
+.matchContainer #team2list label, .matchContainer #team1list label, .matchContainer #team2list ul, .matchContainer #team1list ul, .matchContainer #team2list li, .matchContainer #team1list li{
+    padding: 0 !important; 
 }
 
 .matchContainer #t1l{
@@ -348,9 +361,9 @@ table tr.even td {
     display: inline-block!important; 
 }
 
-.matchContainer #tournament, .matchContainer .submit{
+/*.matchContainer #tournament, .matchContainer .submit{
     display: inline-block!important; 
-}
+}*/
 
 #addMatchContainer #team0, #addMatchContainer #team1label, #addMatchContainer #team1input, #addMatchContainer #team1list, #addMatchContainer #team1list, #addMatchContainer #newplayer1{
     clear:both; 
@@ -382,6 +395,19 @@ table tr.even td {
 
 #teamsContainer table{
     width: 50em !important;
+}
+
+/*#playersContainer table{
+    width: 90em !important;
+}*/
+#playersContainer{
+    width: 60em;
+    margin: 0 auto;
+}
+
+#playersContainer table{
+    margin-top: 2em;
+    width: 60em !important;
 }
 
 #playerContainer, #editPlayerContainer, #addTeamContainer, #addTournamentContainer{
@@ -421,6 +447,10 @@ table tr.even td {
     color: #9E8F84;
 }
 
+#playersContainer a, #playersContainer a:link, #playersContainer a:visited, #playersContainer a:hover, #playersContainer a:visited:hover, #playersContainer a:active {
+    color: #9E8F84;
+}
+
 #matchesContainer a, #matchesContainer a:link, #matchesContainer a:visited, #matchesContainer a:hover, #matchesContainer a:visited:hover, #matchesContainer a:active {
     color: #9E8F84;
 }
@@ -456,7 +486,7 @@ table tr.even td {
     width: 90em;
 }
 
-#matchesContainer, #editMatchesContainer{
+#matchesContainer, #editMatchesContainer, #playersContainer{
     color: #9E8F84;
 }
 

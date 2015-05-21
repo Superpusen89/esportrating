@@ -41,7 +41,7 @@
         <input id="end_time" name="time_end" required="" ng-model="newMatch.match_time_end" type="datetime-local" placeholder="Time end, yyyy-MM-dd HH:mm:ss">
 
         <input id="tournament" name="tournament" required="" autocomplete="off" ng-model="newMatch.tournament_id" type="text" placeholder="Tournament id" typeahead="tournament.id as tournament.id + ' ' + tournament.tournament_name for tournament in tournaments | filter:$viewValue | limitTo:8" typeahead-editable="false" typeahead-input-formatter="formatTournamentLabel($model)">
-
+        <br>
         <input class="submit" type="submit" value="Update match">
 
         <p class="info">{{status}}</p>
