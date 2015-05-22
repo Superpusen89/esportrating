@@ -230,11 +230,11 @@ app.controller('MatchController', function ($scope, $routeParams, daoMatches, da
                 $scope.match = match;
                 var checkedBoxes = getCheckedBoxes("pcheckbox");
                 for (i = 0; i < checkedBoxes.length; i++) {
-                    var new_team_id = parseInt(team_1_id);
+                    var new_team_id = parseInt($scope.newMatch.team_1_id);
                     var new_player_id = parseInt(checkedBoxes[i].value);
-                    console.log("checkboxvalue " + checkedBoxes[i].value)
                     /****************************** ADD TO PLAYER MATCH ******************************************************/
 
+                    console.log("***----**** " + match_id + " new_player_id " + new_player_id + " new_team_id " + new_team_id);
                     daoPlayerMatch.add(match_id, new_player_id, new_team_id, function () {
                         $scope.status = "Successfully edited player_match ";
                     }, function () {
@@ -247,6 +247,7 @@ app.controller('MatchController', function ($scope, $routeParams, daoMatches, da
                 for (i = 0; i < checkedBoxes2.length; i++) {
                     var new_team_id_2 = parseInt($scope.newMatch.team_2_id);
                     var new_player_id_2 = parseInt(checkedBoxes2[i].value);
+                    console.log("***----**** " + match_id + " new_player_id " + new_player_id_2 + " new_team_id " + new_team_id_2);
                     daoPlayerMatch.add(match_id, new_player_id_2, new_team_id_2, function () {
                         $scope.status = "Successfully edited player_match ";
                     }, function () {

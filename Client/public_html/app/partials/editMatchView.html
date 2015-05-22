@@ -25,7 +25,7 @@
         <div id="team1list">
             <ul id="t1l" ng-repeat="player in players1">
                 <li id="{{'playercheckbox' + $index}}">
-                    <label><input type="checkbox" value=" {{player.player_id}}" id="{{'pcb' + $index}}" name="pcheckbox" ng-model="checked" ng-init="checked = true"/>{{player.player_id}} {{player.username}} </label>
+                    <label><input type="checkbox" value="{{player.player_id}}" id="{{'pcb' + $index}}" name="pcheckbox" ng-model="checked" ng-init="checked = true"/>{{player.player_id}} {{player.username}} </label>
                 </li>
             </ul>
         </div>
@@ -33,7 +33,7 @@
         <div id="team2list">
             <ul id="t2l" ng-repeat="player2 in players2">
                 <li id="{{'playercheckbox' + $index}}">
-                    <label><input value=" {{player2.player_id}}" type="checkbox" name="pcheckbox2"  ng-model="checked" ng-init="checked = true">{{player2.player_id}} {{player2.username}} </label>
+                    <label><input value="{{player2.player_id}}" type="checkbox" name="pcheckbox2"  ng-model="checked" ng-init="checked = true">{{player2.player_id}} {{player2.username}} </label>
                 </li>
             </ul>
         </div><br>
