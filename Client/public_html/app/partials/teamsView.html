@@ -6,10 +6,10 @@
 
     <table>
         <tr>
-            <th>Team</th>
-            <th>Number of matches</th>
+            <th ng-click="changeSorting('team_name')" style="cursor: pointer;">Team</th>
+            <th ng-click="changeSorting('count')" style="cursor: pointer;">Number of matches</th>
         </tr>
-        <tr ng-repeat="team in teams| filter:searchTeam | orderBy:'id'" such-href="/team/{{team.id}}">
+        <tr ng-repeat="team in teams| filter:searchTeams | orderBy:sort.column:sort.descending" such-href="/team/{{team.id}}">
             <td>
                 <a href="#/team/{{team.id}}"> {{ team.team_name}} </a> 
             </td>

@@ -476,7 +476,7 @@ table th, table td {
     width: 90em;
 }
 
-#matchesContainer, #editMatchesContainer, .playersContainer{
+#matchesContainer, #editMatchesContainer, .playersContainer, .tournamentsContainer{
     color: #9E8F84;
 }
 
@@ -502,6 +502,10 @@ table th, table td {
 }
 
 .playersContainer table tr:nth-child(even){
+    background-color: #4d3f3f !important; 
+}
+
+.tournamentsContainer table tr:nth-child(even){
     background-color: #4d3f3f !important; 
 }
 /*#teamContainer table tr:nth-child(even){

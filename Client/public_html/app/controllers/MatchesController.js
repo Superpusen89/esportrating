@@ -17,5 +17,43 @@ app.controller('MatchesController', function ($scope, daoMatches) {
     });
 
 
+    /* Code taken from 
+     * http://jsfiddle.net/gweur/
+     * http://stackoverflow.com/questions/18789973/sortable-table-columns-with-angularjs
+     */
+    $scope.sort = {
+        column: '',
+        descending: false
+    };
+    $scope.changeSorting = function (column) {
+
+        var sort = $scope.sort;
+
+        if (sort.column == column) {
+            sort.descending = !sort.descending;
+        } else {
+            sort.column = column;
+            sort.descending = false;
+        }
+    };
+    /*
+     * code end
+     */
+
+    $scope.spoilers = function () {
+
+        console.log("clicked");
+        elements = document.getElementsByName("hidden");
+        for (var i = 0; i < elements.length; i++) {
+            elements[i].style.visibility = "visible";
+        }
+    };
+
+    $scope.showRow = function (index) {
+        console.log("ROW clicked");
+        document.getElementById("row"+index).style.display = "block";
+        document.getElementById("hide"+index).style.display = "none";
+    };
+
 });
 

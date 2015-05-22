@@ -3,12 +3,21 @@
 
     <input class="searchfield" type="text" ng-model="searchTeams" placeholder="Search teams">
     <p class="info">Chose the team you want to edit</p>
-    
-    <ul>
-        <li ng-repeat="team in teams| filter:searchTeam | orderBy:'id'">
-                <a href="#/editTeam/{{team.id}}"> {{ team.id}} {{ team.team_name}} </a> 
-        </li>
-    </ul>
+
+    <table>
+        <tr>
+            <th ng-click="changeSorting('id')" style="cursor: pointer;">ID</th>
+            <th ng-click="changeSorting('team_name')" style="cursor: pointer;">Team name</th>
+        </tr>
+        <tr ng-repeat="team in teams| filter:searchTeams | orderBy:sort.column:sort.descending" such-href="/editTeam/{{team.id}}">
+            <td>        
+                {{ team.id}} 
+            </td>
+            <td>
+                {{ team.team_name}}
+            </td>
+        </tr>
+    </table>
 
     <p class="info">{{status}}</p>
 

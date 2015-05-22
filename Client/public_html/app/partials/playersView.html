@@ -1,32 +1,32 @@
 <section class="playersContainer">
-    
+
 
     <h1>Player ranking</h1>
 
-    <input class="searchfield" type="text" ng-model="searchPlayers" placeholder="Search players">
+    <input class="searchfield" type="text" ng-model="searchText" placeholder="Search players">
     <p class="info">Click a player for more information</p>
 
     <table>
-            <tr>
-                <th>#</th>
-                <th>Name</th>
-                <th></th>
-                <th>Score</th>
-                <th>Team</th>
-                <th>Matches played</th>
-            </tr>
-            <tr ng-repeat="player in players| filter:searchText | orderBy:sortorder" such-href="/player/{{player.id}}">
-                <td>{{ player.rank}}</td>
-                <td>
-                    <a href="#/player/{{ player.id}}"> {{ player.username}} </a> 
-                </td>
-                <td><img src="app/resources/flags/{{player.countrycode}}.png" alt="{{player.country}}" title="{{player.country}}"></td>
-                <td>{{ player.display_rating}}</td>
-                <td>
-                    <a href="#/team/{{ player.team_id}}">{{ player.team_name}} </a> 
-                </td> 
-                <td>{{player.count}}</td>
-            </tr>
+        <tr>
+            <th ng-click="changeSorting('rank')" style="cursor: pointer;">#</th>
+            <th ng-click="changeSorting('username')" style="cursor: pointer;">Name</th>
+            <th ng-click="changeSorting('country')" style="cursor: pointer;"></th>
+            <th ng-click="changeSorting('display_rating')" style="cursor: pointer;">Score</th>
+            <th ng-click="changeSorting('team_name')" style="cursor: pointer;">Team</th>
+            <th ng-click="changeSorting('count')" style="cursor: pointer;">Matches played</th>
+        </tr>
+        <tr ng-repeat="player in players| filter:searchText | orderBy:sort.column:sort.descending" such-href="/player/{{player.id}}">
+            <td>{{ player.rank}}</td>
+            <td>
+                <a href="#/player/{{ player.id}}"> {{ player.username}} </a> 
+            </td>
+            <td><img src="app/resources/flags/{{player.countrycode}}.png" alt="{{player.country}}" title="{{player.country}}"></td>
+            <td>{{ player.display_rating}}</td>
+            <td>
+                <a href="#/team/{{ player.team_id}}">{{ player.team_name}} </a> 
+            </td> 
+            <td>{{player.count}}</td>
+        </tr>
     </table>
 
     <p class="info">{{status}}</p>

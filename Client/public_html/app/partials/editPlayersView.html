@@ -1,19 +1,21 @@
 <section class="playersContainer">
-    
+
     <h1>Players</h1>
 
-    <input class="searchfield" type="text" ng-model="searchPlayers" placeholder="Search players">
+    <input class="searchfield" type="text" ng-model="searchText" placeholder="Search players">
     <p class="info">Click the player you want to edit</p>
 
     <table>
         <tr>
-            <th>Name</th>
-            <th></th>
-            <th>Score</th>
-            <th>Team</th>
-            <th>Matches played</th>
+            <th ng-click="changeSorting('rank')" style="cursor: pointer;">#</th>
+            <th ng-click="changeSorting('username')" style="cursor: pointer;">Name</th>
+            <th ng-click="changeSorting('country')" style="cursor: pointer;"></th>
+            <th ng-click="changeSorting('display_rating')" style="cursor: pointer;">Score</th>
+            <th ng-click="changeSorting('team_name')" style="cursor: pointer;">Team</th>
+            <th ng-click="changeSorting('count')" style="cursor: pointer;">Matches played</th>
         </tr>
-        <tr ng-repeat="player in players| filter:searchText | orderBy:sortorder">
+        <tr ng-repeat="player in players| filter:searchText | orderBy:sort.column:sort.descending">
+            <td>{{ player.rank}}</td>
             <td>
                 <a href="#/editPlayer/{{ player.id}}"> {{player.id}} {{ player.username}} </a> 
             </td>
@@ -26,6 +28,6 @@
         </tr>
     </table>
 
-     <p class="info">{{status}}</p>
+    <p class="info">{{status}}</p>
 </section>
 
