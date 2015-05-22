@@ -6,9 +6,49 @@
 
 app.service('daoPlayerMatch', function ($http, REST) {
 
-    this.addPlayerMatch = function (match_id, player_id, team_id, successCallback, errorCallback) {
+    this.add = function (match_id, player_id, team_id, successCallback, errorCallback) {
         var newPlayerMatch = {match_id: match_id, player_id: player_id, team_id: team_id};
         $http.post(REST.path + 'player_match', newPlayerMatch).success(function (result) {
+            if (typeof (successCallback) === 'function') {
+                successCallback(result);
+            }
+        }).error(function () {
+            if (typeof (errorCallback) === 'function') {
+                errorCallback();
+            }
+        });
+    };
+
+    this.get = function (match_id, team_id, successCallback, errorCallback) {
+        $http.get(REST.path + 'player_match/' + match_id + ',' + team_id).success(function (result) {
+            if (typeof (successCallback) === 'function') {
+                successCallback(result);
+            }
+        }).error(function () {
+            if (typeof (errorCallback) === 'function') {
+                errorCallback();
+            }
+        });
+    };
+
+
+    this.edit = function (match_id, old_team_id, new_team_id, old_player_id, new_player_id, successCallback, errorCallback) {
+        var newPlayerMatch = {match_id: match_id, old_team_id: old_team_id, new_team_id: new_team_id, old_player_id: old_player_id, new_player_id: new_player_id};
+        $http.put(REST.path + 'player_match', newPlayerMatch).success(function (result) {
+            if (typeof (successCallback) === 'function') {
+                successCallback(result);
+            }
+        }).error(function () {
+            if (typeof (errorCallback) === 'function') {
+                errorCallback();
+            }
+        });
+    };
+
+    this.delete = function (match_id, successCallback, errorCallback) {
+        console.log("DETETE " + match_id);
+        var newPlayerMatch = {match_id: match_id};
+        $http.put(REST.path + 'delete_player_match', newPlayerMatch).success(function (result) {
             if (typeof (successCallback) === 'function') {
                 successCallback(result);
             }

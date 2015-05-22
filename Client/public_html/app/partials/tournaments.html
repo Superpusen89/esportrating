@@ -16,11 +16,3 @@ Search: <input type="text" ng-model="searchTournament">
             {{ tournament.tournament_name}}  </a>
     </li>
 </ul>
-
-<div>
-    New Tournament<br>
-    <form ng-submit="addTournament()">
-        <input ng-model="newTournament.tournament_name" type="text" placeholder="Tournament name">
-        <input type="submit" value="Add tournament" ng-disabled="!newTournament.tournament_name">
-    </form>
-</div>

@@ -6,6 +6,7 @@ DROP TABLE Player;
 DROP TABLE Matches;
 DROP TABLE Team;
 DROP TABLE Tournament;
+DROP TABLE Countries; 
 DROP TABLE Game_period;
 DROP TABLE Countries;
 
@@ -269,7 +270,7 @@ INSERT INTO Countries (name, alpha_2, alpha_3) VALUES
     ('Iceland', 'is', 'isl'),
     ('India', 'in', 'ind'),
     ('Indonesia', 'id', 'idn'),
-    ('Iran, Islamic Republic of', 'ir', 'irn'),
+    ('Iran', 'ir', 'irn'),
     ('Iraq', 'iq', 'irq'),
     ('Ireland', 'ie', 'irl'),
     ('Isle of Man', 'im', 'imn'),
@@ -282,8 +283,8 @@ INSERT INTO Countries (name, alpha_2, alpha_3) VALUES
     ('Kazakhstan', 'kz', 'kaz'),
     ('Kenya', 'ke', 'ken'),
     ('Kiribati', 'ki', 'kir'),
-    ('Korea, Democratic People''s Republic of', 'kp', 'prk'),
-    ('Korea, Republic of', 'kr', 'kor'),
+    ('Democratic People''s Republic of Korea', 'kp', 'prk'),
+    ('Republic of Korea', 'kr', 'kor'),
     ('Kuwait', 'kw', 'kwt'),
     ('Kyrgyzstan', 'kg', 'kgz'),
     ('Lao People''s Democratic Republic', 'la', 'lao'),
@@ -309,8 +310,8 @@ INSERT INTO Countries (name, alpha_2, alpha_3) VALUES
     ('Mauritius', 'mu', 'mus'),
     ('Mayotte', 'yt', 'myt'),
     ('Mexico', 'mx', 'mex'),
-    ('Micronesia, Federated States of', 'fm', 'fsm'),
-    ('Moldova, Republic of', 'md', 'mda'),
+    ('Federated States of Micronesia', 'fm', 'fsm'),
+    ('Republic of Moldova', 'md', 'mda'),
     ('Monaco', 'mc', 'mco'),
     ('Mongolia', 'mn', 'mng'),
     ('Montenegro', 'me', 'mne'),

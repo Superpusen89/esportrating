@@ -1,0 +1,10 @@
+    <div>
+        New team:<br>
+        <form ng-submit="addTeam()">
+            <input ng-model="newTeam.team_name" type="text" placeholder="Team name">
+            <input type="submit" value="Add team" ng-disabled="!newTeam.team_name">
+        </form>
+    </div>
+
+
+    <div>{{ status}}</div><br>

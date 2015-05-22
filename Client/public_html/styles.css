@@ -1,19 +1,22 @@
 html, body{
     height: 100%;
     overflow: hidden;
+    background-color: #090909 !important; 
+    //#191919
+    //#231F20
 }
 
 body{
-    background: url("app/resources/blue.jpg") no-repeat center center fixed;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-    padding: 40px 0px;
+/*        background: url("app/resources/noise.jpg") no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;*/
+    padding: 150px 0px;
 }
 
 #page-wrap{
-    margin-top: 70px;
+   // margin-top: 70px;
     overflow-y: scroll; 
     height: 100%;
 }
@@ -23,17 +26,7 @@ body{
     width: 1100px; 
     min-height: 100%;
     color: #DBDBDB; 
-    background-color: #050E15;
-    //background-color: #4D4D4D; 
-    //background-color: #404040;
-    padding-top: 25px;
-    padding-right: 50px; 
-    padding-left: 50px;
-    padding-bottom: 70px; //top right bottom left 
-    //border-radius:.25em;
-    //box-shadow:0 .08em .08em rgba(0,0,0,.25);
-    //box-shadow:0 1em .08em rgba(0,0,0,.25);
-    //border:.08em solid rgba(0,0,0,.1);box-shadow:0 0 .625em .08em rgba(0,0,0,.05);
+    //background-color: #050E15;
 }
 
 @font-face {
@@ -48,99 +41,74 @@ body{
 
 header{
     width: 100%;
-    //width: 1100px;
     position: fixed;
     top: 0px;
-    //border:.08em solid rgba(0,0,0,.1);box-shadow:0 0 .625em .08em rgba(0,0,0,.05);
-}
-
-header #dota2logo{
-    width:auto; /* you can use % */
-    height: 50px;
-    //float: left; 
-    //padding-left: 300px;
-    //padding-right: 130px;
-}
-
-#admin{ 
-    text-align: right; 
-    color: white;
+    background-color: #090909;
+    height: 150px;
+    padding-top: 12.5px;
 }
 
 #menu{
-    background-color: #050E15; 
-    //background-color: maroon;
-    height: 63px;
-    line-height: 63px;
-    //color: #DBDBDB; //whiteish
-    color: #978275; 
-    font-size: 15px;
-    font-family: TrajanusBricks;
-    //font-style: oblique; 
+    /*background-color: #231F20;*/ 
+    background-color: #090909; 
+    height: 125px;
+    line-height: 125px;
+    /*color: #978275;*/ 
+    color: #AB2A30;
+    font-size: 20px;
+    /*font-family: TrajanusBricks;*/
+    font-family: SteinerLight; 
     text-align: center; 
     text-transform: lowercase;
-
-    //text-transform: uppercase;
-    /*    -khtml-opacity:.70; 
-        -moz-opacity:.70; 
-        -ms-filter:”alpha(opacity=70)”;
-        filter:alpha(opacity=70);
-        filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0.7);
-        opacity:.70; */
+    border-bottom-style: dashed;
+    border-top-style: dashed;
+    border-color: black;
+    box-sizing:border-box;
+    -moz-box-sizing:border-box;
+    -webkit-box-sizing:border-box;
 }
 
-/*#menu.a:visited {
-    color: #978275 !important;
-}*/
+aside{
+    float: left; 
+    padding-top: 70px; 
+}
+
+aside a, aside a:link, menu a:visited, aside a:hover, aside a:visited:hover, aside a:active {
+    color: #AB2A30;
+}
+
+#admin_nav ul{
+    list-style-type: none; 
+}
 
 #menu ul li {
     display: inline; 
     padding: 10px;
 }
 
-#menu a {
-    color: #978275; 
-}
-
-#menu a:link {
-    color: #978275;
-}
-
-#menu a:visited {
-    color: #978275;
-}
-
-#menu a:hover{
-    color: #978275;
-}
-
-#menu a:visited:hover{
-    color: #978275;
-}
-
-#menu a:active {
-    color: #978275;
+#menu a, #menu a:link, menu a:visited, #menu a:hover, #menu a:visited:hover, #menu a:active {
+    color: #AB2A30;
 }
 
 /* SORTABLE */
-table.sortable {
+table {
     border-collapse: collapse;
 }
-table.sortable th, table.sortable td {
+table th, table td {
     text-align: left;
     padding: 2px 12px 2px 4px;
-    // width: 100px;
     border-style: none;
     font-size: 20px;
 }
-table.sortable th {
+/*table th {
     background-color: #2A4F62;
-}
-table.sortable tr.odd td {
-    background-color: #336075 ;
+}*/
+
+table tr.odd td {
+    background-color: #336075;
     color: #DBDBDB;
 }
-table.sortable tr.even td {
+table tr.even td {
     background-color: #2A4F62;
     color: #DBDBDB;
 }
@@ -158,9 +126,11 @@ table {
 }
 
 .searchfield{
+    padding: 5px;
     background: #DBDBDB url(app/resources/search.png) right no-repeat;
     background-size: 15px 15px;
     border: solid 1px black;
+    border-radius: 5px; 
     //background: url(app/resources/search.png) no-repeat scroll 7px 7px;
 }
 
@@ -183,10 +153,10 @@ table {
 
 #ranking_container {
     margin: 0 auto;
-    width: 1100; 
+    width: 1100px; 
     min-height: 90%;
     color: #DBDBDB; 
-    background-color: #050E15;
+    background-color: #090909;
     padding-top: 25px;
     padding-right: 50px; 
     padding-left: 50px;
@@ -198,65 +168,12 @@ table {
     width: 100%; 
     min-height: 90%;
     color: #DBDBDB; 
-    background-color: #050E15;
+    background-color: #090909;
     padding-top: 25px;
     padding-right: 50px; 
     padding-left: 50px;
     padding-bottom: 70px; //top right bottom left 
 }
-
-
-/*#newmatch{
-    padding-top: 40px;
-    font-size: 20px;
-    width: 57%;
-}*/
-
-/*#winnerchx{
-    list-style-type: none;
-    display: inline-block;
-}
-
-#team0{
-    float: left; 
-    padding-right: 100px;
-}
-
-#playercheckbox3{
-    border: 8px solid red; 
-}
-
-#team1{
-    float: right;  
-}
-
-#team1label, #team2label{
-    display: inline; 
-}
-
-#addmatchtable ul{
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-
-    display: inline;
-    *display: inline;
-    zoom: 1 
-}*/
-
-/*#team1list{
-    float: left; 
-}
-#team2list{
-    float: right; 
-}*/
-
-/*
-
-<div>Icons made by <a href="http://www.flaticon.com/authors/freepik" 
-title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a>             is licensed by 
-<a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></div>
-*/
 
 #addPlayerContainer{
     color: lightgray;    

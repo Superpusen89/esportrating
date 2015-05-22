@@ -49,8 +49,8 @@ app.service('daoPlayers', function ($http, REST) {
         });
     };
 
-    this.edit = function (player_id, username, team_id, base_rating, display_rating, successCallback, errorCallback) {
-        var newPlayer = {player_id: player_id, username: username, team_id: team_id, base_rating: base_rating, display_rating: display_rating};
+    this.edit = function (player_id, username, team_id, avatar, realname, country, successCallback, errorCallback) {
+        var newPlayer = {player_id: player_id, username: username, team_id: team_id, avatar: avatar, realname: realname, countrycode: country};
         $http.put(REST.path + 'player', newPlayer).success(function (result) {
             if (typeof (successCallback) === 'function') {
                 successCallback(result);

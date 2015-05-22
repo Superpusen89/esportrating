@@ -1,0 +1,11 @@
+<h1> Add tournament </h1>
+
+<div>
+    <form ng-submit="addTournament()">
+        <label> Tournament name </label>
+        <input ng-model="newTournament.tournament_name" type="text">
+        <input type="submit" value="Add tournament" ng-disabled="!newTournament.tournament_name">
+    </form>
+</div>
+
+<div>{{status}}</div>

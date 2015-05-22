@@ -39,6 +39,8 @@ antallKallTot = 0
 #EloCalc.orderRank()
 
 #Runs one time all the way through
+#EloCalc.calculateAll()
+#EloCalc.orderRank()
 #dataLeagues = probeMethods.getLeagueListing()
 #dataLeagues = [(65001, 'The_International_2012'), (65006, 'The_International'), (600, 'The_International_2014')]
 dataLeagues = [(19, 'GosuAsiaMadness'),(65007, 'Nexon_Starter_League'), (88, 'LigaBEL') ]

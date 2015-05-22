@@ -37,8 +37,8 @@ app.service('daoMatches', function ($http, REST) {
         });
     };
 
-    this.edit = function (match_time_start, match_time_end, team_1_id, team_2_id, winning_team_id, losing_team_id, tournament_id, successCallback, errorCallback) {
-        var newMatch = {match_time_start: match_time_start, match_time_end: match_time_end, team_1_id: team_1_id, team_2_id: team_2_id, winning_team_id: winning_team_id, losing_team_id: losing_team_id, tournament_id: tournament_id};
+    this.edit = function (match_id, match_time_start, match_time_end, team_1_id, team_2_id, winning_team_id, losing_team_id, tournament_id, successCallback, errorCallback) {
+        var newMatch = {id: match_id, match_time_start: match_time_start, match_time_end: match_time_end, team_1_id: team_1_id, team_2_id: team_2_id, winning_team_id: winning_team_id, losing_team_id: losing_team_id, tournament_id: tournament_id};
         $http.put(REST.path + 'match', newMatch).success(function (result) {
             if (typeof (successCallback) === 'function') {
                 successCallback(result);
