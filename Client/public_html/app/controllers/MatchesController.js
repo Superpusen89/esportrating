@@ -44,8 +44,10 @@ app.controller('MatchesController', function ($scope, daoMatches) {
 
         console.log("clicked");
         elements = document.getElementsByName("hidden");
+        spans = document.getElementsByName("spoilerspan");
         for (var i = 0; i < elements.length; i++) {
-            elements[i].style.visibility = "visible";
+            elements[i].style.display = "block";
+            spans[i].style.display = "none";
         }
     };
 

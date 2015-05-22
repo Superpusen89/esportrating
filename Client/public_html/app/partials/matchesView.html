@@ -20,7 +20,7 @@
             <td><a href="#/match/{{match.id}}"> {{ match.match_time_start}}</a></td>
             <td><a href="#/team/{{match.team_1_id}}">{{ match.team_1_name}}</a></td>
             <td><a href="#/team/{{match.team_2_id}}">{{ match.team_2_name}}</a></td>
-            <td ng-click="showRow($index)" style="cursor:pointer"><span id="hide{{$index}}">Click to show</span><a href="#/team/{{match.winning_team_id}}" name="hidden" style="display:none" id="row{{$index}}">{{ match.winning_team}}</a></td>
+            <td ng-click="showRow($index)" style="cursor:pointer"><span name="spoilerspan" id="hide{{$index}}">Click to show</span><a href="#/team/{{match.winning_team_id}}" name="hidden" style="display:none" id="row{{$index}}">{{ match.winning_team}}</a></td>
             <td><a href="#/team/{{match.tournament_id}}">{{ match.tournament_name}}</a></td>
         </tr>
     </table>
