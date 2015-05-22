@@ -35,6 +35,10 @@ antallKallTot = 0
 
 
 #probeMethods.setDate(); # Runs ONE TIME before probemodule starts
+#EloCalc.calculateAll() # Runs one time after probe modules first runthrough
+#EloCalc.orderRank()
+
+#Runs one time all the way through
 #EloCalc.calculateAll()
 #EloCalc.orderRank()
 #dataLeagues = probeMethods.getLeagueListing()
@@ -140,7 +144,8 @@ for row in dataLeagues:
 
 
 
-##Evig while her
+##WHILE FOREVER
+#dataLeagues = probeMethods.getLeagueListing()
 #dataLeagues = [(65001, 'The_International_2012'), (65006, 'The_International'), (600, 'The_International_2014')]
 #for row in dataLeagues:
 #    league_id = row[0]

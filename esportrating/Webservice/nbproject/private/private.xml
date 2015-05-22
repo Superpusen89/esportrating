@@ -2,6 +2,15 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+<<<<<<< HEAD
+        <group>
+            <file>file:/home/henriette/Bachelor/esportrating/Webservice/src/Service/webservice.py</file>
+            <file>file:/home/henriette/Bachelor/esportrating/Webservice/src/Database/databaseconnector.py</file>
+            <file>file:/home/henriette/Bachelor/esportrating/Webservice/src/Database/databaseCreateTables.sql</file>
+            <file>file:/home/henriette/Bachelor/esportrating/Webservice/src/Service/queries.py</file>
+        </group>
+=======
         <group/>
+>>>>>>> 67dfa40c3e4199d73898de74cd2532653d4bd797
     </open-files>
 </project-private>
