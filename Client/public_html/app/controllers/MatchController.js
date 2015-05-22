@@ -214,6 +214,12 @@ app.controller('MatchController', function ($scope, $routeParams, daoMatches, da
         else {
 
             /******************** DELETE PLAYER MATCH *************************************/
+            daoPlayerMatch.reset(match_id, function () {
+                console.log("Success resetting Player_match");
+            }, function () {
+                console.log("Error resetting Player_match");
+            });
+
             daoPlayerMatch.delete(match_id, function () {
                 $scope.status = "Success deleting Player_match";
             }, function () {
@@ -249,8 +255,13 @@ app.controller('MatchController', function ($scope, $routeParams, daoMatches, da
                     $scope.checked2 = 0;
                 }
 
-
                 $scope.status = "Successfully created new match";
+
+                daoPlayerMatch.calculate(match_id, function () {
+                    console.log("Successfully calculated ELO-rating ");
+                }, function () {
+                    console.log("ELO-calculation failed");
+                });
             }, function () {
                 $scope.status = "Error creating new match";
             });

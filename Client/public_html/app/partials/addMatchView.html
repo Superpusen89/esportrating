@@ -1,7 +1,7 @@
 <section class="matchContainer">
 
     <h1> Add match</h1>
-
+    <p class="info">{{status}}</p>
     <form ng-submit="addMatch()" name="newMatch" id="newMatch">
         <p>All fields are required<br>The match must be within the current month</p>
 
@@ -62,6 +62,5 @@
         <input id="tournament" name="tournament" required="" autocomplete="off" ng-model="newMatch.tournament_id" type="text" placeholder="Tournament id" typeahead="tournament.id as tournament.id + ' ' + tournament.tournament_name for tournament in tournaments | filter:$viewValue | limitTo:8" typeahead-editable="false" typeahead-input-formatter="formatTournamentLabel($model)">
         <br>
         <input id="submit" type="submit" value="Add match">
-        <p class="info">{{status}}</p>
     </form>
 </section>

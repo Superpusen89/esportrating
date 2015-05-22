@@ -58,4 +58,32 @@ app.service('daoPlayerMatch', function ($http, REST) {
             }
         });
     };
+
+    this.calculate = function (match_id, successCallback, errorCallback) {
+        console.log("CALCULATE " + match_id);
+        var matchId = {match_id: match_id};
+        $http.put(REST.path + 'calculate', matchId).success(function (result) {
+            if (typeof (successCallback) === 'function') {
+                successCallback(result);
+            }
+        }).error(function () {
+            if (typeof (errorCallback) === 'function') {
+                errorCallback();
+            }
+        });
+    };
+
+    this.reset = function (match_id, successCallback, errorCallback) {
+        console.log("resetELO " + match_id);
+        var matchId = {match_id: match_id};
+        $http.put(REST.path + 'resetELO', matchId).success(function (result) {
+            if (typeof (successCallback) === 'function') {
+                successCallback(result);
+            }
+        }).error(function () {
+            if (typeof (errorCallback) === 'function') {
+                errorCallback();
+            }
+        });
+    };
 });

@@ -27,11 +27,11 @@ app.controller('AddMatchController', function ($scope, daoMatches, daoPlayers, d
 
         var boxOne = getCheckedBoxes("pcheckbox");
         var boxTwo = getCheckedBoxes("pcheckbox2");
-        
-        if(getCheckedBoxes("pcheckbox") === null || getCheckedBoxes("pcheckbox2") === null){
+
+        if (getCheckedBoxes("pcheckbox") === null || getCheckedBoxes("pcheckbox2") === null) {
             alert("Please select five players for each team");
         }
-        
+
         var checkedBoxes = boxOne.concat(boxTwo);
         console.log(checkedBoxes.length)
         var valueArray = [];
@@ -111,10 +111,11 @@ app.controller('AddMatchController', function ($scope, daoMatches, daoPlayers, d
                 console.log($scope.entities[0].checked);
 //            $scope.matches.push({id: $scope.match, match_time_start: match_time_start, match_time_end: match_time_end, team_1_id: team_1_id, team_2_id: team_2_id, winning_team_id: winning_team_id, losing_team_id: losing_team_id, tournament_id: tournament_id});
 
+                var match_id = parseInt($scope.match);
+
                 var checkedBoxes = getCheckedBoxes("pcheckbox");
                 for (i = 0; i < checkedBoxes.length; i++) {
                     console.log('!!!!!!!!!' + $scope.match + ' ' + checkedBoxes[i].value + ' ' + team_1_id);
-                    var match_id = parseInt($scope.match);
                     var player_id = parseInt(checkedBoxes[i].value);
                     daoPlayerMatch.add(match_id, player_id, team_1_id, function () {
                         $scope.status = "Successfully created new player_match ";
@@ -127,7 +128,6 @@ app.controller('AddMatchController', function ($scope, daoMatches, daoPlayers, d
                 var checkedBoxes2 = getCheckedBoxes("pcheckbox2");
                 for (i = 0; i < checkedBoxes2.length; i++) {
                     console.log('!!!!!!!!!' + $scope.match + ' ' + checkedBoxes2[i].value + ' ' + team_2_id);
-                    var match_id2 = parseInt($scope.match);
                     var player_id2 = parseInt(checkedBoxes2[i].value);
                     daoPlayerMatch.add(match_id, player_id2, team_2_id, function () {
                         $scope.status = "Successfully created new player_match ";
@@ -137,9 +137,13 @@ app.controller('AddMatchController', function ($scope, daoMatches, daoPlayers, d
                     $scope.checked2 = 0;
                 }
 
+                daoPlayerMatch.calculate(match_id, function () {
+                    console.log("Successfully calculated ELO-rating ");
+                }, function () {
+                    console.log("ELO-calculation failed");
+                });
+
 //            $scope.match, checkedBoxes[i].value, team_1_id
-
-
                 $scope.status = "Successfully created new match";
             }, function () {
                 $scope.status = "Error creating new match";
@@ -149,6 +153,7 @@ app.controller('AddMatchController', function ($scope, daoMatches, daoPlayers, d
             $scope.newMatch.team_1_id = '';
             $scope.newMatch.team_2_id = '';
             $scope.newMatch.tournament_id = '';
+
         }
     };
     daoPlayers.getAll(function (players) {

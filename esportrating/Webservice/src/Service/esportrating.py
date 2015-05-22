@@ -522,6 +522,7 @@ def create_player_match():
     
     cursor.execute("INSERT INTO Player_match (match_id, player_id, team_id) VALUES ('%d', '%d', '%d')" % (match_id, player_id, team_id))
     conn.commit()
+    
     return "%d is added" % match_id  
 
 @app.route('/player_match/<int:match_id>,<int:team_id>', methods=['GET', 'OPTIONS'])
@@ -565,7 +566,23 @@ def update_player_match():
     cursor.execute("UPDATE Player_match SET player_id = '%d', team_id = '%d' WHERE player_id = '%d' AND team_id = '%d' AND match_id = '%d'" % (new_player_id, new_team_id, old_player_id, old_team_id, match_id))
     conn.commit()   
 
-    return "Successfully updated"
+    return "Successfully updated match %d " % match_id
+
+@app.route('/calculate', methods=['PUT', 'OPTIONS'])
+@crossdomain(origin='*')
+def calculate():
+    match_id = request.get_json().get('match_id', '');
+    print "CALCULATE Match id: ", match_id, " Type: ", type(match_id)
+    eloCalc(match_id)
+    return "Successfully calculated match %d" % match_id
+
+@app.route('/resetELO', methods=['PUT', 'OPTIONS'])
+@crossdomain(origin='*')
+def reset():
+    match_id = request.get_json().get('match_id', '');
+    print "RESET Match id: ", match_id, " Type: ", type(match_id)
+    resetDisplayRating(match_id)
+    return "Successfully resat match %d" % match_id    
 
 @app.route('/countries', methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
