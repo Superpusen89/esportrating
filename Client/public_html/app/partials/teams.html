@@ -9,7 +9,7 @@
             <th>Team</th>
             <th>Number of matches</th>
         </tr>
-        <tr ng-repeat="team in teams| filter:searchTeam | orderBy:'id'">
+        <tr ng-repeat="team in teams| filter:searchTeam | orderBy:'id'" such-href="/team/{{team.id}}">
             <td>
                 <a href="#/team/{{team.id}}"> {{ team.team_name}} </a> 
             </td>

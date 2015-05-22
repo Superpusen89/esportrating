@@ -6,17 +6,15 @@
         <tr>
             <th> Match id </th>
             <th> Start time </th>
-            <th> End time </th>
             <th> Winning team </th>
             <th> Losing team </th>
             <th> Tournament id </th>
         </tr>
-        <tr ng-repeat="match in matches| filter:searchText | orderBy:sortorder">
+        <tr ng-repeat="match in matches| filter:searchText | orderBy:sortorder" class='clickable-row'>
             <td>
                 <a href="#/editMatch/{{match.id}}"> {{ match.id}} </a> 
             </td>
             <td><a href="#/editMatch/{{match.id}}">{{ match.match_time_start}}</td>
-            <td>{{ match.match_time_end}}</td>
             <td>{{ match.winning_team}}</td>
             <td>{{ match.losing_team}}</td>
             <td>{{ match.tournament_name}}</td>

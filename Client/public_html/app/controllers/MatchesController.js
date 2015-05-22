@@ -1,6 +1,12 @@
 app.controller('MatchesController', function ($scope, daoMatches) {
     $scope.status = "...loading";
-    
+
+//    jQuery(document).ready(function ($) {
+//        $(".clickable-row").click(function () {
+//            window.document.location = $(this).data("href");
+//        });
+//    });
+
     console.log('matchescontroller loaded');
 
     daoMatches.getAll(function (matches) {
@@ -9,5 +15,7 @@ app.controller('MatchesController', function ($scope, daoMatches) {
     }, function () {
         $scope.status = "Error loading matches";
     });
+
+
 });
 

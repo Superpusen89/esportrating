@@ -2,8 +2,6 @@ html, body{
     height: 100%;
     overflow: hidden;
     background-color: #090909 !important; 
-    //#191919
-    //#231F20
 }
 
 body{
@@ -16,7 +14,6 @@ body{
 }
 
 #page-wrap{
-    // margin-top: 70px;
     overflow-y: scroll; 
     height: 100%;
 }
@@ -26,7 +23,6 @@ body{
     width: 1100px; 
     min-height: 100%;
     color: #DBDBDB; 
-    //background-color: #050E15;
 }
 
 @font-face {
@@ -49,15 +45,11 @@ header{
 }
 
 #menu{
-    //width: 100%;
-    /*background-color: #231F20;*/ 
     background-color: #090909; 
     height: 125px;
     line-height: 125px;
-    /*color: #978275;*/ 
     color: #AB2A30;
     font-size: 20px;
-    /*font-family: TrajanusBricks;*/
     font-family: Steinerlight; 
     text-align: center; 
     text-transform: lowercase;
@@ -72,10 +64,6 @@ header{
 aside{
     float: left; 
     padding-top: 70px; 
-}
-
-aside a, aside a:link, aside a:visited, aside a:hover, aside a:visited:hover, aside a:active {
-    color: #AB2A30;
 }
 
 #admin_nav ul{
@@ -95,25 +83,17 @@ aside a, aside a:link, aside a:visited, aside a:hover, aside a:visited:hover, as
 }
 
 #menu a, #menu a:link, menu a:visited, #menu a:hover, #menu a:visited:hover, #menu a:active {
-    color: #AB2A30;
+    color: #AB2A30 !important;
 }
 
-/* SORTABLE */
-
-/*table {
-    width: 900px;
-}*/
-
-/*tbody {
-    height: 100%;
-    overflow: auto;
+aside a, aside a:link, aside a:visited, aside a:hover, aside a:visited:hover, aside a:active {
+    color: #AB2A30 !important;
 }
 
-thead > tr, tbody{
-    display:block;
-}*/
-
-
+a, a:link, a:visited, a:hover, a:visited:hover, a:active {
+    color: #9E8F84;
+    font-weight: bold; 
+}
 
 table {
     border-collapse: collapse;
@@ -124,20 +104,6 @@ table th, table td {
     border-style: none;
     font-size: 20px;
 }
-/*table th {
-    background-color: #2A4F62;
-}*/
-
-/*table tr.odd td {
-    background-color: #336075;
-    color: #DBDBDB;
-}
-table tr.even td {
-    background-color: #2A4F62;
-    color: #DBDBDB;
-}*/
-
-/* END SORTABLE */
 
 /* SEARCH */
 
@@ -169,31 +135,6 @@ table tr.even td {
 
 
 /* END SEARCH */
-/*
-#ranking_container {
-    margin: 0 auto;
-    width: 1100px; 
-    min-height: 90%;
-    color: #DBDBDB; 
-    background-color: #090909;
-    padding-top: 25px;
-    padding-right: 50px; 
-    padding-left: 50px;
-    padding-bottom: 70px; //top right bottom left 
-}*/
-
-
-/*#matches_container {
-    margin: 0 auto;
-    width: 100%; 
-    min-height: 90%;
-    color: #DBDBDB; 
-    background-color: #090909;
-    padding-top: 25px;
-    padding-right: 50px; 
-    padding-left: 50px;
-    padding-bottom: 70px; 
-}*/
 
 #addPlayerContainer{
     color: lightgray;    
@@ -204,10 +145,6 @@ table tr.even td {
 #addPlayerContainer label{
     padding-right: 30px;
     color: #9E8F84;
-}
-
-#addPlayerContainer input, #addPlayerContainer label{
-    // display: block;
 }
 
 #addPlayerContainer input {
@@ -308,25 +245,67 @@ table tr.even td {
     font-weight: bold;
 }
 
-.matchContainer #winnerchx li {
-    list-style-type: none!important; 
-}
-
-.matchContainer #t1l li, .matchContainer #t2l li {
+.matchContainer #winnerchx li, .matchContainer #t1l li, .matchContainer #t2l li {
     list-style-type: none!important; 
 }
 
 .matchContainer{
-    width: 41em;
+    width: 50em;
     margin: 0 auto;
+    color: #9E8F84;
 }
 
-.matchContainer #team2list{
+.matchContainer label{
+    padding: 0 !important;
+}
+
+.matchContainer #team1label, .matchContainer #team_1{
+    display: block;
+}
+
+.matchContainer #team2label, .matchContainer #team_2{
+    display: block;
+}
+
+.matchContainer #team_1, .matchContainer #team_2{
+    margin-bottom: 2em;
+}
+
+.matchContainer .inline{
+    display: inline-block!important; 
+}
+
+.matchContainer .new_player_1, .matchContainer .newplayer1{
+    display: block;
+}
+
+.matchContainer .new_player_2, .matchContainer .newplayer2{
+    display: block;
+}
+.matchContainer .inline2{
+    display: inline-block!important; 
+}
+
+.matchContainer .start_time, .matchContainer .starttime{
+    display: block;
+}
+
+.matchContainer .end_time, .matchContainer .endtime{
+    display: block;
+}
+.matchContainer .inline3{
+    display: inline-block!important; 
+}
+
+
+/*.matchContainer #team2list{
     float: left;
 }
 
+*/
+
 .matchContainer #team2list{
-    float: right; 
+    padding-left: 15em; 
 }
 
 .matchContainer #team2list label, .matchContainer #team1list label, .matchContainer #team2list ul, .matchContainer #team1list ul, .matchContainer #team2list li, .matchContainer #team1list li{
@@ -337,29 +316,56 @@ table tr.even td {
     display: inline !important;
 }
 
+/*.matchContainer input, .matchContainer label {
+    display:block;
+}*/
+
 .matchContainer #t2l{
     display: inline !important;
 }
 
-.matchContainer ul{
+.matchContainer #winnerchx{
     display: inline-block!important; 
+    padding: 0 15.7em 0 0!important;
+
 }
+
+/*.matchContainer #team_1, .matchContainer #team_2{
+    display: inline-block!important; 
+}*/
 
 .matchContainer #team_1, .matchContainer #team_2{
     display: inline-block!important; 
+    margin-right: 3em !important;
+    margin-bottom: 0.5em; 
 }
 
 .matchContainer #start_time, .matchContainer #end_time{
-    display: inline-block!important;  
+    display: inline-block!important; 
+    margin-right: 3em !important;
+    margin-bottom: 2em; 
 }
 
 .matchContainer #team1list, .matchContainer #team2list{
     display: inline-block!important; 
+    vertical-align: top;
+    margin-bottom: 2em; 
 }
 
 .matchContainer #newplayer1, .matchContainer #newplayer2{
     display: inline-block!important; 
+    margin-right: 3em !important;
+    margin-bottom: 2em; 
 }
+
+.matchContainer .tournamentlabel, .matchContainer #tournament{
+    display: block; 
+    margin-right: 3em !important;
+}
+
+/*.matchContainer .submit{
+    margin-left: 31em !important; 
+}*/
 
 /*.matchContainer #tournament, .matchContainer .submit{
     display: inline-block!important; 
@@ -400,12 +406,12 @@ table tr.even td {
 /*#playersContainer table{
     width: 90em !important;
 }*/
-#playersContainer{
+.playersContainer{
     width: 60em;
     margin: 0 auto;
 }
 
-#playersContainer table{
+.playersContainer table{
     margin-top: 2em;
     width: 60em !important;
 }
@@ -443,32 +449,16 @@ table tr.even td {
     float: right; 
 }*/
 
-#playerContainer a, #playerContainer a:link, #playerContainer a:visited, #playerContainer a:hover, #playerContainer a:visited:hover, #playerContainer a:active {
-    color: #9E8F84;
+/*tr {
+  cursor: pointer;
 }
-
-#playersContainer a, #playersContainer a:link, #playersContainer a:visited, #playersContainer a:hover, #playersContainer a:visited:hover, #playersContainer a:active {
-    color: #9E8F84;
-}
-
-#matchesContainer a, #matchesContainer a:link, #matchesContainer a:visited, #matchesContainer a:hover, #matchesContainer a:visited:hover, #matchesContainer a:active {
-    color: #9E8F84;
-}
-
-#editMatchesContainer a, #editMatchesContainer a:link, #editMatchesContainer a:visited, #editMatchesContainer a:hover, #editMatchesContainer a:visited:hover, #editMatchesContainer a:active {
-    color: #9E8F84;
-}
+// or
+[ng-click] {
+  cursor: pointer;
+}*/
 
 .bold{
     font-weight: bold; 
-}
-
-.tournamentContainer a, .tournamentContainer a:link, .tournamentContainer a:visited, .tournamentContainer a:hover, .tournamentContainer a:visited:hover, .tournamentContainer a:active {
-    color: #9E8F84;
-}
-
-#teamsContainer a, #teamsContainer a:link, #teamsContainer a:visited, #teamsContainer a:hover, #teamsContainer a:visited:hover, #teamsContainer a:active {
-    color: #9E8F84;
 }
 
 .tournamentContainer{
@@ -486,12 +476,12 @@ table tr.even td {
     width: 90em;
 }
 
-#matchesContainer, #editMatchesContainer, #playersContainer{
+#matchesContainer, #editMatchesContainer, .playersContainer{
     color: #9E8F84;
 }
 
 #matchesContainer td, #editMatchesContainer td{
-    font-size: 1.3em;
+    font-size: 1.2em;
 }
 
 #teamContainer table, #teamsContainer table{
@@ -504,6 +494,14 @@ table tr.even td {
 }
 
 #matchesContainer table tr:nth-child(even){
+    background-color: #4d3f3f !important; 
+}
+
+#editMatchesContainer table tr:nth-child(even){
+    background-color: #4d3f3f !important; 
+}
+
+.playersContainer table tr:nth-child(even){
     background-color: #4d3f3f !important; 
 }
 /*#teamContainer table tr:nth-child(even){
@@ -529,14 +527,6 @@ table tr.even td {
     padding: 0; 
 }
 
-.tournamentsContainer a, .tournamentsContainer a:link, .tournamentsContainer a:visited, .tournamentsContainer a:hover, .tournamentsContainer a:visited:hover, .tournamentsContainer a:active {
-    color: #9E8F84;
-}
-
-#teamContainer a, #teamContainer a:link, #teamContainer a:visited, #teamContainer a:hover, #teamContainer a:visited:hover, #teamContainer a:active {
-    color: #9E8F84;
-}
-
 h1{
     font-family: Steinerlight !important;
     font-size: 2em;
@@ -549,7 +539,7 @@ h2{
     color: #9E8F84; 
 }
 
-p, .matchContainer label{
+p{
     padding-top: 1em;
     font-family: Helvetica;
     font-size: 1em;

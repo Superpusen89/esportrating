@@ -1,9 +1,10 @@
 
 <section id="matchesContainer">
+    <h1>Matches</h1>
     <p class="search"> <input class="searchfield" type="text" placeholder="Search matches" ng-model="searchText"></p>
     <p>Click the match time to view match details</p>
 
-    <table>
+   <table id="matchTable">
         <tr>
             <th> Start time </th>
             <th> Team 1 </th>
@@ -11,7 +12,7 @@
             <th> Winning team </th>
             <th> Tournament </th>
         </tr>
-        <tr ng-repeat="match in matches| filter:searchText | orderBy:sortorder">
+        <tr ng-repeat="match in matches| filter:searchText | orderBy:sortorder" such-href="/match/{{match.id}}">
             <td><a href="#/match/{{match.id}}"> {{ match.match_time_start}}</a></td>
             <td><a href="#/team/{{match.team_1_id}}">{{ match.team_1_name}}</a></td>
             <td><a href="#/team/{{match.team_2_id}}">{{ match.team_2_name}}</a></td>

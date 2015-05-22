@@ -3,7 +3,7 @@
 
     <p>Click a match for match details</p>
     <table>
-        <tr ng-repeat="match in matches| filter:searchText | orderBy:sortorder">
+        <tr ng-repeat="match in matches| filter:searchText | orderBy:sortorder" such-href="/match/{{match.id}}">
             <td>
                 <a href="#/match/{{ match.id}}"> 
                     {{match.match_time_start}} - <span class="team">{{match.team_1_name}}</span> <span class="vs">vs</span> <span class="team">{{match.team_2_name}}</span>

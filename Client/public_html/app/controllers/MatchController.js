@@ -1,5 +1,5 @@
 app.run(function (editableOptions) {
-    editableOptions.theme = 'bs3';
+    editableOptions.theme = 'bs2';
 });
 
 app.controller('MatchController', function ($scope, $routeParams, daoMatches, daoPlayerMatch, daoTeams, daoPlayers, daoTournaments) {
@@ -7,24 +7,20 @@ app.controller('MatchController', function ($scope, $routeParams, daoMatches, da
 
     daoMatches.get($routeParams.matchId, function (match) {
         $scope.match = match;
-
         /*************************** GET PLAYER_MATC FOR TEAM 1 ***********************************************/
         daoPlayerMatch.get($routeParams.matchId, $scope.match.data[0].team_1_id, function (playermatch) {
             $scope.players1 = playermatch.data;
-            console.log("players1 " + $scope.players1[0].player_id)
             $scope.status = "";
         }, function () {
             $scope.status = "Error loading playermatchwinner";
         });
-
-        /*************************** GET PLAYER_MATC FOR TEAM 1 ***********************************************/
+        /*************************** GET PLAYER_MATC FOR TEAM 2 ***********************************************/
         daoPlayerMatch.get($routeParams.matchId, $scope.match.data[0].team_2_id, function (playermatch) {
             $scope.players2 = playermatch.data;
             $scope.status = "";
         }, function () {
             $scope.status = "Error loading playermatchloser";
         });
-
         if ($scope.match.data[0].team_1_id === $scope.match.data[0].winning_team_id) {
             $scope.entities = [{
                     checked: true
@@ -46,29 +42,68 @@ app.controller('MatchController', function ($scope, $routeParams, daoMatches, da
         }
 
         /*************************** SET INPUT FIELD VALUES ***********************************************/
-        document.getElementById("team_1").value = $scope.match.data[0].team_1_id + " " + $scope.team_1_name;
-        document.getElementById("team_2").value = $scope.match.data[0].team_2_id + " " + $scope.team_2_name;
-        document.getElementById("start_time").value = $scope.match.data[0].f_time_start;
-        document.getElementById("end_time").value = $scope.match.data[0].f_time_end;
-        document.getElementById("tournament").value = $scope.match.data[0].tournament_id + " " + $scope.match.data[0].tournament_name;
+        if (document.getElementById("team_1") !== null) {
+            document.getElementById("team_1").value = $scope.match.data[0].team_1_id + " " + $scope.team_1_name;
+            document.getElementById("team_2").value = $scope.match.data[0].team_2_id + " " + $scope.team_2_name;
+            document.getElementById("start_time").value = $scope.match.data[0].f_time_start;
+            document.getElementById("end_time").value = $scope.match.data[0].f_time_end;
+            document.getElementById("tournament").value = $scope.match.data[0].tournament_id + " " + $scope.match.data[0].tournament_name;
 
-        /*************************** GET OLD VALUES  ***********************************************/
-        $scope.newMatch.match_time_start = $scope.match.data[0].f_time_start;
-        $scope.newMatch.match_time_end = $scope.match.data[0].f_time_end;
-        $scope.newMatch.team_1_id = parseInt($scope.match.data[0].team_1_id);
-        $scope.newMatch.team_2_id = parseInt($scope.match.data[0].team_2_id);
-        $scope.newMatch.winning_team_id = parseInt($scope.match.data[0].winning_team_id);
-        $scope.newMatch.losing_team_id = parseInt($scope.match.data[0].losing_team_id);
-        $scope.newMatch.tournament_id = parseInt($scope.match.data[0].tournament_id);
+            /*************************** GET OLD VALUES  ***********************************************/
+            $scope.newMatch.match_time_start = $scope.match.data[0].f_time_start;
+            $scope.newMatch.match_time_end = $scope.match.data[0].f_time_end;
+            $scope.newMatch.team_1_id = parseInt($scope.match.data[0].team_1_id);
+            $scope.newMatch.team_2_id = parseInt($scope.match.data[0].team_2_id);
+            $scope.newMatch.winning_team_id = parseInt($scope.match.data[0].winning_team_id);
+            $scope.newMatch.losing_team_id = parseInt($scope.match.data[0].losing_team_id);
+            $scope.newMatch.tournament_id = parseInt($scope.match.data[0].tournament_id);
+            $scope.status = "";
+        }
 
-        $scope.status = "";
+        var startDate = new Date($scope.match.data[0].f_time_start);
+        var currentDate = new Date();
+        var form = document.getElementById("editMatch");
+
+        /*
+         * Code taken from 
+         * http://stackoverflow.com/questions/7709803/javascript-get-minutes-between-two-dates
+         */
+        var start = new Date($scope.match.data[0].match_time_start);
+        var end = new Date($scope.match.data[0].match_time_end);
+        var diffMs = (end - start); //milliseconds
+//        var diffDays = Math.round(diffMs / 86400000); // days
+//        var diffHrs = Math.round((diffMs % 86400000) / 3600000); // hours
+        var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes
+        $scope.duration = diffMins;
+        console.log("start " + start + " end " + end + " diffms " + diffMs + " diffmins " + diffMins)
+
+        /*
+         * end code
+         */
+
+        if (startDate.getMonth() !== currentDate.getMonth() || startDate.getYear() !== currentDate.getYear()) {
+            var elements = form.elements;
+            for (var i = 0, len = elements.length; i < len; ++i) {
+                elements[i].readOnly = true;
+            }
+            document.getElementById("submit").disabled = true;
+            document.getElementById("error").innerHTML = "<br><br>This match is too old to be edited.";
+        } else {
+            console.log("startmonth " + startDate.getMonth() + " curmonth " + currentDate.getMonth() + " startyear " + startDate.getYear() + " curyear" + currentDate.getYear());
+        }
+
     }, function () {
         $scope.status = "Error loading match " + $routeParams.matchId;
     });
 
+
+
+
     /*************************** ON PRESS SAVE ***********************************************/
     $scope.editMatch = function () {
+
         var match_time_start = $scope.newMatch.match_time_start;
+        console.log(match_time_start);
         var match_time_end = $scope.newMatch.match_time_end;
         var team_1_id = parseInt($scope.newMatch.team_1_id);
         var team_2_id = parseInt($scope.newMatch.team_2_id);
@@ -76,14 +111,6 @@ app.controller('MatchController', function ($scope, $routeParams, daoMatches, da
         var losing_team_id = parseInt($scope.newMatch.losing_team_id);
         var tournament_id = parseInt($scope.newMatch.tournament_id);
         var match_id = parseInt($routeParams.matchId);
-
-        console.log("Match time start: " + match_time_start);
-        console.log("Match time end: " + match_time_end);
-        console.log("Team 1 id: " + team_1_id);
-        console.log("Tead 2 id: " + team_2_id);
-        console.log("Winning team id: " + winning_team_id);
-        console.log("Losing team id: " + losing_team_id);
-
         /****************************** FIND WINNING TEAM ***************************************/
         if ($scope.entities[0].checked === true) {
             winning_team_id = $scope.newMatch.team_1_id;
@@ -95,89 +122,157 @@ app.controller('MatchController', function ($scope, $routeParams, daoMatches, da
             losing_team_id = $scope.newMatch.team_1_id;
         }
 
+        /*********************************************************** VALIDATE ***************************************************/
+        /*
+         * code from 
+         * http://stackoverflow.com/questions/22979762/jquery-check-if-array-contains-duplicate-string
+         */
 
-        /******************** DELETE PLAYER MATCH *************************************/
-        daoPlayerMatch.delete(match_id, function () {
-            $scope.status = "Success deleting Player_match";
-        }, function () {
-            $scope.status = "Error deleting Player_match";
-        });
+        var boxOne = getCheckedBoxes("pcheckbox");
+        var boxTwo = getCheckedBoxes("pcheckbox2");
 
-        /****************************** EDIT MATCH ********************************************************************/
-        daoMatches.edit(match_id, match_time_start, match_time_end, team_1_id, team_2_id, winning_team_id, losing_team_id, tournament_id, function (match) {
-            $scope.match = match;
-            console.log('The match id is ' + $scope.match);
-            console.log($scope.entities[0].checked);
+        if (getCheckedBoxes("pcheckbox") === null || getCheckedBoxes("pcheckbox2") === null) {
+            alert("Please select five players for each team");
+        }
 
-            var checkedBoxes = getCheckedBoxes("pcheckbox");
-            for (i = 0; i < checkedBoxes.length; i++) {
-                console.log('----------------------------- length ' + checkedBoxes.length);
-                console.log('---------------------------- scopematch checkboxesvalue teamid' + checkedBoxes[i].value);
+        var checkedBoxes = boxOne.concat(boxTwo);
 
-                var new_team_id = parseInt(team_1_id);
-                console.log("THE TEAM ID = " + new_team_id);
+        console.log(checkedBoxes.length)
+        var valueArray = [];
+        for (var i = 0; i < checkedBoxes.length; i++) {
+            valueArray.push(checkedBoxes[i].value);
+        }
 
-                var new_player_id = parseInt(checkedBoxes[i].value);
-                console.log("NEW PLAYER ID IS " + new_player_id);
-
-                console.log("MATCH ID IS " + match_id);
-
-                /****************************** ADD TO PLAYER MATCH ******************************************************/
-
-                daoPlayerMatch.add(match_id, new_player_id, new_team_id, function () {
-                    $scope.status = "Successfully edited player_match ";
-                }, function () {
-                    $scope.status = "Error editing player_match";
-                });
-
-                $scope.checked1 = 0;
+        var recipientsArray = valueArray.sort();
+        var reportRecipientsDuplicate = [];
+        for (var i = 0; i < recipientsArray.length - 1; i++) {
+            if (recipientsArray[i + 1] === recipientsArray[i]) {
+                reportRecipientsDuplicate.push(recipientsArray[i]);
+                console.log("array values same: " + recipientsArray[i] + " i is " + i);
             }
+            console.log("array values dist: " + recipientsArray[i] + " i is " + i);
+        }
 
-            var checkedBoxes2 = getCheckedBoxes("pcheckbox2");
-            for (i = 0; i < checkedBoxes2.length; i++) {
-                console.log('!!!!!!!!!' + $scope.match + ' ' + checkedBoxes2[i].value + ' ' + team_2_id);
+        var tournamentArray = [];
+        for (i = 0; i < $scope.tournaments.length; i++) {
+            tournamentArray.push($scope.tournaments[i].id);
+        }
+
+        var tournament = 0;
+        if ($.inArray(tournament_id, tournamentArray) !== -1) {
+            tournament = 1;
+        }
+
+        var teamArray = [];
+        for (i = 0; i < $scope.teams.length; i++) {
+            teamArray.push($scope.teams[i].id);
+        }
+
+        var team1 = 0;
+        if ($.inArray(team_1_id, teamArray) !== -1) {
+            team1 = 1;
+        }
+
+        var team2 = 0;
+        if ($.inArray(team_2_id, teamArray) !== -1) {
+            team2 = 1;
+        }
+
+        /*
+         * code end
+         */
+
+        var startDate = new Date(match_time_start);
+        var endDate = new Date(match_time_end);
+        var currentDate = new Date();
 
 
-                var new_team_id_2 = parseInt($scope.newMatch.team_2_id);
-                var new_player_id_2 = parseInt(checkedBoxes2[i].value);
+        if ($scope.entities[0].checked !== true && $scope.entities[1].checked !== true) {
+            console.log("No winning team selected");
+            alert("Please check a winning team");
+        } else if (tournament === 0) {
+            alert("Enter a valid tournament")
+        } else if (team1 === 0) {
+            alert("Enter a valid team")
+        } else if (team2 === 0) {
+            alert("Enter a valid team")
+        } else if (team_1_id === team_2_id) {
+            console.log("Teams must be distinct");
+            alert("Please select two different teams")
+        } else if (startDate.getMonth() !== currentDate.getMonth() || startDate.getYear() !== currentDate.getYear()) {
+            alert("The match must be within the current month and year");
+        } else if (startDate.getTime() > endDate.getTime()) {
+            alert("End time can't be after start time");
+        } else if (getCheckedBoxes("pcheckbox") === null || getCheckedBoxes("pcheckbox2") === null) {
+            console.log("Wrong player count");
+            alert("Please select five players for each team");
+        } else if (getCheckedBoxes("pcheckbox").length !== 5 || getCheckedBoxes("pcheckbox2").length !== 5) {
+            alert("Both teams must have exactly five players");
+        } else if (reportRecipientsDuplicate.length > 0) {
+            alert("You can't select the same player more than once");
+        }
+        else {
 
-                daoPlayerMatch.add(match_id, new_player_id_2, new_team_id_2, function () {
-                    $scope.status = "Successfully edited player_match ";
-                }, function () {
-                    $scope.status = "Error editing player_match";
-                });
+            /******************** DELETE PLAYER MATCH *************************************/
+            daoPlayerMatch.delete(match_id, function () {
+                $scope.status = "Success deleting Player_match";
+            }, function () {
+                $scope.status = "Error deleting Player_match";
+            });
+            /****************************** EDIT MATCH ********************************************************************/
+            daoMatches.edit(match_id, match_time_start, match_time_end, team_1_id, team_2_id, winning_team_id, losing_team_id, tournament_id, function (match) {
+                $scope.match = match;
+                var checkedBoxes = getCheckedBoxes("pcheckbox");
+                for (i = 0; i < checkedBoxes.length; i++) {
+                    var new_team_id = parseInt(team_1_id);
+                    var new_player_id = parseInt(checkedBoxes[i].value);
+                    console.log("checkboxvalue " + checkedBoxes[i].value)
+                    /****************************** ADD TO PLAYER MATCH ******************************************************/
 
-                $scope.checked2 = 0;
-            }
+                    daoPlayerMatch.add(match_id, new_player_id, new_team_id, function () {
+                        $scope.status = "Successfully edited player_match ";
+                    }, function () {
+                        $scope.status = "Error editing player_match";
+                    });
+                    // $scope.checked1 = 0;
+                }
+
+                var checkedBoxes2 = getCheckedBoxes("pcheckbox2");
+                for (i = 0; i < checkedBoxes2.length; i++) {
+                    var new_team_id_2 = parseInt($scope.newMatch.team_2_id);
+                    var new_player_id_2 = parseInt(checkedBoxes2[i].value);
+                    daoPlayerMatch.add(match_id, new_player_id_2, new_team_id_2, function () {
+                        $scope.status = "Successfully edited player_match ";
+                    }, function () {
+                        $scope.status = "Error editing player_match";
+                    });
+                    $scope.checked2 = 0;
+                }
 
 
-            $scope.status = "Successfully created new match";
-        }, function () {
-            $scope.status = "Error creating new match";
-        });
-    };
-
+                $scope.status = "Successfully created new match";
+            }, function () {
+                $scope.status = "Error creating new match";
+            });
+        }
+    }
+    ;
     daoPlayers.getAll(function (players) {
         $scope.players = players.data;
         $scope.status = "";
     }, function () {
-        $scope.status = "Error loading Players";
+        $scope.status = "Error loading players";
     });
-
     daoTeams.getAll(function (teams) {
         $scope.teams = teams.data;
-        console.log('********************** scope teams' + $scope.teams);
     }, function () {
-        console.log('Error loading Teams');
+        console.log('Error loading teams');
     });
-
     daoTournaments.getAll(function (tournaments) {
         $scope.tournaments = tournaments.data;
-        console.log('********************** scope tournament' + $scope.tournaments);
     }, function () {
-        console.log('Error loading Tournaments');
+        console.log('Error loading tournaments');
     });
-
     $scope.formatLabel = function (model) {
         for (var i = 0; i < $scope.teams.length; i++) {
             if (model === $scope.teams[i].id) {
@@ -185,7 +280,6 @@ app.controller('MatchController', function ($scope, $routeParams, daoMatches, da
             }
         }
     };
-
     $scope.formatTournamentLabel = function (model) {
         for (var i = 0; i < $scope.tournaments.length; i++) {
             if (model === $scope.tournaments[i].id) {
@@ -193,7 +287,6 @@ app.controller('MatchController', function ($scope, $routeParams, daoMatches, da
             }
         }
     };
-
     $scope.formatPlayerLabel = function (model) {
         for (var i = 0; i < $scope.players.length; i++) {
             if (model === $scope.players[i].player_id) {
@@ -201,7 +294,6 @@ app.controller('MatchController', function ($scope, $routeParams, daoMatches, da
             }
         }
     };
-
     $scope.updateSelection = function (position, entities) {
         angular.forEach(entities, function (subscription, index) {
             if (position != index)
@@ -210,53 +302,86 @@ app.controller('MatchController', function ($scope, $routeParams, daoMatches, da
     }
 
     $scope.onSelect3 = function ($model) {
-        console.log('please the id is ' + $model);
         player1 = $model;
         daoPlayers.get(player1, function (player) {
             $scope.players1.push(player.data[0]);
             document.getElementById("newplayer1").value = "";
-            console.log('----------' + player.data[0].player_id + ' ' + player.data[0].username);
         });
     };
-
     $scope.onSelect4 = function ($model) {
-        console.log('please ' + $model);
         player2 = $model;
         daoPlayers.get(player2, function (player) {
             $scope.players2.push(player.data[0]);
             document.getElementById("newplayer2").value = "";
-            console.log('----------' + player.data[0].player_id);
+
         });
     };
 
-    $scope.limit = 5;
+    /*
+     * 
+     * following code taken from 
+     * http://stackoverflow.com/questions/15207788/calling-a-function-when-ng-repeat-has-finished
+     * and
+     * http://www.w3schools.com/jsref/met_doc_getelementsbyname.asp
+     */
 
-    $scope.items1 = [];
-    $scope.checked1 = 0;
-    for (var i = 0; i < 100; i++) {
-        $scope.items1.push({team1: false})
-    }
+//    $scope.$on('ngRepeatFinished', function (ngRepeatFinishedEvent) {
+//        console.log("CHECK CHECKBOXES");
+//        var x = document.getElementsByName("pcheckbox");
+//        for (i = 0; i < x.length; i++) {
+//            if (x[i].type == "checkbox") {
+//                x[i].checked = true;
+//                console.log(i);
+//                console.log("CHECBOX LENGTH VALUE IS ") + x[i];
+//            }
+//        }
+//
+//
+//        console.log("CHECK CHECKBOXES 2");
+//        var y = document.getElementsByName("pcheckbox2");
+//        for (i = 0; i < y.length; i++) {
+//            if (y[i].type == "checkbox") {
+//                y[i].checked = true;
+//
+//                console.log("CHECBOX LENGTH VALUE IS ") + y[i].value;
+//            }
+//        }
+//    });
 
-    $scope.checkChanged1 = function (item1) {
-        if (item1.team1)
-            $scope.checked1++;
-        else
-            $scope.checked1--;
-    }
+    /*
+     * code end
+     */
 
-    $scope.items2 = [];
-    $scope.checked2 = 0;
-    for (var i = 0; i < 100; i++) {
-        $scope.items2.push({team2: false})
-    }
+    /* Following code is taken from Stackoverflow*/
 
-    $scope.checkChanged2 = function (item2) {
-        if (item2.team2)
-            $scope.checked2++;
-        else
-            $scope.checked2--;
-    }
 
+//    $scope.limit = 5;
+//    $scope.items1 = [];
+//    $scope.checked1 = 0;
+//    for (var i = 0; i < 100; i++) {
+//        $scope.items1.push({team1: false})
+//    }
+//
+//    $scope.checkChanged1 = function (item1) {
+//        if (item1.team1)
+//            $scope.checked1++;
+//        else
+//            $scope.checked1--;
+//    }
+//
+//    $scope.items2 = [];
+//    $scope.checked2 = 0;
+//    for (var i = 0; i < 100; i++) {
+//        $scope.items2.push({team2: false})
+//    }
+//
+//    $scope.checkChanged2 = function (item2) {
+//        if (item2.team2)
+//            $scope.checked2++;
+//        else
+//            $scope.checked2--;
+//    }
+//
     function getCheckedBoxes(chkboxName) {
         var checkboxes = document.getElementsByName(chkboxName);
         var checkboxesChecked = [];
@@ -265,10 +390,7 @@ app.controller('MatchController', function ($scope, $routeParams, daoMatches, da
             // And stick the checked ones onto an array...
             if (checkboxes[i].checked) {
                 checkboxesChecked.push(checkboxes[i]);
-                console.log("box is checked and the value is " + checkboxes[i].value)
             }
-            console.log("box is unchecked and the value is " + checkboxes[i].value)
-            console.log("the length of the boxes is " + checkboxes.length)
         }
         // Return the array if it is non-empty, or null
         return checkboxesChecked.length > 0 ? checkboxesChecked : null;

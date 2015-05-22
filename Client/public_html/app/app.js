@@ -1,4 +1,27 @@
-var app = angular.module('clientApp', ['ngRoute', 'xeditable', 'ui.bootstrap']); /* 'ngResource', 'ngProgress' */
+/*
+ * 
+ * following code taken from 
+ * http://stackoverflow.com/questions/18344569/setting-ng-href-in-tr-elements/23699554#23699554
+ */
+
+var app = angular.module('clientApp', ['ngRoute', 'xeditable', 'ui.bootstrap']) 
+.directive('suchHref', ['$location', function ($location) {
+  return{
+    restrict: 'A',
+    link: function (scope, element, attr) {
+      element.attr('style', 'cursor:pointer');
+      element.on('click', function(){
+        $location.path(attr.suchHref)
+        scope.$apply();
+      });
+    }
+  }
+}])
+;
+
+/*
+ * code end
+ */
 
 //webshims.setOptions('forms-ext', {types: 'date'});
 //webshims.polyfill('forms forms-ext');

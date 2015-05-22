@@ -1,4 +1,4 @@
-<section id="playersContainer">
+<section class="playersContainer">
     
 
     <h1>Player ranking</h1>
@@ -15,7 +15,7 @@
                 <th>Team</th>
                 <th>Matches played</th>
             </tr>
-            <tr ng-repeat="player in players| filter:searchText | orderBy:sortorder">
+            <tr ng-repeat="player in players| filter:searchText | orderBy:sortorder" such-href="/player/{{player.id}}">
                 <td>{{ player.rank}}</td>
                 <td>
                     <a href="#/player/{{ player.id}}"> {{ player.username}} </a> 

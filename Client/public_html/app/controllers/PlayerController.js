@@ -17,9 +17,7 @@ app.controller('PlayerController', function ($scope, $routeParams, daoPlayers, d
                 $scope.player.data[i].realname = '';
             }
         }
-
-
-
+        
         $scope.status = "";
     }, function () {
         $scope.status = "Error loading player " + $routeParams.playerId;

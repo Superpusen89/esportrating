@@ -10,7 +10,7 @@
             <th>Score</th>
             <th>Rank</th>
         </tr>
-        <tr ng-repeat="player in players| filter:searchText | orderBy:sortorder">
+        <tr ng-repeat="player in players| filter:searchText | orderBy:sortorder" such-href="/player/{{player.id}}">
             <td>
                 <a href="#/player/{{player.id}}"> 
                     {{player.username}} 
