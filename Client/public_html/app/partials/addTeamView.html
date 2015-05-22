@@ -1,0 +1,10 @@
+
+<section id="addTeamContainer">
+    <h1>New team:</h1>
+    <form ng-submit="addTeam()">
+        <p>Team name: </p>
+        <input ng-model="newTeam.team_name" type="text">
+        <input type="submit" value="Add team" ng-disabled="!newTeam.team_name">
+    </form>
+    <p class="info">{{status}}</p>
+</section>

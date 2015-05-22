@@ -46,7 +46,7 @@ app.controller('AddPlayerController', function ($scope, daoPlayers, daoTeams, da
             } else {
                 $scope.status += "The team does not exist/you have to chose from the dropdownlist\n";
             }
-            if($.inArray(country, countryarray) !== -1){
+            if($.inArray(country, countryarray) !== -1 || $scope.newPlayer.country !== ''){
                 console.log("The country exists");
             }else{
                 $scope.status += "The country does not exist/you have to chose from the dropdownlist";

@@ -1,0 +1,25 @@
+<section id="editMatchesContainer">
+    <p class="search"> <input class="searchfield" type="text" placeholder="Search matches" ng-model="searchText"></p>
+    <p>Click the match id or match time of the match you want to edit</p>
+
+    <table>
+        <tr>
+            <th> Match id </th>
+            <th> Start time </th>
+            <th> Winning team </th>
+            <th> Losing team </th>
+            <th> Tournament id </th>
+        </tr>
+        <tr ng-repeat="match in matches| filter:searchText | orderBy:sortorder" class='clickable-row'>
+            <td>
+                <a href="#/editMatch/{{match.id}}"> {{ match.id}} </a> 
+            </td>
+            <td><a href="#/editMatch/{{match.id}}">{{ match.match_time_start}}</td>
+            <td>{{ match.winning_team}}</td>
+            <td>{{ match.losing_team}}</td>
+            <td>{{ match.tournament_name}}</td>
+        </tr>
+    </table>
+
+    <p class="info">{{status}}</p>
+</section>

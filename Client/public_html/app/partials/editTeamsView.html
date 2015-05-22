@@ -1,0 +1,16 @@
+<section id="teamsContainer">
+    <h1>Teams</h1>
+
+    <input class="searchfield" type="text" ng-model="searchTeams" placeholder="Search teams">
+    <p class="info">Chose the team you want to edit</p>
+    
+    <ul>
+        <li ng-repeat="team in teams| filter:searchTeam | orderBy:'id'">
+                <a href="#/editTeam/{{team.id}}"> {{ team.id}} {{ team.team_name}} </a> 
+        </li>
+    </ul>
+
+    <p class="info">{{status}}</p>
+
+
+</section>

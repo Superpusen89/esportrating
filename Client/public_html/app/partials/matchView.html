@@ -1,0 +1,37 @@
+<section class="matchContainer">
+
+    <h1> Match overview </h1>
+
+    <p>
+        Start time: {{match.data[0].match_time_start}}<br>
+        End time: {{match.data[0].match_time_end}}<br>
+        Match duration: {{duration}} minutes<br>
+        Winning team: <a href="#/team/{{match.data[0].winning_team_id}}">{{match.data[0].winning_team}}</a><br>
+        Losing team: <a href="#/team/{{match.data[0].losing_team_id}}"> {{match.data[0].losing_team}}</a><br>
+        Tournament: <a href="#/tournament/{{match.data[0].tournament_id}}"> {{match.data[0].tournament_name}}</a>
+    </p>
+    <p>
+        Players in {{match.data[0].team_1_id}} :
+    </p>
+    <ul ng-repeat="player in players1">
+        <li>
+            <a href="#/player/{{player.player_id}}"> 
+                {{player.username}} 
+            </a>
+        </li>
+    </ul>
+
+    <p>
+        Players in {{match.data[0].team_2_id}} :
+    </p>
+    <ul ng-repeat="player in players2">
+        <li>
+            <a href="#/player/{{player.player_id}}"> 
+                {{player.username}} 
+            </a>
+        </li>
+    </ul>
+
+
+    <p class="info">{{status}}</p>
+</section>

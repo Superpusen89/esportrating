@@ -1,0 +1,26 @@
+<section id="editPlayerContainer">
+    <h1> Player {{player.data[0].id}} </h1>
+    <p class="info">Click a field to edit it</p>
+
+
+    <p>Username: <a href="#" editable-text="player.data[0].username" onbeforesave="saveUsername($data)">{{player.data[0].username|| "empty" }}</a> </p>
+
+    <p>Team: 
+    <a href="#" ng-model="player.data[0].team_id" editable-text="player.data[0].team_name" onbeforesave="saveTeam($data)" e-typeahead="team.id as team.team_name for team in teams | filter:$viewValue | limitTo:8" e-typeahead-editable="false" e-typeahead-input-formatter="formatLabelTeam($model)">
+        {{ player.data[0].team_name || "empty" }}
+    </a> </p>
+
+    <p>Country: 
+    <a href="#" editable-text="player.data[0].country" onbeforesave="saveCountry($data)" e-typeahead="country.alpha_2 as country.name for country in countries | filter:$viewValue | limitTo:8" e-typeahead-editable="false" e-typeahead-input-formatter="formatLabelCountry($model)">
+        {{player.data[0].country|| "empty"}} 
+    </a></p>
+
+    <p>Real name: <a href="#" editable-text="player.data[0].realname" onbeforesave="saveRealname($data)"> {{player.data[0].realname|| "empty"}}</a> </p>
+
+    <img src="{{ player.data[0].avatar}}" alt="Avatar" style="width:104px;height:auto">
+    <p>Edit avatar url: </p>
+    <a href="#" editable-text="player.data[0].avatar" onbeforesave="saveAvatar($data)">{{player.data[0].avatar|| "empty"}}</a>
+
+    <p class="info">{{status}}</p>
+
+</section>

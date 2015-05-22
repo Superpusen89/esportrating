@@ -1,10 +1,10 @@
 app.controller('TournamentsController', function ($scope, daoTournaments) {
-    $scope.status = "Loading...";
+    $scope.status = "Loading tournaments ...";
 
     daoTournaments.getAll(function (tournaments) {
         $scope.tournaments = tournaments.data;
-        $scope.status = "Successfully loaded Tournaments";
+        $scope.status = "";
     }, function () {
-        $scope.status = "Error loading Tournaments";
+        $scope.status = "Error loading tournaments";
     });
 });

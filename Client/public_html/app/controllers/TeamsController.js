@@ -1,12 +1,11 @@
 app.controller('TeamsController', function ($scope, daoTeams) {
-    $scope.status = "";
+    $scope.status = "Loading teams ...";
 
     daoTeams.getAll(function (teams) {
         $scope.teams = teams.data;
-        $scope.statusTeams = "";
-        console.log('**********************' + $scope.teams);
+        $scope.status = "";
     }, function () {
-        $scope.statusTeams = "Error loading Teams";
+        $scope.status = "Error loading Teams";
     });
 
 });

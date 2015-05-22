@@ -270,7 +270,7 @@ def crossdomain(origin=None, methods=None, headers=None,
 @app.route('/player/<int:player_id>', methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def get_player(player_id):
-    cursor.execute("SELECT avatar, p.id, p.id as player_id, countrycode, username, realname, rank, display_rating, base_rating, team_name, p.team_id, c.name as country FROM Player p LEFT JOIN Team t on p.team_id = t.id LEFT JOIN Countries c ON p.countrycode = c.alpha_2 WHERE p.id = '%d'" % (player_id))
+    cursor.execute("SELECT avatar, p.id, p.id as player_id, countrycode, username, realname, rank, display_rating, base_rating, team_name, COUNT(pm.match_id) as count, p.team_id, c.name as country FROM Player p LEFT JOIN Team t on p.team_id = t.id LEFT JOIN Countries c ON p.countrycode = c.alpha_2 LEFT JOIN Player_match pm ON p.id = pm.player_id WHERE p.id = '%d'" % (player_id))
     data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
                                         row) for row in cursor.fetchall()]]
     return jsonify(data=data)
@@ -326,7 +326,7 @@ def edit_player():
 @app.route('/team/<int:team_id>', methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def get_team(team_id):
-    cursor.execute("SELECT * FROM Team WHERE id = '%d'" % (team_id))
+    cursor.execute("SELECT t.id, t.team_id, t.team_name, COUNT(t.id) as count FROM Team t LEFT JOIN Matches m ON (t.id = team_1_id) OR (t.id = m.team_2_id) WHERE t.id = '%d'" % (team_id))
     data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
                                         row) for row in cursor.fetchall()]]
         
@@ -344,7 +344,7 @@ def get_team_by_name(team_name):
 @app.route('/team', methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def get_teams():
-    cursor.execute("SELECT * FROM Team")
+    cursor.execute("SELECT t.id, t.team_id, t.team_name, COUNT(t.id) as count FROM Team t LEFT JOIN Matches m ON (t.id = team_1_id) OR (t.id = m.team_2_id) GROUP BY t.id")
 #    cat = '哈哈'
     data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
                                         row) for row in cursor.fetchall()]]
@@ -420,7 +420,7 @@ def edit_tournament():
 @crossdomain(origin='*')
 def view_ranking_list():
     # order_by = order by enten username eller display_name, maa sendes med GET'en fra clienten
-    cursor.execute("select username, rank, p.id, p.id as player_id, countrycode, display_rating, p.team_id, team_name, c.name as country from Player p LEFT JOIN Team t ON p.team_id = t.id LEFT JOIN Countries c ON p.countrycode = c.alpha_2 order by rank asc") # ORDER BY username desc")# % (order_by))
+    cursor.execute("select username, rank, p.id, p.id as player_id, countrycode, display_rating, p.team_id, COUNT(pm.match_id) as count, team_name, c.name as country from Player p LEFT JOIN Team t ON p.team_id = t.id LEFT JOIN Countries c ON p.countrycode = c.alpha_2 LEFT JOIN Player_match pm ON p.id = pm.player_id group by p.id order by rank asc") # ORDER BY username desc")# % (order_by))
     data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
                                         row) for row in cursor.fetchall()]]
 
@@ -430,7 +430,7 @@ def view_ranking_list():
 @app.route('/match', methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def get_matches():
-    cursor.execute("select m.id, m.match_id, m.tournament_id, team_1_id, team_2_id, winning_team_id, losing_team_id, FROM_UNIXTIME(match_time_start) as match_time_start, FROM_UNIXTIME(match_time_end) as match_time_end, w.team_name AS winning_team, l.team_name AS losing_team, t.tournament_name FROM Matches m JOIN Tournament t on m.tournament_id = t.id LEFT JOIN Team w on m.winning_team_id = w.id LEFT JOIN Team l on m.losing_team_id = l.id order by m.id;")
+    cursor.execute("select m.id, m.match_id, m.tournament_id, team_1_id, team_2_id, winning_team_id, losing_team_id, FROM_UNIXTIME(match_time_start) as match_time_start, FROM_UNIXTIME(match_time_end) as match_time_end, w.team_name AS winning_team, l.team_name AS losing_team, one.team_name AS team_1_name, two.team_name AS team_2_name, t.tournament_name FROM Matches m JOIN Tournament t on m.tournament_id = t.id LEFT JOIN Team w on m.winning_team_id = w.id LEFT JOIN Team l on m.losing_team_id = l.id LEFT JOIN Team one ON m.team_1_id = one.id LEFT JOIN Team two ON m.team_2_id = two.id order by m.match_time_start desc")
     data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
                                         row) for row in cursor.fetchall()]]
     return jsonify(data=data)
@@ -452,9 +452,6 @@ def add_match():
     cursor.execute("SELECT LAST_INSERT_ID()")
     match_id = cursor.fetchone()[0]
     return "%d" % match_id; 
-
-    cursor.execute("SELECT LAST_INSERT_ID()")
-    match_id = cursor.fetchone()[0]
     eloCalc(match_id)
 #        return "match_id som blir sendt til kalkis esportrating: ", match_id; 
 #    return "%d" % match_id
@@ -484,11 +481,12 @@ def update_match():
 
     resetDisplayRating(match_id)
 #    if(winning_team_id and losing_team_id != null):
-#        eloCalc(match_id)
+#    resetDisplayRating(match_id)
   
     cursor.execute("UPDATE Matches SET team_1_id = '%d', team_2_id = '%d', winning_team_id = '%d', losing_team_id = '%d', match_time_start = UNIX_TIMESTAMP('%s'), match_time_end = UNIX_TIMESTAMP('%s'), tournament_id = '%d' WHERE id = '%d'" % (team_1_id, team_2_id, winning_team_id, losing_team_id, time_start, time_end, tournament_id, match_id))
-    conn.commit()   
+    conn.commit()
     eloCalc(match_id)
+
 #    print "CHECK"
 #    check(match_id)
 #    print "ELO-CALC"
@@ -500,6 +498,14 @@ def update_match():
 @crossdomain(origin='*')
 def get_match(match_id):
     cursor.execute("select m.id, m.match_id, m.tournament_id, team_1_id, team_2_id, winning_team_id, losing_team_id, FROM_UNIXTIME(match_time_start) as match_time_start, FROM_UNIXTIME(match_time_start, '%%Y-%%m-%%dT%%H:%%i') as f_time_start, FROM_UNIXTIME(match_time_end) as match_time_end, FROM_UNIXTIME(match_time_end, '%%Y-%%m-%%dT%%H:%%i') as f_time_end, w.team_name AS winning_team, l.team_name AS losing_team, t.tournament_name FROM Matches m JOIN Tournament t on m.tournament_id = t.id LEFT JOIN Team w on m.winning_team_id = w.id LEFT JOIN Team l on m.losing_team_id = l.id WHERE m.id = '%d'" % (match_id))
+    data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
+                                        row) for row in cursor.fetchall()]]
+    return jsonify(data=data)
+
+@app.route('/match_tournament/<int:tournament_id>', methods=['GET', 'OPTIONS'])
+@crossdomain(origin='*')
+def get_matches_tournament(tournament_id):
+    cursor.execute("SELECT m.id, team_1_id, team_2_id, FROM_UNIXTIME(match_time_start, '%%a %%b %%e. %%Y %%H:%%i') AS match_time_start, one.team_name AS team_1_name, two.team_name AS team_2_name FROM Matches m LEFT JOIN Team one ON m.team_1_id = one.id LEFT JOIN Team two ON m.team_2_id = two.id WHERE tournament_id = '%d'" % (tournament_id))
     data = [dict(line) for line in [zip([column[0] for column in cursor.description], 
                                         row) for row in cursor.fetchall()]]
     return jsonify(data=data)

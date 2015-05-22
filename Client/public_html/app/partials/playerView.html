@@ -1,0 +1,15 @@
+<section id="playerContainer">
+
+    <h1> {{player.data[0].username}} </h1> <a href="#/team/{{player.data[0].team_id}}" class="teamname">{{ player.data[0].team_name || "Not part of a team" }} </a>
+
+    <img src="{{ player.data[0].avatar}}" alt="Avatar" style="width:104px;height:auto">
+
+    <p class="exclude">Ranked <span class="rank">#{{player.data[0].rank|| " - Player is not ranked"}}, {{player.data[0].display_rating}} </span> points</p>
+    <p>Matches played: <span class="bold">{{player.data[0].count|| "No matches played"}}</span></p>
+    
+    <p>Country: <span class="bold">{{player.data[0].country|| "Unknown"}}</span></p>
+
+    <p>Real name: <span class="bold">{{player.data[0].realname|| "Unknown"}}</span></p>
+
+    <p class="info">{{status}}</p>
+</section> 

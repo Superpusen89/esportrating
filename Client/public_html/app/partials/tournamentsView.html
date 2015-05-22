@@ -1,0 +1,16 @@
+
+<section class="tournamentsContainer">
+    <h1>Tournaments</h1>
+    
+    <input class="searchfield" type="text" ng-model="searchTournament" placeholder="Search tournaments">
+    <p class="info">Click a tournament for detailed information</p>
+
+    <ul>
+        <li ng-repeat="tournament in tournaments| filter:searchTournament | orderBy:'tournament_name'">
+            <a href="#/tournament/{{tournament.id}}">
+                {{ tournament.tournament_name}}  </a>
+        </li>
+    </ul>
+
+    <p class="info">{{status}}</p>
+</section>

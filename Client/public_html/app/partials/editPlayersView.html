@@ -1,32 +1,31 @@
-<!--CODE TAKEN FROM https://yoast.com/articles/sortable-table/-->
+<section class="playersContainer">
+    
+    <h1>Players</h1>
 
-<section id="ranking_container">
-
-    <p class="search"> <input class="searchfield" type="text" placeholder="Search" ng-model="searchText"> </p>
+    <input class="searchfield" type="text" ng-model="searchPlayers" placeholder="Search players">
+    <p class="info">Click the player you want to edit</p>
 
     <table>
         <tr>
-            <th>#<th>
             <th>Name</th>
-            <th>Country</th>
+            <th></th>
             <th>Score</th>
             <th>Team</th>
-
+            <th>Matches played</th>
         </tr>
         <tr ng-repeat="player in players| filter:searchText | orderBy:sortorder">
-            <td>{{ player.rank}}</td>
             <td>
-                <a href="#/player/{{ player.id}}"> {{ player.username}} </a> 
+                <a href="#/editPlayer/{{ player.id}}"> {{player.id}} {{ player.username}} </a> 
             </td>
             <td><img src="app/resources/flags/{{player.countrycode}}.png" alt="{{player.country}}" title="{{player.country}}"></td>
             <td>{{ player.display_rating}}</td>
             <td>
                 <a href="#/team/{{ player.team_id}}">{{ player.team_name}} </a> 
             </td> 
-
+            <td>{{player.count}}</td>
         </tr>
     </table>
 
-    <div>{{ status}}</div><br>
+     <p class="info">{{status}}</p>
 </section>
 
