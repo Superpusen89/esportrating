@@ -11,7 +11,7 @@
         Tournament: <a href="#/tournament/{{match.data[0].tournament_id}}"> {{match.data[0].tournament_name}}</a>
     </p>
     <p>
-        Players in {{match.data[0].team_1_id}} :
+        Players in {{match.data[0].team_1_name}} :
     </p>
     <ul ng-repeat="player in players1">
         <li>
@@ -22,7 +22,7 @@
     </ul>
 
     <p>
-        Players in {{match.data[0].team_2_id}} :
+        Players in {{match.data[0].team_2_name}} :
     </p>
     <ul ng-repeat="player in players2">
         <li>
