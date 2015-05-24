@@ -35,10 +35,8 @@ app.controller('PlayerController', function ($scope, $routeParams, daoPlayers, d
         console.log("TeamLabelFormatter " + model);
         for (var i = 0; i < $scope.teams.length; i++) {
             if (parseInt(model) === $scope.teams[i].id) {
-                console.log("TeamLabelFormatter inside if" + $scope.teams[i].id);
                 return $scope.teams[i].team_name;                
             }
-            console.log("TeamLabelFormatter outside if ");
         }
     };
 
