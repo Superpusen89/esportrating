@@ -2,13 +2,32 @@
 # -*- coding: utf-8 -*- 
 
 import queryParams
+from flask import Flask, request
+#from configparser import ConfigParser
+from python_mysql_dbconfig import read_db_config
+#from mysql.connector import MySQLConnection, Error
+from flask import Flask, request, json, jsonify
+#from configparser import ConfigParser
+#from python_mysql_dbconfig import read_db_config
+#from mysql.connector import MySQLConnection, Error
+from functools import update_wrapper
 
 
 import MySQLdb
+from decimal import Decimal
+from flask import Flask
+from flask import json
+from flask import jsonify
+from flask import request
+from functools import update_wrapper
+import json
+import math
+import pprint
 import queries
 import queryParams
 import requests
 import sys
+import urllib
 import datetime
 
 try:
@@ -37,14 +56,14 @@ def setDate():
     conn.commit()
 
 
-#def openDatabaseConn():
-#    try:
-#        conn = MySQLdb.connect(host="localhost", user="root", passwd="HenrietteIda", db="esportrating", use_unicode=True, charset='utf8')
-#        cursor = conn.cursor()
-#
-#    except MySQLdb.Error, e:
-#        print "Error %d: %s" % (e.args[0], e.args[1])
-#        sys.exit(1)   
+def openDatabaseConn():
+    try:
+        conn = MySQLdb.connect(host="localhost", user="root", passwd="HenrietteIda", db="esportrating", use_unicode=True, charset='utf8')
+        cursor = conn.cursor()
+
+    except MySQLdb.Error, e:
+        print "Error %d: %s" % (e.args[0], e.args[1])
+        sys.exit(1)   
 
 
 def getLeagueListing():
@@ -87,6 +106,7 @@ def getMatchHistoryV2(league_id, match_id):
     return dataMatchHistory
 
 def getMatchDetailsPlayers(match_id):
+    print "getMatcgDetailsPlayers"
     del dataMatchHistoryPlayers[:]
     query_params3 = {'key': queryParams.key,
         'match_id': match_id 
@@ -141,7 +161,7 @@ def getPlayerSummaries(steam_id):
         data = response.json()['response']['players']
     except KeyError: pass
     for row in data:
-        username = 'null'
+        username = 'null' # IKKE ALLE SOM HAR AAPEN PROFIL
         avatar = 'null'
         realname = 'null'
         countrycode = 'null'
@@ -177,7 +197,7 @@ def getPlayerUsername(steam_id):
         username = 'null'
         try:
             personaname = data[0]['personaname']
-            username = personaname 
+            username = personaname #.encode('ascii', 'ignore')
         except (KeyError, IndexError): pass
     return username
 
@@ -193,19 +213,20 @@ def getPlayerSummariesver2(steam_id):
         data = response.json()['response']['players']
     except KeyError: pass
     for row in data:
-        username = 'null' 
+        username = 'null' # IKKE ALLE SOM HAR AAPEN PROFIL
         avatar = 'null'
         realname = 'null'
         countrycode = 'null'
         try:
             personaname = data[0]['personaname']
-            username = personaname 
+            username = personaname # .encode('utf-8', 'ignore')
+            print username
             try:
                 avatar = data[0]['avatarfull']
             except (KeyError, IndexError): pass
             try:
                 realname1 = data[0]['realname']
-                realname = realname1     
+                realname = realname1 #.encode('ascii', 'ignore')     
             except (KeyError, IndexError): pass
             try:
                 countrycode = data[0]['loccountrycode']
@@ -228,13 +249,14 @@ def getPlayerUsername(steam_id):
         username = 'null'
         try:
             personaname = data[0]['personaname']
-            username = personaname 
+            username = personaname #.encode('ascii', 'ignore')
         except (KeyError, IndexError): pass
     return username
     
             
     
 def getMatchDetailsTeamName(match_id):
+    #del dataTeamNames[:]
     query_params3 = {'key': queryParams.key,
         'match_id': match_id 
             }
@@ -261,7 +283,7 @@ def insertTournament(league_id, league_name):
         conn.commit()
         return 1
     if actualLenMatches < lenMatches:
-        return 2 #return last registered match
+        return 2 #return siste registrerte match
     return -1
 
 def insertTeam(team_id, team_name):
@@ -275,7 +297,7 @@ def insertPlayer(account_id, username, team_id, avatar, realname, countrycode):
     cursor.execute(queries.q5, [account_id])
     test = cursor.fetchone()[0]
     if test == 0:
-        cursor.execute(queries.q6, [account_id, username, 1200, 1200, team_id, avatar, realname, countrycode])
+        cursor.execute(queries.q6, [account_id, username, 1200, 1200, team_id, avatar, realname, countrycode]) #(username + unichr(300))
         conn.commit()
         
 def insertPlayerVer1(account_id, team_id):
@@ -286,7 +308,7 @@ def insertPlayerVer1(account_id, team_id):
         dataPlayers = getPlayerSummaries(steam_id)
         for row in dataPlayers:
             if row[0] != None:
-                cursor.execute(queries.q6, [account_id, row[0], 1200, 1200, row[1], row[2], row[3]]) 
+                cursor.execute(queries.q6, [account_id, row[0], 1200, 1200, row[1], row[2], row[3]]) #(username + unichr(300))
                 conn.commit()
         del dataPlayers[:]
         
@@ -298,7 +320,8 @@ def insertPlayerVer2(account_id):
         dataPlayers = getPlayerSummaries(steam_id)
         for row in dataPlayers:
             if row[0] != None:
-                cursor.execute(queries.q17, [account_id, row[0], 1200, 1200, row[1], row[2], row[3]]) 
+                print "TEAM_ID PLAYERVER2: ", row[1]
+                cursor.execute(queries.q17, [account_id, row[0], 1200, 1200, row[1], row[2], row[3]]) #(username + unichr(300))
                 conn.commit()
         del dataPlayers[:]
         
@@ -314,7 +337,7 @@ def insertMatches(match_id, league_id, radiant_team_id, dire_team_id):
         duration = response.json()['result']['duration']
         radiant_win = response.json()['result']['radiant_win']
     except KeyError: pass
-    if radiant_win != None: 
+    if radiant_win != None: #AND timestamp?
         end_time = start_time + duration
         cursor.execute(queries.q7, [match_id])
         test = cursor.fetchone()[0]
@@ -322,9 +345,11 @@ def insertMatches(match_id, league_id, radiant_team_id, dire_team_id):
             if radiant_win:
                 cursor.execute(queries.q8, [match_id, league_id, radiant_team_id, dire_team_id, radiant_team_id, dire_team_id, start_time, end_time])
                 conn.commit()
+                print "INSERT MATCHES FERDIG"
             else:
                 cursor.execute(queries.q9, [match_id, league_id, radiant_team_id, dire_team_id, dire_team_id, radiant_team_id, start_time, end_time])
                 conn.commit() 
+                print "INSERT MATCHES FERDIG"
     
     
 
@@ -398,6 +423,7 @@ def checkMatchExist(match_id):
     if test == 0:
         return 1;
     else:
+        print "Hopper over match ", match_id
         return -1;
     
    

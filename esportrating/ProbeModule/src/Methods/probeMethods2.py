@@ -1,15 +1,21 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*- 
 
-import queryParams
-
-
 import MySQLdb
+from decimal import Decimal
+from flask import Flask
+from flask import json
+from flask import jsonify
+from flask import request
+from functools import update_wrapper
+import json
+import math
+import pprint
 import queries
 import queryParams
 import requests
 import sys
-import datetime
+import urllib
 
 try:
     conn = MySQLdb.connect(host="localhost", user="root", passwd="HenrietteIda", db="esportrating", use_unicode=True, charset='utf8', )
@@ -28,28 +34,23 @@ dataTeamNames = []
 dataMatchHistoryPlayers = []
 dataTeamPlayers = []
 dataPlayers = []
-numberAPI = []
+numAPI = 0
 
 
-def setDate():
-    month = datetime.datetime.now().month
-    cursor.execute(queries.q25, [month])
-    conn.commit()
 
+def openDatabaseConn():
+    try:
+        conn = MySQLdb.connect(host="localhost", user="root", passwd="HenrietteIda", db="esportrating", use_unicode=True, charset='utf8')
+        cursor = conn.cursor()
 
-#def openDatabaseConn():
-#    try:
-#        conn = MySQLdb.connect(host="localhost", user="root", passwd="HenrietteIda", db="esportrating", use_unicode=True, charset='utf8')
-#        cursor = conn.cursor()
-#
-#    except MySQLdb.Error, e:
-#        print "Error %d: %s" % (e.args[0], e.args[1])
-#        sys.exit(1)   
+    except MySQLdb.Error, e:
+        print "Error %d: %s" % (e.args[0], e.args[1])
+        sys.exit(1)   
 
 
 def getLeagueListing():
     response = requests.get(queryParams.endpoint1, params=queryParams.query_params1)
-    numberAPI.append(1)
+    numAPI = 2
     try:
         data = response.json()['result']['leagues']
     except KeyError: pass
@@ -63,22 +64,6 @@ def getMatchHistory(league_id):
         'league_id': league_id 
             }
     response = requests.get(queryParams.endpoint2, params=query_params2)
-    numberAPI.append(1)
-    try:    
-        data = response.json()['result']['matches']
-    except KeyError: pass
-    for row in data:
-        dataMatchHistory.append([row['match_id'], row['radiant_team_id'], row['dire_team_id'], row['players']])
-    return dataMatchHistory
-
-def getMatchHistoryV2(league_id, match_id):
-    del dataMatchHistory[:]
-    query_params2 = {'key': queryParams.key,
-        'league_id': league_id,
-        'start_at_match_id': match_id
-            }
-    response = requests.get(queryParams.endpoint2, params=query_params2)
-    numberAPI.append(1)
     try:    
         data = response.json()['result']['matches']
     except KeyError: pass
@@ -87,17 +72,17 @@ def getMatchHistoryV2(league_id, match_id):
     return dataMatchHistory
 
 def getMatchDetailsPlayers(match_id):
+    print "getMatcgDetailsPlayers"
     del dataMatchHistoryPlayers[:]
     query_params3 = {'key': queryParams.key,
         'match_id': match_id 
             }
     response = requests.get(queryParams.endpoint3, params=query_params3)
-    numberAPI.append(1)
     try:
         data = response.json()['result']['players']
-        for row in data:
-            dataMatchHistoryPlayers.append([row['account_id'], row['player_slot']])
     except KeyError: pass
+    for row in data:
+        dataMatchHistoryPlayers.append([row['account_id'], row['player_slot']])
     return dataMatchHistoryPlayers
 
 def getTeamPlayers(team_id):
@@ -106,9 +91,8 @@ def getTeamPlayers(team_id):
         'start_at_team_id': team_id,
         'teams_requested': 1
             }
-    response = requests.get(queryParams.endpoint5, params=query_params5)
-    numberAPI.append(1)
     try:
+        response = requests.get(queryParams.endpoint5, params=query_params5)
         data = response.json()['result']['teams']
     except KeyError: pass
     try:
@@ -135,13 +119,12 @@ def getPlayerSummaries(steam_id):
     query_params4 = {'key': queryParams.key,
         'steamids': steam_id
             } 
-    response = requests.get(queryParams.endpoint4, params=query_params4)
-    numberAPI.append(1)
     try:
+        response = requests.get(queryParams.endpoint4, params=query_params4)
         data = response.json()['response']['players']
     except KeyError: pass
     for row in data:
-        username = 'null'
+        username = 'null' # IKKE ALLE SOM HAR AAPEN PROFIL
         avatar = 'null'
         realname = 'null'
         countrycode = 'null'
@@ -168,16 +151,15 @@ def getPlayerUsername(steam_id):
     query_params4 = {'key': queryParams.key,
         'steamids': steam_id
             } 
-    response = requests.get(queryParams.endpoint4, params=query_params4)
-    numberAPI.append(1)
     try:
+        response = requests.get(queryParams.endpoint4, params=query_params4)
         data = response.json()['response']['players']
     except KeyError: pass
     for row in data:
         username = 'null'
         try:
             personaname = data[0]['personaname']
-            username = personaname 
+            username = personaname #.encode('ascii', 'ignore')
         except (KeyError, IndexError): pass
     return username
 
@@ -186,26 +168,26 @@ def getPlayerSummariesver2(steam_id):
     del dataPerson[:]
     query_params4 = {'key': queryParams.key,
         'steamids': steam_id
-            }
-    response = requests.get(queryParams.endpoint4, params=query_params4)
-    numberAPI.append(1)
+            } 
     try:
+        response = requests.get(queryParams.endpoint4, params=query_params4)
         data = response.json()['response']['players']
     except KeyError: pass
     for row in data:
-        username = 'null' 
+        username = 'null' # IKKE ALLE SOM HAR AAPEN PROFIL
         avatar = 'null'
         realname = 'null'
         countrycode = 'null'
         try:
             personaname = data[0]['personaname']
-            username = personaname 
+            username = personaname # .encode('utf-8', 'ignore')
+            print username
             try:
                 avatar = data[0]['avatarfull']
             except (KeyError, IndexError): pass
             try:
                 realname1 = data[0]['realname']
-                realname = realname1     
+                realname = realname1 #.encode('ascii', 'ignore')     
             except (KeyError, IndexError): pass
             try:
                 countrycode = data[0]['loccountrycode']
@@ -219,27 +201,26 @@ def getPlayerUsername(steam_id):
     query_params4 = {'key': queryParams.key,
         'steamids': steam_id
             } 
-    response = requests.get(queryParams.endpoint4, params=query_params4)
-    numberAPI.append(1)
     try:
+        response = requests.get(queryParams.endpoint4, params=query_params4)
         data = response.json()['response']['players']
     except KeyError: pass
     for row in data:
         username = 'null'
         try:
             personaname = data[0]['personaname']
-            username = personaname 
+            username = personaname #.encode('ascii', 'ignore')
         except (KeyError, IndexError): pass
     return username
     
             
     
 def getMatchDetailsTeamName(match_id):
+    #del dataTeamNames[:]
     query_params3 = {'key': queryParams.key,
         'match_id': match_id 
             }
     response = requests.get(queryParams.endpoint3, params=query_params3)
-    numberAPI.append(1)
     radiant_name = 'null'
     dire_name = 'null'
     try:
@@ -261,7 +242,7 @@ def insertTournament(league_id, league_name):
         conn.commit()
         return 1
     if actualLenMatches < lenMatches:
-        return 2 #return last registered match
+        return 1
     return -1
 
 def insertTeam(team_id, team_name):
@@ -275,7 +256,7 @@ def insertPlayer(account_id, username, team_id, avatar, realname, countrycode):
     cursor.execute(queries.q5, [account_id])
     test = cursor.fetchone()[0]
     if test == 0:
-        cursor.execute(queries.q6, [account_id, username, 1200, 1200, team_id, avatar, realname, countrycode])
+        cursor.execute(queries.q6, [account_id, username, 1200, 1200, team_id, avatar, realname, countrycode]) #(username + unichr(300))
         conn.commit()
         
 def insertPlayerVer1(account_id, team_id):
@@ -286,7 +267,7 @@ def insertPlayerVer1(account_id, team_id):
         dataPlayers = getPlayerSummaries(steam_id)
         for row in dataPlayers:
             if row[0] != None:
-                cursor.execute(queries.q6, [account_id, row[0], 1200, 1200, row[1], row[2], row[3]]) 
+                cursor.execute(queries.q6, [account_id, row[0], 1200, 1200, row[1], row[2], row[3]]) #(username + unichr(300))
                 conn.commit()
         del dataPlayers[:]
         
@@ -298,7 +279,7 @@ def insertPlayerVer2(account_id):
         dataPlayers = getPlayerSummaries(steam_id)
         for row in dataPlayers:
             if row[0] != None:
-                cursor.execute(queries.q17, [account_id, row[0], 1200, 1200, row[1], row[2], row[3]]) 
+                cursor.execute(queries.q17, [account_id, row[0], 1200, 1200, row[1], row[2], row[3]]) #(username + unichr(300))
                 conn.commit()
         del dataPlayers[:]
         
@@ -308,13 +289,12 @@ def insertMatches(match_id, league_id, radiant_team_id, dire_team_id):
         'match_id': match_id 
             }
     response = requests.get(queryParams.endpoint3, params=query_params3)
-    numberAPI.append(1)
     try:
         start_time = response.json()['result']['start_time']
         duration = response.json()['result']['duration']
         radiant_win = response.json()['result']['radiant_win']
     except KeyError: pass
-    if radiant_win != None: 
+    if radiant_win != None: #AND timestamp?
         end_time = start_time + duration
         cursor.execute(queries.q7, [match_id])
         test = cursor.fetchone()[0]
@@ -325,7 +305,6 @@ def insertMatches(match_id, league_id, radiant_team_id, dire_team_id):
             else:
                 cursor.execute(queries.q9, [match_id, league_id, radiant_team_id, dire_team_id, dire_team_id, radiant_team_id, start_time, end_time])
                 conn.commit() 
-    
     
 
 def insertPlayerMatch(match_id, account_id, team_id):
@@ -389,41 +368,84 @@ def checkPlayer(account_id):
         insertPlayerVer2(account_id)
     return "PLAYER INSERTED"
 
-def checkNumberOfMatches(league_id, lenMatches):
-    cursor.execute()
-
 def checkMatchExist(match_id):
     cursor.execute(queries.q7, [match_id])
     test = cursor.fetchone()[0]
     if test == 0:
         return 1;
     else:
+        print "Hopper over match ", match_id
         return -1;
+   
+            
+def check(match_id):
+    cursor.execute("SELECT COUNT(points) FROM Player_match WHERE match_id = (SELECT id FROM Matches WHERE match_id = %s", [match_id])
+    count = cursor.fetchone()[0]
+    if(count != 0):
+        resetDisplayRating(match_id)
+
+def resetDisplayRating(match_id):
+    cursor.execute("SELECT points, player_id FROM Player_match WHERE match_id=(SELECT id FROM Matches WHERE match_id = %s", [match_id]) #MATCH_ID
+    pointsExist = cursor.fetchall()
+    for row in pointsExist:
+        player_id = Decimal(row[1])
+        points = Decimal(row[0])
+        if(points != null):
+            cursor.execute("SELECT display_rating FROM Player WHERE id = %s", [player_id])
+            display_rating = Decimal(cursor.fetchone()[0])
+            newDisplay_rating = display_rating - points
+            print Display_rating
+            cursor.execute("UPDATE Player SET display_rating = %s WHERE id = %s", [newDisplay_rating, player_id])
+            conn.commit()
+        
+def setDisplayRating(match_id):
+    cursor.execute("SELECT pm.points, p.id FROM Player_match pm, Player p WHERE match_id=(SELECT id FROM Matches WHERE match_id = %s) AND pm.player_id=p.id", [match_id])
+    data = cursor.fetchall()
+    for row in data:
+        points = float(row[0])
+        player_id = float(row[1])
+        cursor.execute("SELECT display_rating FROM Player WHERE id = %s", [player_id])
+        display_rating = float(cursor.fetchone()[0])
+        newDisplay_rating = display_rating + points
+        cursor.execute("UPDATE Player SET display_rating = %s WHERE id = %s", [newDisplay_rating, player_id])
+        conn.commit()
+        
+def calculate(match_id):
+    team1 = 'winning_team_id'
+    team2 = 'losing_team_id'
+    print "match_id i kalkis: ", match_id
+    cursor.execute(queries.findAVG3, [match_id, match_id]) #finds losing team's average score
+    B = float(cursor.fetchone()[0])
+    cursor.execute(queries.findAVG4, [match_id, match_id]) #finds winning team's average score
+    A = float(cursor.fetchone()[0])
     
-   
-   
-def getStartAtMatchId(league_id):
-    cursor.execute(queries.q22, [league_id])
-    test = cursor.fetchone()[0]
-    if test > 0:
-        try:
-            cursor.execute(queries.q19, [league_id])
-            res = cursor.fetchone()[0]
-            cursor.execute(queries.q21, [res])
-            conn.commit()
-            cursor.execute(queries.q20, [res])
-            conn.commit()
-            return res #return last registered match
-        except TypeError: pass
-    return -1
-
-
+    #Elo-rating formula
+    Es = 1.0 / (1.0 + math.pow(10.0, ((B-A) / 400.0)))
+    print "Es: ", Es 
+    R = round(Decimal(15 * (1-Es)), 2) #winning team points
+    print "R: ", R
+    cursor.execute(queries.findID1, [match_id, match_id]) #finds every participating player on winning team
+    ID = cursor.fetchall()
+    for row in ID: #for each player -> update points
+        id = row[0]
+        print "for each player -> update points", id
+        cursor.execute(queries.updatePoints, [R, match_id, id])
+        conn.commit()
+    R = -R #losing team points
+    cursor.execute(queries.findID2, [match_id, match_id]) #finds every participating player on winning team
+    ID = cursor.fetchall()
+    for row in ID: #for each player -> update points
+        id = row[0]
+        print "for each player -> update points", id
+        cursor.execute(queries.updatePoints, [R, match_id, id])
+        conn.commit()
+    setDisplayRating(match_id) #run this method
     
 
         
 def APIcalls():
-    res = len(numberAPI)
-    del numberAPI[:] 
+    res = numberAPI
+    numberAPI = 0
     return res
  
         

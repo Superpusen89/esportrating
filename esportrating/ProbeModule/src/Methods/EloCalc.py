@@ -1,6 +1,7 @@
 import datetime
 import queries
 import math
+import probeMethods
 import MySQLdb
 from decimal import Decimal
 
@@ -21,6 +22,7 @@ class Month(object):
 def updateBaseRating():
     cursor.execute(queries.q23)
     conn.commit()
+    print "updateBaseRating"
 
 
 def getMonth():
@@ -41,7 +43,7 @@ def check(match_id):
         resetDisplayRating(match_id)
 
 def resetDisplayRating(match_id):
-    cursor.execute("SELECT points, player_id FROM Player_match WHERE match_id=(SELECT id FROM Matches WHERE match_id = %s", [match_id]) 
+    cursor.execute("SELECT points, player_id FROM Player_match WHERE match_id=(SELECT id FROM Matches WHERE match_id = %s", [match_id]) #MATCH_ID
     pointsExist = cursor.fetchall()
     for row in pointsExist:
         player_id = Decimal(row[1])
@@ -50,6 +52,7 @@ def resetDisplayRating(match_id):
             cursor.execute("SELECT display_rating FROM Player WHERE id = %s", [player_id])
             display_rating = Decimal(cursor.fetchone()[0])
             newDisplay_rating = display_rating - points
+            print Display_rating
             cursor.execute("UPDATE Player SET display_rating = %s WHERE id = %s", [newDisplay_rating, player_id])
             conn.commit()
     orderRank()
@@ -69,17 +72,21 @@ def setDisplayRating(match_id):
         
 def calculate1(match_id):
     getMonth()
+    print "match_id i kalkis: ", match_id
     cursor.execute(queries.findAVG3, [match_id, match_id]) #finds losing team's average score
     B = float(cursor.fetchone()[0])
     cursor.execute(queries.findAVG4, [match_id, match_id]) #finds winning team's average score
     A = float(cursor.fetchone()[0])
     #Elo-rating formula
     Es = 1.0 / (1.0 + math.pow(10.0, ((B-A) / 400.0)))
+    print "Es: ", Es 
     R = round(Decimal(15 * (1-Es)), 2) #winning team points
+    print "R: ", R
     cursor.execute(queries.findID1, [match_id, match_id]) #finds every participating player on winning team
     ID = cursor.fetchall()
     for row in ID: #for each player -> update points
         id = row[0]
+        print "for each player -> update points", id
         cursor.execute(queries.updatePoints, [R, match_id, id])
         conn.commit()
     R = -R #losing team points
@@ -87,23 +94,28 @@ def calculate1(match_id):
     ID = cursor.fetchall()
     for row in ID: #for each player -> update points
         id = row[0]
+        print "for each player -> update points", id
         cursor.execute(queries.updatePoints, [R, match_id, id])
         conn.commit()
     setDisplayRating(match_id) #run this method
     
 def calculate2(match_id):
     getMonth()
+    print "match_id i kalkis: ", match_id
     cursor.execute(queries.findAVG3, [match_id, match_id]) #finds losing team's average score
     B = float(cursor.fetchone()[0])
     cursor.execute(queries.findAVG4, [match_id, match_id]) #finds winning team's average score
     A = float(cursor.fetchone()[0])
     #Elo-rating formula
     Es = 1.0 / (1.0 + math.pow(10.0, ((B-A) / 400.0)))
+    print "Es: ", Es 
     R = round(Decimal(15 * (1-Es)), 2) #winning team points
+    print "R: ", R
     cursor.execute(queries.findID1, [match_id, match_id]) #finds every participating player on winning team
     ID = cursor.fetchall()
     for row in ID: #for each player -> update points
         id = row[0]
+        print "for each player -> update points", id
         cursor.execute(queries.updatePoints, [R, match_id, id])
         conn.commit()
     R = -R #losing team points
@@ -111,10 +123,12 @@ def calculate2(match_id):
     ID = cursor.fetchall()
     for row in ID: #for each player -> update points
         id = row[0]
+        print "for each player -> update points", id
         cursor.execute(queries.updatePoints, [R, match_id, id])
         conn.commit()
     setDisplayRating(match_id) #run this method
     orderRank()
+    print "****    *****    *****    *****    ORDER RANK   *****   *****     *****    *****     *****"
     
     
 def calculateAll():
@@ -123,8 +137,10 @@ def calculateAll():
     month = 0
     for row in data:
         if month != row[1]:
+            print "month: ", month, ", row[1]: ", row[1]
             month = row[1]            
             updateBaseRating()
+        print "kalkulerer ", row[0]
         calculate1(row[0])
         
         
@@ -136,14 +152,14 @@ def orderRank():
     rank = 1
     for row in data:
         if i<length-1:
-            if row[1] == data[i][1]: #Same score
+            if row[1] == data[i][1]: #Hvis begge har lik score
                 if row[2] == data[i][2]:
-                    cursor.execute(queries.q29, [rank, row[0]]) #Same amount of matches
+                    cursor.execute(queries.q29, [rank, row[0]]) #Hvis begge har like mange matches
                 else:
-                    cursor.execute(queries.q29, [rank, row[0]]) #First has more matches
+                    cursor.execute(queries.q29, [rank, row[0]]) #Hvis den forste har flere matches
                     rank += 1
             else:
-                cursor.execute(queries.q29, [rank, row[0]]) #First has higher score
+                cursor.execute(queries.q29, [rank, row[0]]) #Naar den forste har fler points
                 rank += 1
             i += 1
     cursor.execute(queries.q29, [rank, data[length-1][0]])
