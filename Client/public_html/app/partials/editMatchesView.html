@@ -10,7 +10,7 @@
             <th ng-click="changeSorting('losing_team_id')" style="cursor: pointer;"> Losing team </th>
             <th ng-click="changeSorting('tournament_name')" style="cursor: pointer;"> Tournament id </th>
         </tr>
-        <tr ng-repeat="match in matches| filter:searchText | orderBy:sort.column:sort.descending" class='clickable-row'>
+        <tr ng-repeat="match in matches| filter:searchText | orderBy:sort.column:sort.descending" such-href="/match/{{match.id}}">
             <td>
                 <a href="#/editMatch/{{match.id}}"> {{ match.id}} </a> 
             </td>

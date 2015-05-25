@@ -17,6 +17,10 @@ import queries
 import sys
 import time
 
+from tornado.wsgi import WSGIContainer
+from tornado.httpserver import HTTPServer
+from tornado.ioloop import IOLoop
+
 app = Flask(__name__)
 api = Api(app)
 
@@ -463,6 +467,14 @@ def get_countries():
     return jsonify(data=data)
     
  
+#if __name__ == '__main__':
+#    app.run(host="0.0.0.0",
+#            port=int("5001"))
+            
+
 if __name__ == '__main__':
-    app.run(host="0.0.0.0",
-            port=int("5001"))
+  http_server = HTTPServer(WSGIContainer(app))
+  http_server.listen(5001)
+  print "Webservice is running";
+  IOLoop.instance().start()  
+  
