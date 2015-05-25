@@ -14,11 +14,11 @@ app.controller('TournamentController', function ($scope, $routeParams, daoTourna
             $scope.matches = matches.data;
             $scope.matchStatus = "";
         }, function () {
-            $scope.matchStatus = "Error loading matches";
+            $scope.matchStatus = "Error loading matches.";
         });
 
     }, function () {
-        $scope.status = "Error loading tournament " + $routeParams.tournamentId;
+        $scope.status = "Error loading tournament.";
     });
 
     /********** FIX YES **********/
@@ -29,7 +29,7 @@ app.controller('TournamentController', function ($scope, $routeParams, daoTourna
         daoTournaments.edit(tournament_id, tournament_name, function () {
             $scope.status = "Successfully edited tournament " + $routeParams.tournamentId + " " + tournament_name;
         }, function () {
-            $scope.status = "Error editing tournament";
+            $scope.status = "Error editing tournament.";
         });
     };
 

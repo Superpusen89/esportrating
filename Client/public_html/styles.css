@@ -273,18 +273,18 @@ table th, table td {
 }
 
 .matchContainer .inline{
-    display: inline-block!important; 
+    display: inline-block; 
 }
 
 .matchContainer .new_player_1, .matchContainer .newplayer1{
     display: block;
 }
 
-.matchContainer .new_player_2, .matchContainer .newplayer2{
+.matchContainer .new_player_2, .matchContainer .newplayer2, matchContainer #team2list{
     display: block;
 }
 .matchContainer .inline2{
-    display: inline-block!important; 
+    display: inline-block; 
 }
 
 .matchContainer .start_time, .matchContainer .starttime{
@@ -295,35 +295,35 @@ table th, table td {
     display: block;
 }
 .matchContainer .inline3{
-    display: inline-block!important; 
+    display: inline-block; 
 }
 
 
 /*.matchContainer #team2list{
     float: left;
 }
-
 */
+
 
 .matchContainer #team2list{
     padding-left: 15em; 
 }
 
 .matchContainer #team2list label, .matchContainer #team1list label, .matchContainer #team2list ul, .matchContainer #team1list ul, .matchContainer #team2list li, .matchContainer #team1list li{
-    padding: 0 !important; 
+    padding: 0; 
 }
 
-.matchContainer #t1l{
+/*.matchContainer #t1l{
     display: inline !important;
 }
 
-/*.matchContainer input, .matchContainer label {
+.matchContainer input, .matchContainer label {
     display:block;
-}*/
+}
 
 .matchContainer #t2l{
     display: inline !important;
-}
+}*/
 
 .matchContainer #winnerchx{
     display: inline-block!important; 

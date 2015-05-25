@@ -88,55 +88,6 @@ CREATE TABLE User_profile
     PRIMARY KEY(email_address)
 )CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
-
-
-# Testdata
-INSERT INTO Team (team_name) VALUES ('Superpusene');
-INSERT INTO Team (team_name) VALUES ('Guttah');
-INSERT INTO Team (team_name) VALUES ('Unicode');
-INSERT INTO Player (player_id, username, base_rating, display_rating, team_id, countrycode) VALUES (null, 'Superpusen', 1200, 1200, 1, 'af');
-INSERT INTO Player (player_id, username, base_rating, display_rating, team_id, countrycode) VALUES (null, 'LobNobIda', 1300, 1300, 1, 'au');
-INSERT INTO Player (player_id, username, base_rating, display_rating, team_id, countrycode) VALUES (null, 'EirikStrongMan', 1200, 1200, 1, 'ar');
-INSERT INTO Player (player_id, username, base_rating, display_rating, team_id, countrycode) VALUES (null, 'TommyTeabag', 1400, 1400, 2, 'bv');
-INSERT INTO Player (player_id, username, base_rating, display_rating, team_id, countrycode) VALUES (null, 'Kettelz', 1400, 1400, 2, 'aw');
-INSERT INTO Player (player_id, username, base_rating, display_rating, team_id, countrycode) VALUES (null, 'Tedzky', 1400, 1400, 2, 'no');
--- INSERT INTO Player (player_id, username, base_rating, display_rating, team_id) VALUES (null, '여보세요', 1400, 1400, 3);
--- INSERT INTO Player (player_id, username, base_rating, display_rating, team_id) VALUES (null, '有什么需要我帮你的', 1400, 1400, 3);
--- INSERT INTO Player (player_id, username, base_rating, display_rating, team_id) VALUES (null, 'お久しぶりですね', 1400, 1400, 3);
--- INSERT INTO Player (player_id, username, base_rating, display_rating, team_id) VALUES (null, 'Trademark™', 1400, 1400, 3);
--- INSERT INTO Player (player_id, username, base_rating, display_rating, team_id) VALUES (null, ' أهلا صديقي/صديقتي!', 1400, 1400, 3);
--- INSERT INTO Player (player_id, username, base_rating, display_rating, team_id) VALUES (null, 'Øystein', 1400, 1400, 3);
-INSERT INTO Player (username, base_rating, display_rating, team_id, countrycode) VALUES ('Gemzi', 1348, 1354, 2, 'aq');
-INSERT INTO Tournament (tournament_name) VALUES ('TheFirst');
-INSERT INTO Matches (tournament_id, winning_team_id, losing_team_id) VALUES (1, 1, 2); 
-INSERT INTO Matches (tournament_id, winning_team_id, losing_team_id) VALUES (1, 1, 2); 
-INSERT INTO Matches (tournament_id, winning_team_id, losing_team_id) VALUES (1, 2, 1);
-INSERT INTO Matches (tournament_id, winning_team_id, losing_team_id) VALUES (4, 1, 2);
-INSERT INTO Player_match (match_id, player_id, team_id) VALUES (1, 1, 1);
-INSERT INTO Player_match (match_id, player_id, team_id) VALUES (1, 2, 1);
-INSERT INTO Player_match (match_id, player_id, team_id) VALUES (1, 3, 1);
-INSERT INTO Player_match (match_id, player_id, team_id) VALUES (1, 4, 2);
-INSERT INTO Player_match (match_id, player_id, team_id) VALUES (1, 5, 2);
-INSERT INTO Player_match (match_id, player_id, team_id) VALUES (1, 6, 2);
-INSERT INTO Player_match (match_id, player_id, team_id) VALUES (2, 1, 1);
-INSERT INTO Player_match (match_id, player_id, team_id) VALUES (2, 2, 1);
-INSERT INTO Player_match (match_id, player_id, team_id) VALUES (2, 3, 1);
-INSERT INTO Player_match (match_id, player_id, team_id) VALUES (2, 4, 2);
-INSERT INTO Player_match (match_id, player_id, team_id) VALUES (2, 5, 2);
-INSERT INTO Player_match (match_id, player_id, team_id) VALUES (2, 6, 2);
-INSERT INTO Player_match (match_id, player_id, team_id) VALUES (3, 1, 1);
-INSERT INTO Player_match (match_id, player_id, team_id) VALUES (3, 2, 1);
-INSERT INTO Player_match (match_id, player_id, team_id) VALUES (3, 3, 1);
-INSERT INTO Player_match (match_id, player_id, team_id) VALUES (3, 4, 2);
-INSERT INTO Player_match (match_id, player_id, team_id) VALUES (3, 5, 2);
-INSERT INTO Player_match (match_id, player_id, team_id) VALUES (3, 6, 2);
-INSERT INTO Player_match (match_id, player_id, team_id) VALUES (4, 1, 1);
-INSERT INTO Player_match (match_id, player_id, team_id) VALUES (4, 2, 1);
-INSERT INTO Player_match (match_id, player_id, team_id) VALUES (4, 3, 1);
-INSERT INTO Player_match (match_id, player_id, team_id) VALUES (4, 4, 1);
-INSERT INTO Player_match (match_id, player_id, team_id) VALUES (4, 5, 1);
-INSERT INTO Player_match (match_id, player_id, team_id) VALUES (4, 6, 2);
-
  
 /************* COUNTRIES ***********/
 
@@ -153,7 +104,10 @@ INSERT INTO Player_match (match_id, player_id, team_id) VALUES (4, 6, 2);
 --  http://stefangabos.ro/other-projects/list-of-world-countries-with-national-flags/
 --
 
-/************** Du må legge inn en og en insert, hvis ikke klikker det ****************************/
+/***************************************************************************************************************/
+/*************************** Each INSERT query has to be run separately. ***************************************/
+/*********************** Something goes wrong if you paste everything at once. *********************************/
+/***************************************************************************************************************/
 
 CREATE TABLE Countries (
   id int(11) NOT NULL auto_increment,
@@ -244,6 +198,8 @@ INSERT INTO Countries (name, alpha_2, alpha_3) VALUES
     ('French Polynesia', 'pf', 'pyf'),
     ('French Southern Territories', 'tf', ''); 
 
+/*************************************************************************************************************/
+
 INSERT INTO Countries (name, alpha_2, alpha_3) VALUES
     ('Gabon', 'ga', 'gab'),
     ('Gambia', 'gm', 'gmb'),
@@ -320,6 +276,8 @@ INSERT INTO Countries (name, alpha_2, alpha_3) VALUES
     ('Mozambique', 'mz', 'moz'),
     ('Myanmar', 'mm', 'mmr'); 
 
+/*************************************************************************************************************/
+
 INSERT INTO Countries (name, alpha_2, alpha_3) VALUES
     ('Namibia', 'na', 'nam'),
     ('Nauru', 'nr', 'nru'),
@@ -385,6 +343,8 @@ INSERT INTO Countries (name, alpha_2, alpha_3) VALUES
     ('Sweden', 'se', 'swe'),
     ('Switzerland', 'ch', 'che'),
     ('Syrian Arab Republic', 'sy', 'syr');
+
+/*************************************************************************************************************/
 
 INSERT INTO Countries (name, alpha_2, alpha_3) VALUES
     ('Taiwan, Province of China', 'tw', ''),

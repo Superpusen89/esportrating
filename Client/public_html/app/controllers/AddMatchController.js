@@ -118,9 +118,9 @@ app.controller('AddMatchController', function ($scope, daoMatches, daoPlayers, d
                     console.log('!!!!!!!!!' + $scope.match + ' ' + checkedBoxes[i].value + ' ' + team_1_id);
                     var player_id = parseInt(checkedBoxes[i].value);
                     daoPlayerMatch.add(match_id, player_id, team_1_id, function () {
-                        $scope.status = "Successfully created new player_match ";
+                        $scope.status = "Successfully created new match.";
                     }, function () {
-                        $scope.status = "Error creating new player_match";
+                        $scope.status = "Error creating new match.";
                     });
                     $scope.checked1 = 0;
                 }
@@ -130,9 +130,9 @@ app.controller('AddMatchController', function ($scope, daoMatches, daoPlayers, d
                     console.log('!!!!!!!!!' + $scope.match + ' ' + checkedBoxes2[i].value + ' ' + team_2_id);
                     var player_id2 = parseInt(checkedBoxes2[i].value);
                     daoPlayerMatch.add(match_id, player_id2, team_2_id, function () {
-                        $scope.status = "Successfully created new player_match ";
+                        $scope.status = "Successfully created new match.";
                     }, function () {
-                        $scope.status = "Error creating new player_match";
+                        $scope.status = "Error creating new match.";
                     });
                     $scope.checked2 = 0;
                 }
@@ -144,9 +144,9 @@ app.controller('AddMatchController', function ($scope, daoMatches, daoPlayers, d
                 });
 
 //            $scope.match, checkedBoxes[i].value, team_1_id
-                $scope.status = "Successfully created new match";
+                $scope.status = "Successfully created new match.";
             }, function () {
-                $scope.status = "Error creating new match";
+                $scope.status = "Error creating new match.";
             });
             $scope.newMatch.match_time_start = '';
             $scope.newMatch.match_time_end = '';
@@ -160,7 +160,7 @@ app.controller('AddMatchController', function ($scope, daoMatches, daoPlayers, d
         $scope.players = players.data;
         $scope.status = "";
     }, function () {
-        $scope.status = "Error loading Players";
+        $scope.status = "Error loading players.";
     });
     daoTeams.getAll(function (teams) {
         $scope.teams = teams.data;
@@ -226,7 +226,6 @@ app.controller('AddMatchController', function ($scope, daoMatches, daoPlayers, d
         team2 = $model;
         daoPlayers.getTeamPlayers(team2, function (players) {
             $scope.players2 = players.data;
-            console.log('********************** scope team2players' + team2);
         }, function () {
             console.log('Error loading team2players');
         });
@@ -236,42 +235,48 @@ app.controller('AddMatchController', function ($scope, daoMatches, daoPlayers, d
         player1 = $model;
         daoPlayers.get(player1, function (player) {
             $scope.players1.push(player.data[0]);
-            document.getElementById("newplayer1").value = "";
+//            var len1 = $scope.players1.length - 1;
+//            console.log("LEN1" + len1);
+//            document.getElementById("team1box" + len1).checked = true;
+//            document.getElementById("newplayer1").value = "";
         });
     };
     $scope.onSelect4 = function ($model) {
         player2 = $model;
         daoPlayers.get(player2, function (player) {
             $scope.players2.push(player.data[0]);
-            document.getElementById("newplayer2").value = "";
+//            var len2 = $scope.players2.length - 1;
+//            console.log("LEN2" + len2);
+//            document.getElementById("team1box" + len2).checked = true;
+//            document.getElementById("newplayer2").value = "";
         });
     };
-    $scope.limit = 5;
-    $scope.items1 = [];
-    $scope.checked1 = 0;
-    for (var i = 0; i < 100; i++) {
-        $scope.items1.push({team1: false})
-    }
-
-    $scope.checkChanged1 = function (item1) {
-        if (item1.team1)
-            $scope.checked1++;
-        else
-            $scope.checked1--;
-    }
-
-    $scope.items2 = [];
-    $scope.checked2 = 0;
-    for (var i = 0; i < 100; i++) {
-        $scope.items2.push({team2: false})
-    }
-
-    $scope.checkChanged2 = function (item2) {
-        if (item2.team2)
-            $scope.checked2++;
-        else
-            $scope.checked2--;
-    }
+//    $scope.limit = 5;
+//    $scope.items1 = [];
+//    $scope.checked1 = 0;
+//    for (var i = 0; i < 100; i++) {
+//        $scope.items1.push({team1: false})
+//    }
+//
+//    $scope.checkChanged1 = function (item1) {
+//        if (item1.team1)
+//            $scope.checked1++;
+//        else
+//            $scope.checked1--;
+//    }
+//
+//    $scope.items2 = [];
+//    $scope.checked2 = 0;
+//    for (var i = 0; i < 100; i++) {
+//        $scope.items2.push({team2: false})
+//    }
+//
+//    $scope.checkChanged2 = function (item2) {
+//        if (item2.team2)
+//            $scope.checked2++;
+//        else
+//            $scope.checked2--;
+//    }
 
     function getCheckedBoxes(chkboxName) {
         var checkboxes = document.getElementsByName(chkboxName);

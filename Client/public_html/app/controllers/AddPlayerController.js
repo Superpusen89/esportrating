@@ -31,9 +31,9 @@ app.controller('AddPlayerController', function ($scope, daoPlayers, daoTeams, da
 //            
 
             daoPlayers.add(username, team_id, avatar, real_name, country, function () {
-                $scope.status = "Successfully created new Player " + username;
+                $scope.status = "Successfully created new player " + username;
             }, function () {
-                $scope.status = "Error creating new Player";
+                $scope.status = "Error creating new player.";
             });
             $scope.newPlayer.username = '';
             $scope.newPlayer.team_id = '';
@@ -49,7 +49,7 @@ app.controller('AddPlayerController', function ($scope, daoPlayers, daoTeams, da
             if($.inArray(country, countryarray) !== -1 || $scope.newPlayer.country !== ''){
                 console.log("The country exists");
             }else{
-                $scope.status += "The country does not exist/you have to chose from the dropdownlist";
+                $scope.status += "The country does not exist/you have to chose from the dropdownlist\n";
             } 
         }
     };

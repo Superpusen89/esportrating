@@ -20,14 +20,14 @@ app.controller('PlayerController', function ($scope, $routeParams, daoPlayers, d
         
         $scope.status = "";
     }, function () {
-        $scope.status = "Error loading player " + $routeParams.playerId;
+        $scope.status = "Error loading player.";
     });
 
     daoTeams.getAll(function (teams) {
         $scope.teams = teams.data;
         $scope.statusTeams = "";
     }, function () {
-        $scope.statusTeams = "Error loading teams";
+        $scope.statusTeams = "Error loading teams.";
     });
 
 //formats the input selector
@@ -66,9 +66,9 @@ app.controller('PlayerController', function ($scope, $routeParams, daoPlayers, d
 
             daoPlayers.edit(player_id, username, team_id, avatar, realname, country, function () {
 //            $scope.players.push({username: username, team_name: team_name});
-                $scope.status = "Successfully edited team " + username;
+                $scope.status = "Successfully edited team. ";
             }, function () {
-                $scope.status = "Error editing team";
+                $scope.status = "Error editing team.";
             });
         } else {
             return "Team does not exist ";
@@ -112,9 +112,9 @@ app.controller('PlayerController', function ($scope, $routeParams, daoPlayers, d
 
             daoPlayers.edit(player_id, username, team_id, avatar, realname, country, function () {
 //            $scope.players.push({username: username, team_name: team_name});
-                $scope.status = "Successfully edited team " + username;
+                $scope.status = "Successfully edited country.";
             }, function () {
-                $scope.status = "Error editing team";
+                $scope.status = "Error editing country.";
             });
         } else {
             return "Country does not exist ";
@@ -131,9 +131,9 @@ app.controller('PlayerController', function ($scope, $routeParams, daoPlayers, d
         var country = $scope.player.data[0].countrycode;
         daoPlayers.edit(player_id, username, team_id, avatar, realname, country, function () {
 //            $scope.players.push({username: username, team_name: team_name});
-            $scope.status = "Successfully edited player " + username;
+            $scope.status = "Successfully edited username.";
         }, function () {
-            $scope.status = "Error editing player";
+            $scope.status = "Error editing username.";
         });
     };
 
@@ -146,9 +146,9 @@ app.controller('PlayerController', function ($scope, $routeParams, daoPlayers, d
         var country = $scope.player.data[0].countrycode;
         daoPlayers.edit(player_id, username, team_id, avatar, realname, country, function () {
 //            $scope.players.push({username: username, team_name: team_name});
-            $scope.status = "Successfully edited player " + username;
+            $scope.status = "Successfully edited player avatar.";
         }, function () {
-            $scope.status = "Error editing player";
+            $scope.status = "Error editing player avatar.";
         });
     };
 
@@ -161,9 +161,9 @@ app.controller('PlayerController', function ($scope, $routeParams, daoPlayers, d
         var country = $scope.player.data[0].countrycode;
         daoPlayers.edit(player_id, username, team_id, avatar, realname, country, function () {
 //            $scope.players.push({username: username, team_name: team_name});
-            $scope.status = "Successfully edited player " + username;
+            $scope.status = "Successfully edited real name.";
         }, function () {
-            $scope.status = "Error editing player";
+            $scope.status = "Error editing real name.";
         });
     };
 

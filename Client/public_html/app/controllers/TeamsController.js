@@ -5,7 +5,7 @@ app.controller('TeamsController', function ($scope, daoTeams) {
         $scope.teams = teams.data;
         $scope.status = "";
     }, function () {
-        $scope.status = "Error loading Teams";
+        $scope.status = "Error loading teams.";
     });
 
     /* Code taken from 

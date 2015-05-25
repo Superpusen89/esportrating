@@ -4,15 +4,13 @@
     <form ng-submit="addMatch()" name="newMatch" id="newMatch">
         <p>All fields are required<br>The match must be within the current month</p>
 
-
-
         <div class="inline">
             <label for="team_1" id="team1label">Team name: </label>
-            <input name="team1linput" id="team_1" required="" autocomplete="off" id="team1input" ng-model="newMatch.team_1_id" type="text" placeholder="Team 1" typeahead="team.id as team.id + ' ' + team.team_name for team in teams | filter:$viewValue | limitTo:8" typeahead-editable="false" typeahead-input-formatter="formatLabel($model)" typeahead-on-select="onSelect1($model)">
+            <input name="team1linput" id="team_1" required="" autocomplete="off" id="team1input" ng-model="newMatch.team_1_id" type="text" typeahead="team.id as team.id + ' ' + team.team_name for team in teams | filter:$viewValue | limitTo:8" typeahead-editable="false" typeahead-input-formatter="formatLabel($model)" typeahead-on-select="onSelect1($model)">
         </div>
         <div class="inline">
             <label for="team_2" id="team2label">Team name: </label>
-            <input name="team2linput" id="team_2" required="" autocomplete="off" id="team2input" ng-model="newMatch.team_2_id" type="text" placeholder="Team 2" typeahead="team.id as team.id + ' ' + team.team_name for team in teams | filter:$viewValue | limitTo:8" typeahead-editable="false" typeahead-input-formatter="formatLabel($model)" typeahead-on-select="onSelect2($model)">
+            <input name="team2linput" id="team_2" required="" autocomplete="off" id="team2input" ng-model="newMatch.team_2_id" type="text" typeahead="team.id as team.id + ' ' + team.team_name for team in teams | filter:$viewValue | limitTo:8" typeahead-editable="false" typeahead-input-formatter="formatLabel($model)" typeahead-on-select="onSelect2($model)">
         </div>
 
         <ul id="winnerchx" ng-repeat="subscription in entities" required="">
@@ -24,7 +22,7 @@
         <div id="team1list">
             <ul  id="t1l" ng-repeat="player in players1">
                 <li id="{{'playercheckbox' + $index}}">
-                    <label><input value="{{player.id}}" name="pcheckbox" type="checkbox" ng-model="item1.team1" ng-change="checkChanged1(item1)" ng-disabled="checked1 == limit && !item1.team1">{{player.id}} {{player.username}} </label>
+                    <label><input value="{{player.id}}" name="pcheckbox" type="checkbox" ng-model="checked" id="team1box{{$index}}"> <!-- ng-change="checkChanged1(item1)" ng-disabled="checked1 == limit && !item1.team1"-->{{player.id}} {{player.username}} </label>
                 </li>
             </ul>
         </div>
@@ -32,20 +30,20 @@
         <div id="team2list">
             <ul id="t2l" ng-repeat="player in players2">
                 <li id="{{'playercheckbox' + $index}}">
-                    <label> <input value="{{player.id}}" type="checkbox" name="pcheckbox2" ng-model="item2.team2" ng-change="checkChanged2(item2)" ng-disabled="checked2 == limit && !item2.team2">{{player.id}} {{player.username}}</label>
+                    <label> <input value="{{player.id}}" type="checkbox" name="pcheckbox2" ng-model="checked" id="team2box{{$index}}"> <!-- ng-change="checkChanged2(item2)" ng-disabled="checked2 == limit && !item2.team2"-->{{player.id}} {{player.username}}</label>
                 </li>
             </ul>
         </div><br>
         <!--this thing should trigger a function to add the value-->
 
         <div class="inline2">
-            <label class="new_player_1">Select different players for team 1</label>
-            <input id="newplayer1" ng-model="newPlayers.player1" autocomplete="off" type="text" placeholder="Select different players" typeahead="player.id as player.id + ' ' + player.username + ', ' + player.team_name for player in players | filter:$viewValue | limitTo:8" typeahead-editable="false" typeahead-input-formatter="formatPlayerLabel($model)" typeahead-on-select="onSelect3($model)">
+            <label class="new_player_1">Add players to team 1</label>
+            <input id="newplayer1" ng-model="newPlayers.player1" autocomplete="off" type="text" typeahead="player.id as player.id + ' ' + player.username + ', ' + player.team_name for player in players | filter:$viewValue | limitTo:8" typeahead-editable="false" typeahead-input-formatter="formatPlayerLabel($model)" typeahead-on-select="onSelect3($model)">
         </div>
         <div class="inline2">
-            <label class="new_player_2">Select different players for team 2</label>
+            <label class="new_player_2">Add players to team 2</label>
 
-            <input id="newplayer2" ng-model="newPlayers.player2" autocomplete="off" type="text" placeholder="Select different players" typeahead="player.id as player.id + ' ' + player.username + ', ' + player.team_name for player in players | filter:$viewValue | limitTo:8" typeahead-editable="false" typeahead-input-formatter="formatPlayerLabel($model)" typeahead-on-select="onSelect4($model)">
+            <input id="newplayer2" ng-model="newPlayers.player2" autocomplete="off" type="text" typeahead="player.id as player.id + ' ' + player.username + ', ' + player.team_name for player in players | filter:$viewValue | limitTo:8" typeahead-editable="false" typeahead-input-formatter="formatPlayerLabel($model)" typeahead-on-select="onSelect4($model)">
         </div>
 
         <div class="inline3">
@@ -58,7 +56,7 @@
         </div>
 
         <label class="tournamentlabel">This match is part of tournament</label>
-        <input id="tournament" name="tournament" required="" autocomplete="off" ng-model="newMatch.tournament_id" type="text" placeholder="Tournament id" typeahead="tournament.id as tournament.id + ' ' + tournament.tournament_name for tournament in tournaments | filter:$viewValue | limitTo:8" typeahead-editable="false" typeahead-input-formatter="formatTournamentLabel($model)">
+        <input id="tournament" name="tournament" required="" autocomplete="off" ng-model="newMatch.tournament_id" type="text" typeahead="tournament.id as tournament.id + ' ' + tournament.tournament_name for tournament in tournaments | filter:$viewValue | limitTo:8" typeahead-editable="false" typeahead-input-formatter="formatTournamentLabel($model)">
         <br>
         <input id="submit" type="submit" value="Add match">
     </form>

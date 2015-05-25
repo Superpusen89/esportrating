@@ -5,7 +5,7 @@ app.controller('TournamentsController', function ($scope, daoTournaments) {
         $scope.tournaments = tournaments.data;
         $scope.status = "";
     }, function () {
-        $scope.status = "Error loading tournaments";
+        $scope.status = "Error loading tournaments.";
     });
 
     /* Code taken from 

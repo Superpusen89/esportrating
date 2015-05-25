@@ -12,15 +12,17 @@ app.controller('MatchController', function ($scope, $routeParams, daoMatches, da
             $scope.players1 = playermatch.data;
             $scope.status = "";
         }, function () {
-            $scope.status = "Error loading playermatchwinner";
+            $scope.status = "Error loading winning team.";
         });
         /*************************** GET PLAYER_MATC FOR TEAM 2 ***********************************************/
         daoPlayerMatch.get($routeParams.matchId, $scope.match.data[0].team_2_id, function (playermatch) {
             $scope.players2 = playermatch.data;
             $scope.status = "";
         }, function () {
-            $scope.status = "Error loading playermatchloser";
+            $scope.status = "Error loading losing team.";
         });
+        
+        /**** The following code has been taken from somewhere **/
         if ($scope.match.data[0].team_1_id === $scope.match.data[0].winning_team_id) {
             $scope.entities = [{
                     checked: true
@@ -40,6 +42,7 @@ app.controller('MatchController', function ($scope, $routeParams, daoMatches, da
             $scope.team_2_name = $scope.match.data[0].winning_team;
             $scope.team_1_name = $scope.match.data[0].losing_team;
         }
+        /*************** code end *******************/
 
         /*************************** SET INPUT FIELD VALUES ***********************************************/
         if (document.getElementById("team_1") !== null) {
@@ -93,7 +96,7 @@ app.controller('MatchController', function ($scope, $routeParams, daoMatches, da
         }
 
     }, function () {
-        $scope.status = "Error loading match " + $routeParams.matchId;
+        $scope.status = "Error loading match.";
     });
 
 
@@ -221,9 +224,9 @@ app.controller('MatchController', function ($scope, $routeParams, daoMatches, da
             });
 
             daoPlayerMatch.delete(match_id, function () {
-                $scope.status = "Success deleting Player_match";
+                console.log("Success deleting Player_match");
             }, function () {
-                $scope.status = "Error deleting Player_match";
+                console.log("Error deleting Player_match");
             });
             /****************************** EDIT MATCH ********************************************************************/
             daoMatches.edit(match_id, match_time_start, match_time_end, team_1_id, team_2_id, winning_team_id, losing_team_id, tournament_id, function (match) {
@@ -236,9 +239,9 @@ app.controller('MatchController', function ($scope, $routeParams, daoMatches, da
 
                     console.log("***----**** " + match_id + " new_player_id " + new_player_id + " new_team_id " + new_team_id);
                     daoPlayerMatch.add(match_id, new_player_id, new_team_id, function () {
-                        $scope.status = "Successfully edited player_match ";
+                        $scope.status = "Successfully edited match.";
                     }, function () {
-                        $scope.status = "Error editing player_match";
+                        $scope.status = "Error editing match.";
                     });
                     // $scope.checked1 = 0;
                 }
@@ -249,9 +252,9 @@ app.controller('MatchController', function ($scope, $routeParams, daoMatches, da
                     var new_player_id_2 = parseInt(checkedBoxes2[i].value);
                     console.log("***----**** " + match_id + " new_player_id " + new_player_id_2 + " new_team_id " + new_team_id_2);
                     daoPlayerMatch.add(match_id, new_player_id_2, new_team_id_2, function () {
-                        $scope.status = "Successfully edited player_match ";
+                        $scope.status = "Successfully edited match. ";
                     }, function () {
-                        $scope.status = "Error editing player_match";
+                        $scope.status = "Error editing match.";
                     });
                     $scope.checked2 = 0;
                 }
@@ -273,7 +276,7 @@ app.controller('MatchController', function ($scope, $routeParams, daoMatches, da
         $scope.players = players.data;
         $scope.status = "";
     }, function () {
-        $scope.status = "Error loading players";
+        $scope.status = "Error loading players.";
     });
     daoTeams.getAll(function (teams) {
         $scope.teams = teams.data;

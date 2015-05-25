@@ -1,5 +1,5 @@
 app.controller('MatchesController', function ($scope, daoMatches) {
-    $scope.status = "...loading";
+    $scope.status = "Loading matches ...";
 
 //    jQuery(document).ready(function ($) {
 //        $(".clickable-row").click(function () {
@@ -11,9 +11,9 @@ app.controller('MatchesController', function ($scope, daoMatches) {
 
     daoMatches.getAll(function (matches) {
         $scope.matches = matches.data;
-        $scope.status = "Successfully loaded matches";
+        $scope.status = "";
     }, function () {
-        $scope.status = "Error loading matches";
+        $scope.status = "Error loading matches.";
     });
 
 

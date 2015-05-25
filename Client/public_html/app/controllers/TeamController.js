@@ -6,7 +6,7 @@ app.controller('TeamController', function ($scope, $routeParams, daoTeams, daoPl
         $scope.team = team;
         $scope.status = "";
     }, function () {
-        $scope.status = "Error loading team " + $routeParams.teamId;
+        $scope.status = "Error loading team.";
     });
 
     $scope.saveData = function (data) {
@@ -14,9 +14,9 @@ app.controller('TeamController', function ($scope, $routeParams, daoTeams, daoPl
         var team_name = data;
         daoTeams.edit(team_id, team_name, function () {
 //            $scope.players.push({username: username, team_name: team_name});
-            $scope.status = "Successfully edited team " + team_id;
+            $scope.status = "Successfully edited team " + team_id + " " + team_name;
         }, function () {
-            $scope.status = "Error editing team";
+            $scope.status = "Error editing team.";
         });
     };
 
@@ -31,7 +31,7 @@ app.controller('TeamController', function ($scope, $routeParams, daoTeams, daoPl
 
         $scope.statusPlayers = "";
     }, function () {
-        $scope.statusPlayers = "Error loading Players";
+        $scope.statusPlayers = "Error loading players.";
     });
 
 });

@@ -10,7 +10,7 @@ app.controller('AddTeamController', function ($scope, daoTeams) {
 //            $scope.teams.push({team_name: team_name, id: $scope.team});
             $scope.status = "Successfully created new team " + team_name;
         }, function () {
-            $scope.status = "Error creating new team";
+            $scope.status = "Error creating new team.";
         });
         $scope.newTeam.team_name = '';
     };

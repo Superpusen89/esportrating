@@ -13,7 +13,7 @@ app.controller('PlayersController', function ($scope, daoPlayers) {
 
         $scope.status = "";
     }, function () {
-        $scope.status = "Error loading Players";
+        $scope.status = "Error loading players.";
     });
     
     /*
