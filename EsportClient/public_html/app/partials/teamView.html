@@ -1,0 +1,32 @@
+<section id="teamContainer">
+    <h1> {{team.data[0].team_name|| "empty" }}</h1>
+    <p>This team has played {{team.data[0].count}} matches</p>
+
+    <p class="info">Click a player for more information</p>
+    <table>
+        <tr>
+            <th>Player</th>
+            <th></th>
+            <th>Score</th>
+            <th>Rank</th>
+        </tr>
+        <tr ng-repeat="player in players| filter:searchText | orderBy:sortorder" such-href="/player/{{player.id}}">
+            <td>
+                <a href="#/player/{{player.id}}"> 
+                    {{player.username}} 
+                </a>
+            </td>
+            <td>
+                <img src="app/resources/flags/{{player.countrycode}}.png" alt="{{player.country}}" title="{{player.country}}">
+            </td>
+            <td>{{ player.display_rating}}
+            </td>
+            <td>
+                {{ player.rank}}
+            </td>
+        </tr>
+    </table>
+
+    <p class="info">{{status}}</p>
+    <p class="info">{{statusPlayers}}</p>
+</section>

@@ -1,0 +1,6 @@
+<section class="tournamentsContainer">
+    <h1>Edit tournament {{tournament.data[0].id}}</h1>
+    <p class="info">Click a field to edit it</p>
+    <p> Tournament name: <a href="#" editable-text="tournament.data[0].tournament_name" onbeforesave="saveName($data)">{{tournament.data[0].tournament_name|| "empty" }}</a></p>
+    <p class="info">{{status}}</p>
+</section>

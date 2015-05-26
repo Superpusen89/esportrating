@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<section class ="tournamentsContainer">
+    <h1>Tournaments</h1>
+    
+    <input class="searchfield" type="text" ng-model="searchTournaments" placeholder="Search tournaments">
+    <p class="info">Chose the tournament you want to edit</p>
+
+    <table>
+        <tr>
+            <th ng-click="changeSorting('id')" style="cursor: pointer;">ID</th>
+            <th ng-click="changeSorting('tournament_name')" style="cursor: pointer;">Name</th>
+        </tr>
+        <tr ng-repeat="tournament in tournaments| filter:searchTournaments | orderBy:sort.column:sort.descending" such-href="/editTournament/{{tournament.id}}">
+            <th>{{tournament.id}}</th>
+            <th>{{ tournament.tournament_name}}</th>     
+        </tr>
+    </table>
+
+    <p class="info">{{status}}</p>
+</section>

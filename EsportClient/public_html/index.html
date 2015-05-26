@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html ng-app="clientApp">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>Esport Ratings</title>
+
+        <link rel="stylesheet" type="text/css" href="styles.css">
+
+        <script src="lib/AngularJS/angular.min.js"></script>
+        <script src="lib/AngularJS/angular-route.min.js"></script>
+        <script src="lib/jQuery/jquery-1.11.2.min.js"></script>
+
+        <link href="lib/Angular-xeditable/css/xeditable.css" rel="stylesheet">
+        <script src="lib/Angular-xeditable/js/xeditable.js"></script>
+
+        <link href="lib/Bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <script src="lib/Bootstrap/js/ui-bootstrap-tpls.min.js"></script>
+
+        <script src="app/app.js"></script>
+        <script src="app/controllers/PlayersController.js"></script>
+        <script src="app/controllers/PlayerController.js"></script>
+        <script src="app/services/daoPlayers.js"></script>
+        <script src="app/controllers/TournamentsController.js"></script>
+        <script src="app/controllers/TournamentController.js"></script>
+        <script src="app/controllers/AddTournamentController.js"></script>
+        <script src="app/services/daoTournaments.js"></script>
+        <script src="app/controllers/MatchesController.js"></script>
+        <script src="app/controllers/MatchController.js"></script>
+        <script src="app/controllers/AddMatchController.js"></script>
+        <script src="app/services/daoMatches.js"></script>
+        <script src="app/controllers/TeamsController.js"></script>
+        <script src="app/controllers/TeamController.js"></script>
+        <script src="app/controllers/AddTeamController.js"></script>
+        <script src="app/services/daoTeams.js"></script>
+        <script src="app/services/daoPlayerMatch.js"></script>
+        <script src="app/controllers/AddPlayerController.js"></script>
+        <script src="app/services/daoCountries.js"></script>
+    </head>
+
+    <body ng-app="app">
+        <header ng-include="'app/layout/header.html'"></header>
+        <div id="page-wrap">            
+            <aside ng-include="'app/layout/admin_menu.html'"></aside>
+            <div id="content" ng-view></div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,37 @@
+<section id="addPlayerContainer">
+
+        <h1>Add player</h1>
+
+        <form ng-submit="addPlayer()">
+            <p>Fields marked with * are required</p>
+            <div class="form_group">
+                <label> Username * </label> <input ng-model="newPlayer.username" class="required" type="text">
+            </div>
+            <div class="form_group">
+                <label> Team </label>
+                <input name="teamlabel" autocomplete="off" id="teamlabel" ng-model="newPlayer.team_id" type="text" 
+                       typeahead="team.id as team.id + ' ' + team.team_name for team in teams | filter:$viewValue | limitTo:8" 
+                       typeahead-editable="false" typeahead-input-formatter="formatLabelTeam($model)">
+            </div>
+            <div class="form_group">
+                <label> Avatar url </label> <input ng-model="newPlayer.avatar" type="url">
+            </div>
+            <div class="form_group">
+                <label> Real name </label> <input ng-model="newPlayer.real_name" type="text">
+            </div>
+            <div class="form_group">
+                <label> Country </label> 
+                <input name="countrylabel" autocomplete="off" id="countrylabel" ng-model="newPlayer.country" type="text" 
+                       typeahead="country.alpha_2 as country.name for country in countries | filter:$viewValue | limitTo:8" 
+                       typeahead-editable="false" typeahead-input-formatter="formatLabelCountry($model)">
+            </div>
+            <div class="form_group">
+                <input class="submit" type="submit" value="Add Player" ng-disabled="!newPlayer.username">
+            </div>
+            <div class="form_group">
+                <div class="status">{{ status}}</div>
+            </div>
+        </form>
+
+
+</section>

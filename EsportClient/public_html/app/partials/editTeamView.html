@@ -1,0 +1,7 @@
+<section id="teamContainer">
+    <h1> Edit team {{team.data[0].id}} </h1>
+    <p class="info">Click a field to edit it</p>
+    <p> Team name: <a href="#" editable-text="team.data[0].team_name" onbeforesave="saveData($data)">{{team.data[0].team_name|| "empty" }}</a> </p>
+
+    <p class="info">{{status}}</p>
+</section>
